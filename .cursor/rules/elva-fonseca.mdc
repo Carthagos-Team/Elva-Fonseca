@@ -1,0 +1,14 @@
+---
+description: Regras do projeto Elva Fonseca — stack, unidades fluidas, ordem de fases
+alwaysApply: true
+---
+
+# Elva Fonseca — regras
+
+- Stack: Astro 7 estático (sem adapter) + Tailwind v4 CSS-first (`@theme` em `src/styles/global.css`) + GSAP via `src/lib/gsap.ts` + Sanity embutido em `/admin`.
+- **Ordem de fases, não pular seções:** Foundation ✅ → globais → Home seção a seção → Sanity wire → motion. Cada fase precisa de aprovação explícita.
+- **Unidades:** tokens `rem`; `em` só em átomos (botão/badge/ícone); `px` só hairline (`var(--hairline)`) e focus ring. Nunca font-size/max-width de componente em px. Ver `docs/FLUID_DESIGN_SYSTEM.md`.
+- **Cores:** só tokens do `@theme`; pares aprovados na tabela de contraste de `docs/DESIGN_TOKENS.md`. Punch `#e13726` = só texto grande/botões (4.34:1). Buckthorn/Corn nunca como texto sobre fundo claro.
+- **Motion:** todo GSAP via `createMotion()` (reduced-motion obrigatório); import só client-side; MPA — sem `<ClientRouter />`, sem cleanup entre rotas.
+- **Fonte de verdade visual:** Figma Home, base 1440 (raiz fluida = 1:1 em 1440).
+- Não hidratar Header/Footer. Imagens com width/height sempre.

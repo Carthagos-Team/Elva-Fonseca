@@ -1,0 +1,98 @@
+---
+// CtaBand — Fase 2/3. Banda de CTA reutilizável (acima do footer, repete em várias páginas).
+// Fiel ao Figma "volunteer-cta" (node 3098:2384). Conteúdo via props; default = volunteer.
+//
+// Flores laterais = elementos DOM individuais (classe .cta-petal), NUNCA imagem única.
+// Estruturadas para o reveal em stagger com GSAP ScrollTrigger que entra na FASE 5
+// (ver src/lib/gsap.ts / createMotion). Por ora renderizam estáticas/visíveis.
+
+interface Props {
+  titleLines?: string[];
+  body?: string[];
+  ctaLabel?: string;
+  ctaHref?: string;
+}
+
+const {
+  titleLines = ['As a volunteer,', 'you can make a difference.'],
+  body = [
+    'There is wisdom in every hand and strength in every gesture. By offering your time and choosing to care, you become part of something greater.',
+    'Sharing what life has taught you through action, presence, and generosity means joining a movement that builds, heals, and uplifts communities.',
+  ],
+  ctaLabel = 'Apply for Volunteering',
+  ctaHref = '/volunteer#apply',
+} = Astro.props;
+
+// Flores do cluster (posições em % da caixa 601.6×591 do Figma). Ordem = de baixo p/ cima,
+// pensada para o stagger da Fase 5. `mobile` marca as que sobrevivem abaixo de sm (densidade reduzida).
+const flowers = [
+  { tex: '07', x: 0, y: 78.1, w: 23.7 },
+  { tex: '01', x: 19.4, y: 78.1, w: 23.7 },
+  { tex: '04', x: 38.9, y: 78.1, w: 23.7 },
+  { tex: '06', x: 58.6, y: 78.1, w: 23.7 },
+  { tex: '02', x: 77.8, y: 78.1, w: 23.7 },
+  { tex: '03', x: 19.4, y: 58.2, w: 23.7 },
+  { tex: '01', x: 77.8, y: 58.2, w: 23.7 },
+  { tex: '07', x: 35.3, y: 35.1, w: 50.4, mobile: true },
+  { tex: '05', x: 77.8, y: 38.5, w: 23.7 },
+  { tex: '05', x: 42.1, y: 18.4, w: 23.7 },
+  { tex: '04', x: 58.6, y: 0, w: 45.5, mobile: true },
+];
+---
+
+<section
+  data-cta-band
+  class="relative isolate overflow-clip border-t border-woodsmoke/8 bg-surface px-6 pb-40 pt-14 text-center sm:px-10 lg:px-16 lg:pb-52 lg:pt-20"
+>
+  {/* Clusters de flores (decorativos). Cada .cta-petal é individual → stagger na Fase 5. */}
+  {
+    (['left', 'right'] as const).map((side) => (
+      <div
+        class:list={[
+          // translate-y-[20%]: no Figma o cluster atravessa a borda inferior (~119/591px clipados)
+          'cta-flowers pointer-events-none absolute bottom-0 z-0 aspect-[601.6/591] w-[42vw] max-w-[37.6rem] translate-y-[20%]',
+          side === 'left' ? '-left-[4.6vw] -scale-x-100' : '-right-[4.6vw]',
+        ]}
+        data-side={side}
+        aria-hidden="true"
+      >
+        {flowers.map((f) => (
+          <img
+            src={`/images/cta/flower-${f.tex}.webp`}
+            alt=""
+            loading="lazy"
+            decoding="async"
+            class:list={['cta-petal absolute', !f.mobile && 'hidden sm:block']}
+            style={`left:${f.x}%;top:${f.y}%;width:${f.w}%`}
+            data-reveal="petal"
+          />
+        ))}
+      </div>
+    ))
+  }
+
+  {/* Conteúdo */}
+  <div class="relative z-10 mx-auto flex max-w-[75rem] flex-col items-center gap-6">
+    <img src="/images/cta/rose.svg" alt="" aria-hidden="true" width="68" height="64" class="w-[4.25rem]" />
+
+    <h2 class="font-display font-black text-[2.5rem] uppercase leading-none tracking-[-0.04em] text-ink sm:text-6xl lg:text-[4.5rem]">
+      {titleLines.map((line, i) => (
+        <>
+          {line}
+          {i < titleLines.length - 1 && <br />}
+        </>
+      ))}
+    </h2>
+
+    <div class="flex max-w-[34rem] flex-col gap-4 text-ink/85">
+      {body.map((p) => <p class="text-base font-medium leading-relaxed tracking-[-0.01em]">{p}</p>)}
+    </div>
+
+    <a
+      href={ctaHref}
+      class="mt-4 inline-flex min-h-11 items-center justify-center rounded-md border-[1.5px] border-woodsmoke bg-buckthorn px-6 py-3.5 font-display font-black text-base uppercase tracking-[-0.01em] text-ink transition-[transform,filter] duration-150 ease-out hover:brightness-105 active:scale-[0.97]"
+    >
+      {ctaLabel}
+    </a>
+  </div>
+</section>

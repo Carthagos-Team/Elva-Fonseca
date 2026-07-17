@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/global/Hero.astro';
+import CtaBand from '../components/global/CtaBand.astro';
+import CtaDonate from '../components/global/CtaDonate.astro';
+---
+
+<BaseLayout
+  title="Home"
+  description="Empowering communities through legacy, craft and solidarity."
+  headerTheme="light"
+>
+  <Hero
+    titleLines={['A Legacy Crafted', 'by Hand.']}
+    subcopy="Elva Fonseca's legacy is one of care, courage, and generosity, transforming her community through everyday acts of love and solidarity."
+    imageAlt="Women working side by side in a community kitchen"
+  />
+
+  {/* Posição temporária p/ visualização — alinhar nas seções corretas da Home depois (Fase 3) */}
+  <CtaDonate />
+  <CtaBand />
+</BaseLayout>

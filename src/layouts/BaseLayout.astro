@@ -1,0 +1,33 @@
+---
+import '../styles/global.css';
+import SEO from '../components/global/SEO.astro';
+import Header from '../components/global/Header.astro';
+import Footer from '../components/global/Footer.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  ogImage?: string;
+  headerTheme?: 'light' | 'dark';
+}
+
+const { title, description, ogImage, headerTheme = 'dark' } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <SEO {title} {description} {ogImage} />
+  </head>
+  <body class="flex min-h-dvh flex-col">
+    <Header theme={headerTheme} />
+    <main id="main" class="flex-1">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

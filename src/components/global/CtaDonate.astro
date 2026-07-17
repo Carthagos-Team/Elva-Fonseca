@@ -1,0 +1,69 @@
+---
+// CtaDonate — Fase 2/3. Banda de CTA (fundo Punch) que repete acima do footer / na Home.
+// Fiel ao Figma "cta-donate" (node 3104:2462). Conteúdo via props; default = donate.
+//
+// Fileira de flores = elementos DOM individuais (classe .cta-petal), prontas para o
+// reveal em stagger com GSAP ScrollTrigger na FASE 5 (ver src/lib/gsap.ts / createMotion).
+
+interface Props {
+  titleLines?: string[];
+  body?: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+}
+
+const {
+  titleLines = ['Donate or sponsor and', 'keep the mission alive.'],
+  body = "Whether you're making a personal donation or supporting as a sponsor, you're not just offering resources. You're joining a story built on care, courage, and transformation. Every contribution, big or small, helps this mission grow and reach more lives, one generous act at a time.",
+  ctaLabel = 'Donate now',
+  ctaHref = '/donate',
+} = Astro.props;
+
+// Ordem exata do Figma para a fileira de flores.
+const row = ['02', '06', '04', '01', '07', '05', '03'];
+---
+
+<section
+  data-cta-band="donate"
+  class="flex flex-col items-center bg-brand px-6 pb-16 pt-12 text-center text-orchid sm:px-10 lg:px-16"
+>
+  <div class="flex flex-col items-center gap-12">
+    {/* Fileira de flores (decorativa). Cada .cta-petal é individual → stagger na Fase 5. */}
+    <div class="flex w-full max-w-[44.25rem] items-center justify-center" aria-hidden="true">
+      {
+        row.map((tex) => (
+          <img
+            src={`/images/cta/flower-${tex}.webp`}
+            alt=""
+            loading="lazy"
+            decoding="async"
+            class="cta-petal h-auto w-full min-w-0 flex-1"
+            data-reveal="petal"
+          />
+        ))
+      }
+    </div>
+
+    {/* Texto + botão */}
+    <div class="flex flex-col items-center gap-9 px-4">
+      <div class="flex flex-col items-center gap-6">
+        <h2 class="font-display font-black text-[2.25rem] uppercase leading-[1.05] tracking-[-0.04em] sm:text-5xl lg:text-[4rem]">
+          {titleLines.map((line, i) => (
+            <>
+              {line}
+              {i < titleLines.length - 1 && <br />}
+            </>
+          ))}
+        </h2>
+        <p class="max-w-[34.375rem] text-base font-medium leading-relaxed tracking-[-0.01em] text-orchid/90">{body}</p>
+      </div>
+
+      <a
+        href={ctaHref}
+        class="inline-flex min-h-11 items-center justify-center rounded-md border-[1.5px] border-woodsmoke bg-orchid px-6 py-3.5 font-display font-black text-base uppercase tracking-[-0.01em] text-ink transition-transform duration-150 ease-out active:scale-[0.97]"
+      >
+        {ctaLabel}
+      </a>
+    </div>
+  </div>
+</section>

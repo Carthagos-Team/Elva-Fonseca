@@ -1,0 +1,68 @@
+---
+// Header — Fase 2. Global, sobreposto ao Hero (overlay). Fiel ao Figma (node 3107:2480).
+// Preparado para virar `fixed` + fundo no scroll + interação de nav na FASE 5 (data-header).
+//
+// theme:
+//  - 'light' (páginas com hero escuro): logo/nav/texto orchid, fundo transparente
+//  - 'dark'  (Contact/Thank You e stubs sem hero escuro): logo/nav/texto woodsmoke
+
+interface Props {
+  theme?: 'light' | 'dark';
+}
+const { theme = 'dark' } = Astro.props;
+
+// Nav do Header = Figma (4 itens) + botão Donate. Stories/Contact ficam no footer.
+const nav = [
+  { href: '/', label: 'Home' },
+  { href: '/about', label: 'About' },
+  { href: '/programs', label: 'Programs' },
+  { href: '/volunteer', label: 'Volunteer' },
+];
+
+const path = Astro.url.pathname;
+const isCurrent = (href: string) =>
+  href === '/' ? path === '/' : path === href || path.startsWith(`${href}/`);
+
+const isLight = theme === 'light';
+const logo = isLight ? '/images/brand/logo-lockup-light.svg' : '/images/brand/logo-lockup-dark.svg';
+---
+
+<header
+  data-header
+  data-theme={theme}
+  class:list={[
+    'absolute inset-x-0 top-0 z-50',
+    isLight ? 'text-orchid' : 'text-ink',
+  ]}
+>
+  <div class="mx-auto flex max-w-[120rem] items-center justify-between px-6 py-4 sm:px-10">
+    <a href="/" aria-label="Elva Fonseca Foundation — home" class="shrink-0">
+      <img src={logo} alt="Fundación Elva Fonseca" width="143" height="40" class="h-10 w-auto" />
+    </a>
+
+    <nav aria-label="Main" class="hidden md:block">
+      <ul class="flex items-center gap-6">
+        {
+          nav.map(({ href, label }) => (
+            <li>
+              <a
+                href={href}
+                aria-current={isCurrent(href) ? 'page' : undefined}
+                class="font-display text-base tracking-[-0.02em] transition-opacity hover:opacity-70 aria-[current=page]:opacity-60"
+              >
+                {label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <a
+      href="/donate"
+      class="inline-flex min-h-11 items-center justify-center rounded-md bg-orchid px-5 py-3 font-display text-lg leading-none tracking-[-0.04em] text-ink transition-transform duration-150 ease-out active:scale-[0.97]"
+    >
+      Donate now
+    </a>
+  </div>
+</header>

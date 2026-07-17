@@ -1,0 +1,126 @@
+/* Elva Fonseca — global.css
+   Fluid design system: raiz vw + tokens rem. Estratégia completa em docs/FLUID_DESIGN_SYSTEM.md */
+
+@import "@fontsource/comme/400.css";
+@import "@fontsource/comme/500.css";
+@import "@fontsource/comme/600.css";
+
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Raiz fluida — base Figma 1440 (16px @ 1440 = 1.111vw)
+   - < 1024: clamp com piso legível (layout responde por breakpoint)
+   - 1024–1920: proporcional puro ("canvas com zoom", 1:1 com o Figma em 1440)
+   - ≥ 1920: cresce com inclinação 0.8vw, contínuo em 1920 (21.33px) até teto 26px
+   Limites em rem (nunca px) para preservar zoom/preferência de fonte (WCAG 1.4.4).
+--------------------------------------------------------------------------- */
+html {
+  font-size: clamp(0.875rem, 1.111vw, 1.125rem);
+}
+
+@media (min-width: 1024px) {
+  html {
+    font-size: max(0.875rem, 1.111vw);
+  }
+}
+
+@media (min-width: 1920px) {
+  html {
+    /* 0.373rem + 0.8vw = 21.33px @ 1920 (contínuo com a faixa anterior) */
+    font-size: clamp(1.334rem, 0.373rem + 0.8vw, 1.625rem);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Tokens — espelham docs/DESIGN_TOKENS.md (fonte: Figma Home)
+--------------------------------------------------------------------------- */
+@theme {
+  /* Brand */
+  --color-orchid: #fffef4; /* Orchid White */
+  --color-woodsmoke: #151515;
+  --color-punch: #e13726;
+  --color-buckthorn: #ffa430; /* Sea Buckthorn — decorativo, não usar como texto sobre claro */
+  --color-studio: #753cbf;
+  --color-corn: #ecbc03; /* decorativo, não usar como texto sobre claro */
+  --color-salem: #00784c;
+
+  /* Neutrals Orchid — valores reais do Figma (get_variable_defs, node Home) */
+  --color-orchid-025: #fffffc;
+  --color-orchid-050: #fffef4;
+  --color-orchid-100: #f5f4e9;
+  --color-orchid-200: #e5e4d9;
+
+  /* Paleta de categoria — pastéis de fundo + tinta de texto pareada, usados em
+     cards/tags de Programs (borda 1.5px woodsmoke + radius 12px no Figma).
+     Mapeamento categoria↔cor é conteúdo: atribuição final na Fase 3/4. */
+  --color-cerulean-200: #d8e1f2;
+  --color-malachite-200: #bbf0ce;
+  --color-buckthorn-200: #fadbb2;
+  --color-corn-200: #f5e9bb;
+  --color-corn-100: #f7f2df;
+  --color-studio-200: #e3daef;
+  --color-viking-900: #102a2f; /* tinta pareada com cerulean/malachite */
+  --color-jacko-bean-950: #2e1a03; /* tinta pareada com buckthorn/corn */
+
+  /* Semânticos */
+  --color-surface: var(--color-orchid);
+  --color-ink: var(--color-woodsmoke);
+  --color-brand: var(--color-punch);
+
+  /* Tipografia — 2 famílias, 3 papéis (confirmado no Figma real, node Home):
+     Taberna Sans Black = display; Taberna Sans Regular = nav/botão; Comme = corpo + eyebrow. */
+  --font-display: "Taberna Sans", "Arial Black", "Helvetica Neue", sans-serif;
+  --font-sans: "Comme", system-ui, sans-serif;
+
+  /* Radius (Figma: 6 / 8 / 12 / 16 / 20 → rem) */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.25rem;
+
+  /* Spacing: escala padrão do Tailwind (--spacing: 0.25rem) já cobre os tokens
+     do Figma em rem → 4=p-1, 8=p-2, 12=p-3, 16=p-4, 20=p-5, 24=p-6, 40=p-10,
+     64=p-16, 80=p-20. Nada a estender. */
+}
+
+/* Taberna Sans — Black (display) e Regular (nav/botão), woff2 em public/fonts/ */
+@font-face {
+  font-family: "Taberna Sans";
+  src: url("/fonts/TabernaSans-Black.woff2") format("woff2");
+  font-weight: 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Taberna Sans";
+  src: url("/fonts/TabernaSans-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@layer base {
+  body {
+    @apply bg-surface text-ink font-sans antialiased;
+  }
+
+  /* Hairline do Figma: exceção px consciente (não escala com a raiz) */
+  :root {
+    --hairline: 1.5px;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-punch);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
