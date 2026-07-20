@@ -1,0 +1,105 @@
+---
+// Home / OurPrograms — Fase 3, seção a seção. Fiel ao Figma (node 3153:336).
+// Paleta de categoria confirmada aqui (docs/DESIGN_TOKENS.md previa a tabela pastel↔tinta, o
+// mapeamento categoria↔cor ficava em aberto). Figma usa text-ink uniforme nos 5 cards (não a
+// tinta pareada da doc) — sigo o Figma literal; contraste ink-sobre-pastel passa com folga.
+// Fotos reaproveitadas de public/images/stories/ (mesmas 5 já usadas em Stories.astro).
+
+const btnBase =
+  'inline-flex min-h-11 items-center justify-center whitespace-nowrap rounded-md border-[1.5px] border-woodsmoke bg-buckthorn px-6 py-3.5 font-display font-black text-base uppercase tracking-[-0.01em] text-ink transition-[transform,filter] duration-150 ease-out hover:brightness-105 active:scale-[0.97]';
+
+const programs = [
+  {
+    bg: 'bg-cerulean-200',
+    image: '/images/programs/education.webp',
+    imageAlt: 'Children in traditional dress walking in a community parade',
+    title: 'Education',
+    description: 'School support, scholarships, and workshops for a better future.',
+  },
+  {
+    bg: 'bg-malachite-200',
+    image: '/images/programs/health.webp',
+    imageAlt: 'Fruit trees in a community garden',
+    title: 'Health',
+    description: 'Medical campaigns, care, and prevention.',
+  },
+  {
+    bg: 'bg-buckthorn-200',
+    image: '/images/programs/community.webp',
+    imageAlt: 'Community members gathered at an outdoor workshop',
+    title: 'Community Development',
+    description: 'Workshops and training to strengthen our community.',
+  },
+  {
+    bg: 'bg-corn-200',
+    image: '/images/programs/nutrition.webp',
+    imageAlt: 'A prepared meal for a community nutrition program',
+    title: 'Nutrition',
+    description: 'Nutrition programs for children and families.',
+  },
+  {
+    bg: 'bg-studio-200',
+    image: '/images/programs/senior-adults.webp',
+    imageAlt: 'A senior community member at home',
+    title: 'Senior Adults',
+    description: 'Companionship and activities for their well-being.',
+  },
+];
+---
+
+<section data-reveal-section class="border-t border-orchid-200 bg-orchid-100">
+  <div class="mx-auto flex max-w-[120rem] flex-col items-center gap-10 px-6 py-16 text-center sm:px-10 lg:px-16">
+    <div class="flex flex-col items-center gap-6">
+      <img src="/images/cta/rose.svg" alt="" class="h-16 w-auto" aria-hidden="true" />
+      <h2 class="font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-ink text-[2.5rem] sm:text-6xl lg:text-[4rem]">
+        Our Programs
+      </h2>
+      <a href="/donate" class={btnBase}>Donate now</a>
+    </div>
+
+    <ul class="grid w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        programs.map(({ bg, image, imageAlt, title, description }) => (
+          <li class={`flex h-[22rem] flex-col rounded-lg border-[1.5px] border-woodsmoke p-2 sm:h-[26rem] lg:h-[30rem] ${bg}`}>
+            <div class="relative flex-1 overflow-hidden rounded-md border-[1.5px] border-woodsmoke bg-orchid-100">
+              <img
+                src={image}
+                alt={imageAlt}
+                class="absolute inset-0 h-full w-full object-cover"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <div class="flex flex-col gap-3 px-2 py-6 text-center sm:px-4">
+              <p class="font-display font-black leading-[1.05] tracking-[-0.04em] text-ink text-2xl">
+                {title}
+              </p>
+              <p class="font-sans text-base font-medium leading-relaxed tracking-[-0.02em] text-ink/80">
+                {description}
+              </p>
+            </div>
+          </li>
+        ))
+      }
+
+      {/* 6º card — foto full-bleed + CTA sobreposto */}
+      <li class="flex h-[22rem] flex-col rounded-lg border-[1.5px] border-woodsmoke bg-orchid-050 p-2 sm:h-[26rem] lg:h-[30rem]">
+        <div class="relative flex-1 overflow-hidden rounded-md border-[1.5px] border-woodsmoke">
+          <img
+            src="/images/programs/explore.jpg"
+            alt="A volunteer wearing a Fundación Elva Fonseca t-shirt"
+            class="absolute inset-0 h-full w-full object-cover"
+            loading="lazy"
+            decoding="async"
+          />
+          <a
+            href="/programs"
+            class="absolute bottom-4 left-4 inline-flex min-h-9 items-center justify-center whitespace-nowrap rounded-md border-[1.5px] border-woodsmoke bg-buckthorn px-4 py-3 font-display font-black text-sm uppercase tracking-[-0.01em] text-ink transition-[transform,filter] duration-150 ease-out hover:brightness-105 active:scale-[0.97]"
+          >
+            Explore our programs
+          </a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
