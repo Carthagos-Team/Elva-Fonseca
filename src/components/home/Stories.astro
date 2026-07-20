@@ -1,0 +1,153 @@
+---
+// Home / Stories ("Stories that inspire") — Fase 3, seção a seção.
+// Grid de 5 cards (Figma node 3134:138) + card de tiers (laranja) + faixa de missão (donut 85/10/5).
+// Rótulos de categoria em buckthorn (#FFA430), fiel ao Figma — desvio deliberado da regra de
+// contraste #3 (buckthorn/orchid reprova 1.96:1), pedido explícito do cliente. Idem para a faixa
+// de missão (texto em viking-900). Estático; hook data-reveal-section reservado p/ motion.
+
+const heading = 'Stories that inspire';
+
+const stories = [
+  { img: '/images/stories/education.jpg', category: 'Education', caption: 'María now dreams big.' },
+  { img: '/images/stories/health.jpg', category: 'Health', caption: "We provide care where it's needed most." },
+  { img: '/images/stories/nutrition.jpg', category: 'Nutrition', caption: 'A breakfast that changes their day.' },
+  { img: '/images/stories/community.jpg', category: 'Community', caption: 'Workshops that create opportunities.' },
+  { img: '/images/stories/senior-adults.jpg', category: 'Senior Adults', caption: 'We accompany with love and respect.' },
+];
+
+const tiers = [
+  { amount: '$10 USD', label: 'Feed a child' },
+  { amount: '$25 USD', label: 'Support educational materials' },
+  { amount: '$50 USD', label: 'Fund community workshops' },
+  { amount: '$100 USD', label: 'Drive full programs' },
+];
+
+// Donut: fatias em ordem; conic-gradient montado no template a partir dos acumulados.
+// Cores fiéis ao Figma (node 3137:237): buckthorn / corn-100 / corn-200.
+const allocations = [
+  { pct: 85, label: 'Community programs', color: 'var(--color-buckthorn)' },
+  { pct: 10, label: 'Operations', color: 'var(--color-corn-100)' },
+  { pct: 5, label: 'Administration', color: 'var(--color-corn-200)' },
+];
+
+let acc = 0;
+const donutStops = allocations
+  .map(({ pct, color }) => {
+    const stop = `${color} ${acc}% ${acc + pct}%`;
+    acc += pct;
+    return stop;
+  })
+  .join(', ');
+const donutStyle = `background: conic-gradient(${donutStops});`;
+
+// Variantes de botão (base compartilhada + troca de bg/text).
+const btnBase =
+  'inline-flex min-h-11 items-center justify-center whitespace-nowrap rounded-md border-[1.5px] border-woodsmoke px-6 py-3.5 font-display font-black text-base uppercase tracking-[-0.01em] transition-[transform,filter] duration-150 ease-out active:scale-[0.97]';
+---
+
+<section data-reveal-section class="bg-surface">
+  <div class="mx-auto flex max-w-[120rem] flex-col gap-10 px-6 py-16 sm:px-10 lg:px-16 lg:py-24">
+    {/* Topo: heading + grade (esq.) | card de tiers (dir.) */}
+    <div class="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-10">
+      <div class="flex flex-1 flex-col gap-8">
+        <h2 class="font-display font-black uppercase leading-none tracking-[-0.04em] text-ink text-[2rem] sm:text-4xl lg:text-[2.75rem]">
+          {heading}
+        </h2>
+
+        <ul class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+          {
+            stories.map(({ img, category, caption }) => (
+              <li class="flex flex-col items-center gap-3 text-center">
+                <div class="aspect-square w-full overflow-hidden rounded-md border-[1.5px] border-woodsmoke bg-orchid-100">
+                  <img src={img} alt={caption} class="h-full w-full object-cover" loading="lazy" decoding="async" />
+                </div>
+                <div class="flex flex-col gap-1">
+                  <p class="font-display font-black text-sm uppercase text-buckthorn">{category}</p>
+                  <p class="font-sans text-[0.8125rem] leading-relaxed text-viking-900">{caption}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      {/* Card de tiers */}
+      <aside class="flex flex-col gap-6 rounded-xl border-[1.5px] border-woodsmoke bg-buckthorn p-6 text-ink sm:p-8 lg:w-[22rem] lg:shrink-0">
+        <h3 class="font-display font-black uppercase leading-tight tracking-[-0.02em] text-[1.5rem]">
+          Your help changes lives
+        </h3>
+        <ul class="flex flex-col gap-3">
+          {
+            tiers.map(({ amount, label }) => (
+              <li class="flex items-baseline gap-3">
+                <span class="w-[4.5rem] shrink-0 font-display font-black tracking-[-0.01em]">{amount}</span>
+                <span class="font-sans text-[0.9375rem] leading-snug text-ink/85">{label}</span>
+              </li>
+            ))
+          }
+        </ul>
+        <a href="/donate" class={`${btnBase} mt-auto bg-ink text-orchid hover:brightness-110`}>Support us</a>
+      </aside>
+    </div>
+
+    {/* Faixa de missão — pixel-perfect ao Figma (node 3137:237). Cor de texto viking-900 nesta
+        faixa por pedido explícito (exceção à regra de contraste, decisão do cliente). */}
+    <div class="flex flex-col gap-8 rounded-xl border-[1.5px] border-woodsmoke bg-orchid-025 p-4 sm:p-6 xl:flex-row xl:items-center xl:gap-12">
+      {/* Our mission */}
+      <div class="flex flex-1 items-center gap-4">
+        <svg class="h-16 w-16 shrink-0" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M41.0906 23.5325L33.562 30.8975C32.5621 31.8976 32.0004 33.2539 32.0004 34.668C32.0004 36.0822 32.5621 37.4384 33.562 38.4385C34.5622 39.4383 35.9187 40 37.333 40C38.7473 40 40.1037 39.4383 41.1039 38.4385L45.6643 33.8787C46.2612 33.2817 46.9698 32.8081 47.7498 32.4849C48.5297 32.1618 49.3657 31.9955 50.21 31.9955C51.0543 31.9955 51.8903 32.1618 52.6702 32.4849C53.4502 32.8081 54.1589 33.2817 54.7557 33.8787L59.7721 38.8972C60.772 39.8973 61.3338 41.2535 61.3338 42.6677C61.3338 44.0818 60.772 45.4381 59.7721 46.4382C64.0018 42.209 66.6687 38.6679 66.6687 33.3347C66.6686 30.3674 65.7683 27.4699 64.0868 25.0249C62.4052 22.5798 60.0214 20.7023 57.2503 19.6404C54.4791 18.5784 51.451 18.3819 48.5658 19.0768C45.6807 19.7717 43.0742 21.3253 41.0906 23.5325ZM59.7721 46.4382C59.2461 46.9642 58.6216 47.3815 57.9343 47.6662C57.247 47.9508 56.5104 48.0974 55.7665 48.0974C55.0225 48.0974 54.2859 47.9508 53.5986 47.6662C52.9113 47.3815 52.2868 46.9642 51.7608 46.4382C52.3303 46.9531 52.7892 47.5784 53.1095 48.2761C53.4299 48.9739 53.605 49.7294 53.6243 50.4969C53.6436 51.2644 53.5066 52.0278 53.2217 52.7407C52.9368 53.4536 52.5099 54.1012 51.967 54.644C51.4241 55.1869 50.7764 55.6137 50.0634 55.8986C49.3504 56.1834 48.5869 56.3204 47.8193 56.3011C47.0518 56.2818 46.2961 56.1067 45.5983 55.7864C44.9005 55.4661 44.2751 55.0073 43.7602 54.4379C44.2866 54.9622 44.7045 55.5851 44.99 56.2711C45.2755 56.957 45.4229 57.6925 45.4239 58.4355C45.4249 59.1785 45.2794 59.9143 44.9958 60.601C44.7121 61.2877 44.2959 61.9118 43.7708 62.4375C43.2641 62.9444 42.6603 63.3439 41.9956 63.6123C41.331 63.8806 40.6191 64.0122 39.9024 63.9993C39.1857 63.9863 38.479 63.8291 37.8245 63.5369C37.1699 63.2448 36.581 62.8237 36.0929 62.2989L21.3317 48.0008C17.3314 44.001 13.3311 39.4678 13.3311 33.3347C13.3316 30.3676 14.2323 27.4705 15.9141 25.0259C17.5959 22.5813 19.9797 20.7042 22.7507 19.6426C25.5217 18.5809 28.5496 18.3846 31.4345 19.0796C34.3194 19.7746 36.9257 21.3282 38.9091 23.5351C39.2056 23.8107 39.5956 23.9636 40.0004 23.9631C40.4052 23.9626 40.7948 23.8088 41.0906 23.5325" stroke="var(--color-buckthorn)" stroke-width="4" stroke-linecap="round" />
+        </svg>
+        <div class="flex flex-col gap-2">
+          <p class="font-display font-black text-xl uppercase text-viking-900">Our mission</p>
+          <p class="max-w-[24rem] font-sans text-sm font-normal leading-normal text-viking-900">
+            With empathy and open hands, we work so no one is left behind. Our goal is to stand beside
+            those who need it most.
+          </p>
+        </div>
+      </div>
+
+      <div class="hidden h-20 w-px shrink-0 self-center bg-woodsmoke/15 xl:block" aria-hidden="true"></div>
+
+      {/* How we use your donations */}
+      <div class="flex flex-1 items-center gap-6">
+        <div class="relative h-[7.5rem] w-[7.5rem] shrink-0 rounded-full" style={donutStyle} aria-hidden="true">
+          <div class="absolute inset-[24%] rounded-full bg-orchid-025"></div>
+        </div>
+        <div class="flex flex-col gap-3">
+          <p class="font-display font-black text-xl uppercase text-viking-900">How we use your donations</p>
+          <ul class="flex flex-col gap-1.5">
+            {
+              allocations.map(({ pct, label, color }) => (
+                <li class="flex items-center gap-2">
+                  <span class="h-3 w-3 shrink-0 rounded-[2px]" style={`background:${color}`} />
+                  <span class="w-[1.875rem] shrink-0 font-display font-black text-sm text-viking-900">{pct}%</span>
+                  <span class="whitespace-nowrap font-sans text-[0.8125rem] font-normal text-viking-900">{label}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+
+      <div class="hidden h-20 w-px shrink-0 self-center bg-woodsmoke/15 xl:block" aria-hidden="true"></div>
+
+      {/* Be part of the change */}
+      <div class="flex flex-1 flex-col gap-4 xl:p-6">
+        <div class="flex items-center gap-4">
+          <svg class="h-8 w-8 shrink-0" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M14.6662 18.6672H17.333C18.0403 18.6672 18.7186 18.3862 19.2187 17.8862C19.7188 17.3861 19.9998 16.7079 19.9998 16.0007C19.9998 15.2934 19.7188 14.6152 19.2187 14.1151C18.7186 13.6151 18.0403 13.3341 17.333 13.3341H13.3328C12.5327 13.3341 11.866 13.6008 11.466 14.1341L3.99893 21.3337M19.2664 17.8534L26.0001 11.5951C26.9282 10.6671 28.0002 9.13388 28.0002 7.6673C28.0004 6.92514 27.7753 6.2004 27.3547 5.58889C26.9342 4.97738 26.3379 4.50789 25.6447 4.24248C24.9516 3.97707 24.1942 3.92823 23.4727 4.10243C22.7512 4.27663 22.0995 4.66566 21.6039 5.2181C21.5694 5.25551 21.5276 5.28537 21.481 5.30579C21.4344 5.32622 21.3841 5.33676 21.3332 5.33676C21.2823 5.33676 21.232 5.32622 21.1854 5.30579C21.1388 5.28537 21.097 5.25551 21.0625 5.2181C20.5669 4.66566 19.9152 4.27663 19.1937 4.10243C18.4722 3.92823 17.7148 3.97707 17.0217 4.24248C16.3285 4.50789 15.7323 4.97738 15.3117 5.58889C14.8911 6.2004 14.666 6.92514 14.6662 7.6673C14.6662 9.26721 15.7356 10.6645 16.6663 11.5951L21.3332 15.9335M2.66553 20.0004L10.666 28M9.33256 26.6671L11.466 24.8005C11.866 24.2672 12.5327 24.0006 13.3328 24.0006H18.6664C20.1331 24.0006 21.4665 23.4673 22.3999 22.4007L28.5336 16.5343C29.0481 16.0481 29.3485 15.3774 29.3685 14.6698C29.3885 13.9622 29.1265 13.2757 28.6403 12.7612C28.154 12.2467 27.4833 11.9464 26.7756 11.9264C26.0679 11.9064 25.3813 12.1683 24.8667 12.6545" stroke="var(--color-buckthorn)" stroke-width="2" stroke-linecap="round" />
+          </svg>
+          <p class="whitespace-nowrap font-display font-black text-xl uppercase text-viking-900">Be part of the change</p>
+        </div>
+        <p class="font-sans text-sm font-normal leading-normal text-viking-900">
+          Your support keeps Elva's legacy alive, turning compassion into action.
+        </p>
+        <div class="flex flex-col gap-3 sm:flex-row">
+          <a href="/donate" class={`${btnBase} flex-1 border-viking-900 bg-buckthorn text-orchid-025 hover:brightness-105`}>Donate now</a>
+          <a href="/volunteer" class={`${btnBase} flex-1 bg-transparent text-ink hover:bg-woodsmoke/5`}>Become a volunteer</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
