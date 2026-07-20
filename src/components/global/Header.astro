@@ -1,6 +1,8 @@
 ---
 // Header — Fase 2. Global, sobreposto ao Hero (overlay). Fiel ao Figma (node 3107:2480).
-// Preparado para virar `fixed` + fundo no scroll + interação de nav na FASE 5 (data-header).
+// Preparado para virar `fixed` + fundo no scroll na FASE 5 (data-header).
+// Menu mobile: "scaling hamburger" (base Osmo Supply) — transições CSS, JS mínimo só alterna
+// `data-navigation-status`. Sem GSAP: Header nunca é hidratado. reduced-motion tratado no CSS.
 //
 // theme:
 //  - 'light' (páginas com hero escuro): logo/nav/texto orchid, fundo transparente
@@ -35,7 +37,7 @@ const logo = isLight ? '/images/brand/logo-lockup-light.svg' : '/images/brand/lo
     isLight ? 'text-orchid' : 'text-ink',
   ]}
 >
-  <div class="mx-auto flex max-w-[120rem] items-center justify-between px-6 py-4 sm:px-10">
+  <div class="mx-auto flex max-w-[120rem] items-center justify-between px-6 py-10 sm:px-10">
     <a href="/" aria-label="Elva Fonseca Foundation — home" class="shrink-0">
       <img src={logo} alt="Fundación Elva Fonseca" width="143" height="40" class="h-10 w-auto" />
     </a>
@@ -60,9 +62,220 @@ const logo = isLight ? '/images/brand/logo-lockup-light.svg' : '/images/brand/lo
 
     <a
       href="/donate"
-      class="inline-flex min-h-11 items-center justify-center rounded-md bg-orchid px-5 py-3 font-display text-lg leading-none tracking-[-0.04em] text-ink transition-transform duration-150 ease-out active:scale-[0.97]"
+      class="hidden min-h-11 items-center justify-center rounded-md bg-orchid px-5 py-3 font-display text-lg leading-none tracking-[-0.04em] text-ink transition-transform duration-150 ease-out active:scale-[0.97] md:inline-flex"
     >
       Donate now
     </a>
   </div>
+
+  {/* Menu mobile (scaling hamburger). Some em md+ (nav desktop assume). */}
+  <div data-navigation-status="not-active" class="nav-mobile md:hidden">
+    <div data-navigation-toggle="close" class="nav-mobile__bg-overlay" aria-hidden="true"></div>
+
+    <div class="nav-mobile__panel">
+      <div class="nav-mobile__surface" aria-hidden="true"></div>
+
+      <div id="nav-mobile-panel" class="nav-mobile__group flex min-w-[16rem] flex-col gap-4 py-8 pl-8 pr-6">
+        <p class="font-display text-sm uppercase tracking-[0.1em] text-orchid/70">Menu</p>
+        <ul class="flex flex-col gap-2">
+          {
+            nav.map(({ href, label }) => (
+              <li>
+                <a
+                  href={href}
+                  aria-current={isCurrent(href) ? 'page' : undefined}
+                  class="block whitespace-nowrap font-display text-3xl tracking-[-0.03em] text-orchid transition-opacity hover:opacity-60 aria-[current=page]:opacity-40"
+                >
+                  {label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        <a
+          href="/donate"
+          class="mt-2 inline-flex min-h-11 w-full items-center justify-center rounded-md bg-orchid px-6 py-3.5 font-display font-black text-base uppercase tracking-[-0.01em] text-ink transition-transform duration-150 ease-out active:scale-[0.97]"
+        >
+          Donate now
+        </a>
+      </div>
+
+      <button
+        data-navigation-toggle="toggle"
+        type="button"
+        aria-label="Menu"
+        aria-expanded="false"
+        aria-controls="nav-mobile-panel"
+        class="nav-mobile__toggle"
+      >
+        <span class="nav-mobile__bar"></span>
+        <span class="nav-mobile__bar"></span>
+      </button>
+    </div>
+  </div>
 </header>
+
+<style>
+  /* Base de escala em rem = 1rem, para os `em` internos não sofrerem compounding
+     (docs/FLUID_DESIGN_SYSTEM.md). Cores/raio vêm dos tokens do @theme (CLAUDE.md #3). */
+  /* Sem position/inset fixos: o toggle ancora no <header> (absolute) e rola junto com a hero,
+     em vez de acompanhar o scroll do viewport. */
+  .nav-mobile {
+    font-size: 1rem;
+    pointer-events: none;
+  }
+
+  .nav-mobile__bg-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: var(--color-ink);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: auto;
+    transition:
+      opacity 0.6s cubic-bezier(0.5, 0.5, 0, 1),
+      visibility 0.6s cubic-bezier(0.5, 0.5, 0, 1);
+  }
+  .nav-mobile[data-navigation-status='active'] .nav-mobile__bg-overlay {
+    opacity: 0.33;
+    visibility: visible;
+  }
+
+  /* top/right alinham o toggle com o logo (header px-6/py-10). Tunável por breakpoint. */
+  .nav-mobile__panel {
+    position: absolute;
+    top: 2.25rem;
+    right: 1.5rem;
+    z-index: 1;
+    pointer-events: none;
+  }
+  @media (min-width: 640px) {
+    .nav-mobile__panel {
+      right: 2.5rem;
+    }
+  }
+
+  .nav-mobile__surface {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 3rem;
+    height: 3rem;
+    background-color: var(--color-punch);
+    border-radius: var(--radius-md);
+    box-shadow: 0 0.625rem 1.875rem -0.625rem rgb(0 0 0 / 0.25);
+    transition:
+      width 0.6s cubic-bezier(0.5, 0.5, 0, 1),
+      height 0.6s cubic-bezier(0.5, 0.5, 0, 1);
+  }
+  .nav-mobile[data-navigation-status='active'] .nav-mobile__surface {
+    width: 100%;
+    height: 100%;
+  }
+
+  .nav-mobile__group {
+    position: relative;
+    pointer-events: auto;
+    transform-origin: 100% 0;
+    transform: scale(0.15);
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      transform 0.6s cubic-bezier(0.5, 0.5, 0, 1),
+      opacity 0.5s cubic-bezier(0.5, 0.5, 0, 1),
+      visibility 0.5s cubic-bezier(0.5, 0.5, 0, 1);
+  }
+  .nav-mobile[data-navigation-status='active'] .nav-mobile__group {
+    transform: scale(1);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .nav-mobile__toggle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto;
+    cursor: pointer;
+    border: 0;
+    background: transparent;
+    border-radius: var(--radius-md);
+    transition: transform 0.6s cubic-bezier(0.5, 0.5, 0, 1);
+  }
+  .nav-mobile[data-navigation-status='active'] .nav-mobile__toggle {
+    transform: translate(-0.5rem, 0.5rem);
+  }
+
+  .nav-mobile__bar {
+    position: absolute;
+    width: 1.125rem;
+    height: 2px;
+    background-color: var(--color-orchid);
+    transition: transform 0.6s cubic-bezier(0.5, 0.5, 0, 1);
+  }
+  .nav-mobile__bar:nth-child(1) {
+    transform: translateY(-0.2rem);
+  }
+  .nav-mobile__bar:nth-child(2) {
+    transform: translateY(0.2rem);
+  }
+  .nav-mobile[data-navigation-status='active'] .nav-mobile__bar:nth-child(1) {
+    transform: rotate(45deg);
+  }
+  .nav-mobile[data-navigation-status='active'] .nav-mobile__bar:nth-child(2) {
+    transform: rotate(-45deg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nav-mobile__bg-overlay,
+    .nav-mobile__surface,
+    .nav-mobile__group,
+    .nav-mobile__toggle,
+    .nav-mobile__bar {
+      transition-duration: 0.01ms !important;
+    }
+    .nav-mobile[data-navigation-status='active'] .nav-mobile__group {
+      transform: scale(1);
+    }
+  }
+</style>
+
+<script>
+  const nav = document.querySelector<HTMLElement>('[data-navigation-status]');
+  if (nav) {
+    const toggle = nav.querySelector<HTMLButtonElement>('[data-navigation-toggle="toggle"]');
+
+    const setState = (active: boolean) => {
+      nav.setAttribute('data-navigation-status', active ? 'active' : 'not-active');
+      toggle?.setAttribute('aria-expanded', String(active));
+      document.body.style.overflow = active ? 'hidden' : '';
+    };
+
+    nav.querySelectorAll('[data-navigation-toggle="toggle"]').forEach((btn) =>
+      btn.addEventListener('click', () =>
+        setState(nav.getAttribute('data-navigation-status') === 'not-active'),
+      ),
+    );
+
+    nav.querySelectorAll('[data-navigation-toggle="close"]').forEach((btn) =>
+      btn.addEventListener('click', () => setState(false)),
+    );
+
+    // Fecha ao clicar num link (MPA navega; reseta o estado se for a mesma página).
+    nav.querySelectorAll('a').forEach((a) =>
+      a.addEventListener('click', () => setState(false)),
+    );
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && nav.getAttribute('data-navigation-status') === 'active') {
+        setState(false);
+        toggle?.focus();
+      }
+    });
+  }
+</script>
