@@ -1,0 +1,65 @@
+---
+// Home / Story ("About Us") — Fase 3, seção a seção. Fiel ao Figma (node 3129:121).
+// Faixa full-bleed: imagem no topo + bloco de texto em 2 colunas (headline esq. / corpo+CTA dir.).
+// Motion leve fica para o passo de review; por ora estática (hook data-reveal-section reservado).
+
+interface Props {
+  eyebrow?: string;
+  titleLines?: string[];
+  body?: string;
+  image?: string;
+  imageAlt?: string;
+  cta?: { label: string; href: string };
+}
+
+const {
+  eyebrow = 'About us',
+  titleLines = ['Rooted in love,', 'grown through action.'],
+  body = 'The Elva Fonseca Foundation was born from one woman’s strength, compassion, and commitment to her community. What started with small, selfless acts continues today as a legacy of care and opportunity for those who need it most.',
+  image = '/images/about/story.jpg',
+  imageAlt = 'Members of the community greeting each other at a shared meal',
+  cta = { label: 'Discover our story', href: '/about' },
+} = Astro.props;
+---
+
+<section data-reveal-section class="border-y border-orchid-200 bg-orchid-025">
+  <div class="h-[20rem] w-full overflow-hidden sm:h-[26rem] lg:h-[34rem]">
+    <img
+      src={image}
+      alt={imageAlt}
+      class="h-full w-full object-cover"
+      loading="lazy"
+      decoding="async"
+    />
+  </div>
+
+  <div class="mx-auto grid max-w-[120rem] gap-8 px-6 pb-12 pt-9 sm:px-10 lg:grid-cols-[auto_1fr] lg:gap-12 lg:px-16 xl:gap-20">
+    <div class="flex flex-col gap-3">
+      <p class="font-sans text-sm font-semibold uppercase tracking-[0.08em] text-ink">
+        {eyebrow}
+      </p>
+      <h2 class="font-display font-black uppercase leading-none tracking-[-0.04em] text-ink text-[2.5rem] sm:text-5xl lg:whitespace-nowrap lg:text-[3.5rem]">
+        {
+          titleLines.map((line, i) => (
+            <>
+              {line}
+              {i < titleLines.length - 1 && <br />}
+            </>
+          ))
+        }
+      </h2>
+    </div>
+
+    <div class="flex flex-col items-start gap-6">
+      <p class="max-w-[34rem] text-base font-medium leading-relaxed tracking-[-0.02em] text-ink/85">
+        {body}
+      </p>
+      <a
+        href={cta.href}
+        class="inline-flex min-h-11 items-center justify-center rounded-md border-[1.5px] border-woodsmoke bg-buckthorn px-6 py-3.5 font-display font-black text-base uppercase tracking-[-0.01em] text-ink transition-[transform,filter] duration-150 ease-out hover:brightness-105 active:scale-[0.97]"
+      >
+        {cta.label}
+      </a>
+    </div>
+  </div>
+</section>
