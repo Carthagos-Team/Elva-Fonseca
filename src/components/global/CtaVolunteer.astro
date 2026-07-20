@@ -1,0 +1,71 @@
+---
+// CtaVolunteer — banda CTA de 2 colunas (painel punch + foto). Fiel ao Figma (node 3139:282).
+// Família dos CtaDonate/CtaBand; reutilizável. Estático; hook data-reveal-section p/ motion.
+
+interface Props {
+  titleLines?: string[];
+  subcopy?: string;
+  image?: string;
+  imageAlt?: string;
+  primary?: { label: string; href: string };
+  secondary?: { label: string; href: string };
+}
+
+const {
+  titleLines = ['There are many ways', 'to make a difference.'],
+  subcopy = "Whether donating, volunteering, or sharing our message, you are part of something greater. Help us continue Elva's legacy of compassion and service.",
+  image = '/images/cta/volunteer.jpg',
+  imageAlt = 'A community member the foundation supports',
+  primary = { label: 'Donate now', href: '/donate' },
+  secondary = { label: 'Become a volunteer', href: '/volunteer' },
+} = Astro.props;
+
+const btnBase =
+  'inline-flex min-h-11 items-center justify-center whitespace-nowrap rounded-md border-[1.5px] border-woodsmoke px-6 py-3.5 font-display font-black text-base uppercase tracking-[-0.01em] transition-[transform,filter] duration-150 ease-out active:scale-[0.97]';
+---
+
+<section data-reveal-section class="border-t border-orchid-200 bg-surface">
+  <div class="mx-auto max-w-[120rem] px-6 py-12 sm:px-10 sm:py-16 lg:px-16">
+    <div class="grid overflow-hidden rounded-xl border-[1.5px] border-woodsmoke bg-brand lg:grid-cols-2 lg:h-130">
+      {/* Conteúdo */}
+      <div class="flex flex-col justify-between gap-10 p-8 sm:p-12">
+        <div class="flex flex-col gap-6">
+          <h2 class="font-display font-black uppercase leading-none tracking-[-0.04em] text-orchid text-[1.75rem] sm:text-4xl lg:text-[2.5rem] min-[1300px]:text-[3.25rem]">
+            {
+              titleLines.map((line, i) => (
+                <>
+                  {line}
+                  {i < titleLines.length - 1 && <br />}
+                </>
+              ))
+            }
+          </h2>
+          <p class="max-w-[34rem] font-sans text-lg font-normal leading-relaxed text-orchid/85">
+            {subcopy}
+          </p>
+        </div>
+
+        <div class="flex flex-col gap-4 sm:flex-row sm:gap-5">
+          <a href={primary.href} class={`${btnBase} bg-buckthorn text-ink hover:brightness-105`}>
+            {primary.label}
+          </a>
+          <a href={secondary.href} class={`${btnBase} bg-orchid text-ink hover:brightness-105`}>
+            {secondary.label}
+          </a>
+        </div>
+      </div>
+
+      {/* Foto — position:absolute p/ não influenciar o auto-sizing da linha do grid
+          (a proporção retrato da foto senão vence o cálculo e estica o card). */}
+      <div class="relative h-56 w-full overflow-hidden sm:h-72 lg:h-auto">
+        <img
+          src={image}
+          alt={imageAlt}
+          class="absolute inset-0 h-full w-full object-cover object-[50%_20%]"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+    </div>
+  </div>
+</section>

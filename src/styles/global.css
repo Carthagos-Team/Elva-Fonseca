@@ -10,9 +10,19 @@
 /* ---------------------------------------------------------------------------
    Raiz fluida — base Figma 1440 (16px @ 1440 = 1.111vw)
    - < 1024: clamp com piso legível (layout responde por breakpoint)
-   - 1024–1920: proporcional puro ("canvas com zoom", 1:1 com o Figma em 1440)
+   - 1024–1440: transição contínua do piso (14px @ 1024) até 16px @ 1440
+   - 1440–1920: proporcional puro ("canvas com zoom", 1:1 com o Figma em 1440)
    - ≥ 1920: cresce com inclinação 0.8vw, contínuo em 1920 (21.33px) até teto 26px
    Limites em rem (nunca px) para preservar zoom/preferência de fonte (WCAG 1.4.4).
+
+   Nota de calibração: usar `max(0.875rem, 1.111vw)` de 1024 em diante parece
+   "proporcional puro", mas 1.111vw só ultrapassa o piso de 14px a partir de
+   ~1260px (14 / 1.111 × 100) — entre 1024–1260 a raiz ficava travada no piso
+   enquanto o container (100% do viewport) continuava encolhendo, quebrando a
+   proporção e forçando quebras de linha extras nesse intervalo. O segmento
+   1024–1440 abaixo usa inclinação própria (0.4808vw) só para restaurar a
+   continuidade real no boundary de 1024, sem alterar o coeficiente 1.111vw
+   (preserva 16px em 1440 e a calibração já validada em 1920).
 --------------------------------------------------------------------------- */
 html {
   font-size: clamp(0.875rem, 1.111vw, 1.125rem);
@@ -20,7 +30,15 @@ html {
 
 @media (min-width: 1024px) {
   html {
-    font-size: max(0.875rem, 1.111vw);
+    /* 0.567rem + 0.4808vw = 14px @ 1024 (contínuo com o piso) → 16px @ 1440 */
+    font-size: calc(0.567rem + 0.4808vw);
+  }
+}
+
+@media (min-width: 1440px) {
+  html {
+    /* 1.111vw = 16px exatos @ 1440 (design 1:1), contínuo até 1920 (21.33px) */
+    font-size: 1.111vw;
   }
 }
 
