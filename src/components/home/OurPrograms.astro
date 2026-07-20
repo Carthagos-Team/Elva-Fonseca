@@ -61,7 +61,7 @@ const programs = [
       {
         programs.map(({ bg, image, imageAlt, title, description }) => (
           <li class={`flex h-[22rem] flex-col rounded-lg border-[1.5px] border-woodsmoke p-2 sm:h-[26rem] lg:h-[30rem] ${bg}`}>
-            <div class="relative flex-1 overflow-hidden rounded-md border-[1.5px] border-woodsmoke bg-orchid-100">
+            <div class="relative min-h-0 flex-1 overflow-hidden rounded-md border-[1.5px] border-woodsmoke bg-orchid-100">
               <img
                 src={image}
                 alt={imageAlt}
@@ -70,11 +70,11 @@ const programs = [
                 decoding="async"
               />
             </div>
-            <div class="flex flex-col gap-3 px-2 py-6 text-center sm:px-4">
-              <p class="font-display font-black leading-[1.05] tracking-[-0.04em] text-ink text-2xl">
+            <div class="flex shrink-0 flex-col gap-6 px-4 py-9 text-center">
+              <p class="font-display font-black leading-[1.05] tracking-[-0.04em] text-ink text-[2rem]">
                 {title}
               </p>
-              <p class="font-sans text-base font-medium leading-relaxed tracking-[-0.02em] text-ink/80">
+              <p class="min-h-[2.75rem] font-sans text-base font-medium leading-[1.4] tracking-[-0.02em] text-ink/80">
                 {description}
               </p>
             </div>
@@ -88,7 +88,9 @@ const programs = [
           <img
             src="/images/programs/explore.jpg"
             alt="A volunteer wearing a Fundación Elva Fonseca t-shirt"
-            class="absolute inset-0 h-full w-full object-cover"
+            width="1066"
+            height="1600"
+            class="absolute inset-0 h-full w-full object-cover object-top"
             loading="lazy"
             decoding="async"
           />
