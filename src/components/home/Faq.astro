@@ -71,14 +71,16 @@ const faqs = [
 
 <section data-reveal-section data-faq class="overflow-x-clip border-t border-woodsmoke/10 bg-orchid-025">
   <div class="mx-auto grid max-w-[120rem] grid-cols-1 gap-12 px-6 py-16 sm:px-10 lg:grid-cols-2 lg:items-stretch lg:gap-x-12 lg:px-16">
-    {/* Coluna esquerda — foto */}
+    {/* Coluna esquerda — foto (Figma 3180:681, frame 632×750).
+       Fill = width-first com âncora quase no topo (top -1.02% / h 126.38% no Figma).
+       object-cover center cortava a testa; object-[50%_4%] equivale ao crop do Figma. */}
     <div class="relative aspect-[3/4] overflow-hidden rounded-md border-[1.5px] border-woodsmoke bg-orchid-100 sm:aspect-[4/5] lg:aspect-auto lg:h-full lg:min-h-[32rem]">
       <img
         src="/images/faq/woman.jpg"
         alt="A community member wearing a Fundación Elva Fonseca t-shirt, standing outdoors"
         width="1066"
         height="1600"
-        class="absolute inset-0 h-full w-full object-cover"
+        class="absolute inset-0 size-full object-cover object-[50%_4%]"
         loading="lazy"
         decoding="async"
       />
