@@ -11,6 +11,8 @@ interface Props {
   body?: string[];
   ctaLabel?: string;
   ctaHref?: string;
+  secondaryLabel?: string;
+  secondaryHref?: string;
 }
 
 const {
@@ -21,6 +23,8 @@ const {
   ],
   ctaLabel = 'Apply for Volunteering',
   ctaHref = '/volunteer#apply',
+  secondaryLabel,
+  secondaryHref,
 } = Astro.props;
 
 // Flores do cluster (posições em % da caixa 601.6×591 do Figma). Ordem = de baixo p/ cima,
@@ -88,11 +92,21 @@ const flowers = [
       {body.map((p) => <p class="text-base font-medium leading-relaxed tracking-[-0.01em]">{p}</p>)}
     </div>
 
-    <a
-      href={ctaHref}
-      class="mt-4 inline-flex min-h-11 items-center justify-center rounded-md border-[1.5px] border-woodsmoke bg-buckthorn px-6 py-3.5 font-display font-black text-base uppercase tracking-[-0.01em] text-ink transition-[transform,filter] duration-150 ease-out hover:brightness-105 active:scale-[0.97]"
-    >
-      {ctaLabel}
-    </a>
+    <div class="mt-4 flex flex-col items-center gap-4 sm:flex-row">
+      <a
+        href={ctaHref}
+        class="inline-flex min-h-11 items-center justify-center rounded-md border-[1.5px] border-woodsmoke bg-buckthorn px-6 py-3.5 font-display font-black text-base uppercase tracking-[-0.01em] text-ink transition-[transform,filter] duration-150 ease-out hover:brightness-105 active:scale-[0.97]"
+      >
+        {ctaLabel}
+      </a>
+      {secondaryLabel && secondaryHref && (
+        <a
+          href={secondaryHref}
+          class="inline-flex min-h-11 items-center justify-center rounded-md border-[1.5px] border-woodsmoke bg-surface px-6 py-3.5 font-display font-black text-base uppercase tracking-[-0.01em] text-ink transition-[transform,filter] duration-150 ease-out hover:brightness-95 active:scale-[0.97]"
+        >
+          {secondaryLabel}
+        </a>
+      )}
+    </div>
   </div>
 </section>
