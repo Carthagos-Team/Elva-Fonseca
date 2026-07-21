@@ -8,7 +8,7 @@ interface Props {
   image?: string;
   imageAlt?: string;
   primary?: { label: string; href: string };
-  secondary?: { label: string; href: string };
+  secondary?: { label: string; href: string } | null;
 }
 
 const {
@@ -49,9 +49,11 @@ const btnBase =
           <a href={primary.href} class={`${btnBase} bg-buckthorn text-ink hover:brightness-105`}>
             {primary.label}
           </a>
-          <a href={secondary.href} class={`${btnBase} bg-orchid text-ink hover:brightness-105`}>
-            {secondary.label}
-          </a>
+          {secondary && (
+            <a href={secondary.href} class={`${btnBase} bg-orchid text-ink hover:brightness-105`}>
+              {secondary.label}
+            </a>
+          )}
         </div>
       </div>
 

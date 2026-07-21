@@ -1,5 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import CtaVolunteer from '../components/global/CtaVolunteer.astro';
+import Faq from '../components/home/Faq.astro';
 import CtaBand from '../components/global/CtaBand.astro';
 ---
 
@@ -8,6 +10,18 @@ import CtaBand from '../components/global/CtaBand.astro';
     <h1 class="font-display text-4xl">Contact</h1>
     <p class="mt-4 max-w-prose text-ink/70">Get in touch with the Elva Fonseca Foundation.</p>
   </section>
+
+  {/* TODO: confirmar com o Jonathan o link real do Transparency Report (PDF/página) — href="#" é placeholder. */}
+  <CtaVolunteer
+    titleLines={['Transparency that builds trust.']}
+    subcopy="Explore detailed results and impact in our Transparency Report—updated regularly for full accountability."
+    image="/images/cta/transparency.jpg"
+    imageAlt="A community member wearing a Fundación Elva Fonseca t-shirt"
+    primary={{ label: 'Read', href: '#' }}
+    secondary={null}
+  />
+
+  <Faq />
 
   <CtaBand
     titleLines={['So many ways to', 'make a difference.']}
