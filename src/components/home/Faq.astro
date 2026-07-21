@@ -1,0 +1,444 @@
+---
+// Home / Faq — Fase 3, seção a seção. Fiel ao Figma (node 3166:404, base 1440).
+// Slider horizontal com efeito "overlapping" (Osmo) adaptado à nossa stack: em repouso é uma
+// fileira normal (= layout do Figma); escala/rotação/sobreposição só entram durante a navegação.
+// Navegação por botões (Figma) + teclado + drag. Acordeões usam a técnica CSS da Osmo
+// (grid-template-rows 0fr→1fr) reestilizada com nossos tokens. Motion via createMotion() (Fase 5
+// refina). Conteúdo é placeholder fiel ao Figma — array `faqs` já pré-modelado p/ Sanity `faqItem`
+// (Fase 4). Assets: foto e flor baixadas do Figma; ícones de categoria/chevron são SVG inline
+// (trocáveis quando o CMS trouxer os ícones reais).
+
+// Ícones de categoria (Lucide-style, viewBox 24). set:html dentro de um <svg> compartilhado.
+const ICONS: Record<string, string> = {
+  home: '<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
+  heart:
+    '<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>',
+  hand: '<path d="M11 12h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 14"/><path d="m7 18 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a2 2 0 0 0-2.75-2.91l-4.2 3.9"/><path d="m2 13 6 6"/>',
+  layers:
+    '<path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/>',
+  users:
+    '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+};
+
+const answer =
+  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis laoreet in odio vel sollicitudin. Nam aliquet augue dolor, quis varius ligula aliquet nec.';
+
+// Cada categoria: badge (fundo = token de cor), tom do ícone (contraste sobre o badge),
+// glyph e perguntas. `a` é a resposta do acordeão (placeholder).
+const faqs = [
+  {
+    key: 'foundation',
+    title: 'About the Foundation',
+    badge: 'bg-studio',
+    iconTone: 'text-orchid-050',
+    icon: 'home',
+    items: [{ q: 'Question item #1', a: answer }, { q: 'Question item #2', a: answer }, { q: 'Question item #3', a: answer }, { q: 'Question item #4', a: answer }],
+  },
+  {
+    key: 'donations',
+    title: 'Donations and Support',
+    badge: 'bg-punch',
+    iconTone: 'text-orchid-050',
+    icon: 'heart',
+    items: [{ q: 'Question item #1', a: answer }, { q: 'Question item #2', a: answer }, { q: 'Question item #3', a: answer }, { q: 'Question item #4', a: answer }],
+  },
+  {
+    key: 'volunteering',
+    title: 'Volunteering',
+    badge: 'bg-corn',
+    iconTone: 'text-woodsmoke',
+    icon: 'hand',
+    items: [{ q: 'Question item #1', a: answer }, { q: 'Question item #2', a: answer }, { q: 'Question item #3', a: answer }, { q: 'Question item #4', a: answer }],
+  },
+  {
+    key: 'programs',
+    title: 'Programs and Services',
+    badge: 'bg-salem',
+    iconTone: 'text-orchid-050',
+    icon: 'layers',
+    items: [{ q: 'Question item #1', a: answer }, { q: 'Question item #2', a: answer }, { q: 'Question item #3', a: answer }, { q: 'Question item #4', a: answer }],
+  },
+  {
+    key: 'partnerships',
+    title: 'Partnerships and Collaborations',
+    badge: 'bg-buckthorn',
+    iconTone: 'text-woodsmoke',
+    icon: 'users',
+    items: [{ q: 'Question item #1', a: answer }, { q: 'Question item #2', a: answer }, { q: 'Question item #3', a: answer }, { q: 'Question item #4', a: answer }],
+  },
+];
+---
+
+<section data-reveal-section data-faq class="overflow-x-clip border-t border-woodsmoke/10 bg-orchid-025">
+  <div class="mx-auto grid max-w-[120rem] grid-cols-1 gap-12 px-6 py-16 sm:px-10 lg:grid-cols-2 lg:items-stretch lg:gap-x-12 lg:px-16">
+    {/* Coluna esquerda — foto */}
+    <div class="relative aspect-[3/4] overflow-hidden rounded-md border-[1.5px] border-woodsmoke bg-orchid-100 sm:aspect-[4/5] lg:aspect-auto lg:h-full lg:min-h-[32rem]">
+      <img
+        src="/images/faq/woman.jpg"
+        alt="A community member wearing a Fundación Elva Fonseca t-shirt, standing outdoors"
+        width="1066"
+        height="1600"
+        class="absolute inset-0 h-full w-full object-cover"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+
+    {/* Coluna direita — header + slider */}
+    <div class="flex min-w-0 flex-col gap-12">
+      <div class="flex flex-col gap-6">
+        <img src="/images/faq/flower.png" alt="" width="160" height="152" class="h-16 w-auto self-start" aria-hidden="true" />
+        <div class="flex flex-col gap-4">
+          {/* Exceção consciente de vw (one-line fit): no desktop o título precisa acompanhar a
+             largura do viewport para caber sempre em 1 linha (Figma = whitespace-nowrap, ~48px @1440),
+             sem quebrar em notebooks menores. Mesma justificativa da largura do card do slider;
+             ver docs/FLUID_DESIGN_SYSTEM.md. Mobile segue em rem puro e pode quebrar. */}
+          <h2 class="font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-ink text-[2rem] sm:text-[2.5rem] lg:whitespace-nowrap lg:[font-size:clamp(2rem,3.4vw,3rem)]">
+            Frequently Asked Questions
+          </h2>
+          <p class="font-sans text-base font-medium leading-[1.4] tracking-[-0.02em] text-ink/80">
+            Find answers to the most common questions about our foundation
+          </p>
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-8">
+        {/* Bleed à direita: margem negativa = padding horizontal do container, então o slider
+           chega à borda do viewport (o peek é cortado na borda, sem gutter — igual ao Figma). */}
+        <div data-overlap-slider-init class="faq-slider -mr-6 sm:-mr-10 lg:-mr-16">
+          <div data-overlap-slider-collection class="faq-slider__viewport">
+            <ul data-overlap-slider-list class="faq-slider__track">
+              {
+                faqs.map((cat) => (
+                  <li data-overlap-slider-item class="faq-slider__item">
+                    <article class="flex h-full flex-col gap-6 rounded-lg border-[1.5px] border-woodsmoke bg-orchid-050 p-5">
+                      <span class={`inline-flex w-fit items-center justify-center p-3 ${cat.badge}`}>
+                        <svg
+                          class={`size-8 ${cat.iconTone}`}
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="1.75"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                          set:html={ICONS[cat.icon]}
+                        />
+                      </span>
+
+                      <h3 class="font-display font-black leading-[1.05] tracking-[-0.04em] text-ink text-[1.5rem]">
+                        {cat.title}
+                      </h3>
+
+                      <ul data-accordion-css-init data-accordion-close-siblings="true" class="flex flex-col gap-5">
+                        {cat.items.map((item, i) => (
+                          <li
+                            data-accordion-status={cat.key === 'foundation' && i === 0 ? 'active' : 'not-active'}
+                            class="border-b border-woodsmoke/10 pb-5 last:border-b-0 last:pb-0"
+                          >
+                            <button
+                              type="button"
+                              data-accordion-toggle
+                              aria-expanded={cat.key === 'foundation' && i === 0 ? 'true' : 'false'}
+                              class="flex w-full cursor-pointer items-center justify-between gap-4 text-left"
+                            >
+                              <span class="font-display font-black leading-[1.05] tracking-[-0.03em] text-ink text-[1.125rem]">
+                                {item.q}
+                              </span>
+                              <svg
+                                class="faq-acc-chevron size-5 shrink-0 text-ink"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                              >
+                                <path d="m6 9 6 6 6-6" />
+                              </svg>
+                            </button>
+                            <div class="faq-acc-panel">
+                              <div class="min-h-0 overflow-hidden">
+                                <p class="pt-4 font-sans text-base font-medium leading-[1.4] tracking-[-0.02em] text-ink/80">
+                                  {item.a}
+                                </p>
+                              </div>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    </article>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        </div>
+
+        {/* Controles — Figma node 3166:535 */}
+        <div class="flex gap-2">
+          <button
+            type="button"
+            data-overlap-slider-prev
+            aria-label="Previous questions"
+            class="grid size-12 place-items-center rounded-sm border-[1.5px] border-woodsmoke bg-orchid-050 text-ink transition-[transform,background-color,opacity] duration-150 ease-out enabled:hover:bg-buckthorn enabled:active:bg-buckthorn active:scale-[0.95] disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m15 18-6-6 6-6" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            data-overlap-slider-next
+            aria-label="Next questions"
+            class="grid size-12 place-items-center rounded-sm border-[1.5px] border-woodsmoke bg-orchid-050 text-ink transition-[transform,background-color,opacity] duration-150 ease-out enabled:hover:bg-buckthorn enabled:active:bg-buckthorn active:scale-[0.95] disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m9 18 6-6-6-6" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Slider: largura da card menor que o viewport → o próximo card espia (peek).
+     Viewport recorta horizontalmente; a pilha sobreposta fica no canto esquerdo. */
+  .faq-slider__viewport {
+    position: relative;
+    display: flex;
+    width: 100%;
+    overflow: hidden;
+  }
+  .faq-slider__track {
+    display: flex;
+    flex: none;
+    align-items: stretch;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .faq-slider__item {
+    flex: none;
+    width: min(86vw, 32rem);
+    margin-right: 1.5rem;
+  }
+  @media (min-width: 1024px) {
+    .faq-slider__item {
+      /* ~32rem < largura da coluna (≈39.5rem @1440) → peek do próximo card */
+      width: 32rem;
+    }
+  }
+
+  /* Acordeão (técnica CSS Osmo: grid-template-rows 0fr→1fr). O clamp global de
+     prefers-reduced-motion em global.css neutraliza estas transições automaticamente. */
+  .faq-acc-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.5s cubic-bezier(0.625, 0.05, 0, 1);
+  }
+  [data-accordion-status='active'] > button .faq-acc-chevron {
+    transform: rotate(180deg);
+  }
+  [data-accordion-status='active'] .faq-acc-panel {
+    grid-template-rows: 1fr;
+  }
+  .faq-acc-chevron {
+    transition: transform 0.4s cubic-bezier(0.625, 0.05, 0, 1);
+  }
+</style>
+
+<script>
+  import { createMotion, gsap } from '../../lib/gsap';
+
+  // ---- Acordeão (CSS puro + toggle de estado; sem GSAP) ----
+  function initAccordions(root: Element) {
+    root.querySelectorAll<HTMLElement>('[data-accordion-css-init]').forEach((accordion) => {
+      const closeSiblings = accordion.getAttribute('data-accordion-close-siblings') === 'true';
+
+      accordion.addEventListener('click', (event) => {
+        const toggle = (event.target as Element).closest('[data-accordion-toggle]');
+        if (!toggle || !accordion.contains(toggle)) return;
+
+        const item = toggle.closest('[data-accordion-status]');
+        if (!item) return;
+
+        const isActive = item.getAttribute('data-accordion-status') === 'active';
+        item.setAttribute('data-accordion-status', isActive ? 'not-active' : 'active');
+        toggle.setAttribute('aria-expanded', String(!isActive));
+
+        if (closeSiblings && !isActive) {
+          accordion.querySelectorAll('[data-accordion-status="active"]').forEach((sib) => {
+            if (sib !== item) {
+              sib.setAttribute('data-accordion-status', 'not-active');
+              sib.querySelector('[data-accordion-toggle]')?.setAttribute('aria-expanded', 'false');
+            }
+          });
+        }
+      });
+    });
+  }
+
+  // ---- Overlapping slider (Osmo, adaptado) — nav por setas + teclado (sem drag) ----
+  // Sem drag/inércia: o arrasto conflitava com o toque nos acordeões internos.
+  function initOverlapSlider(init: HTMLElement, opts: { reducedMotion: boolean }) {
+    const minScale = 0.45;
+    const maxRotation = -8;
+    const reduced = opts.reducedMotion;
+
+    const wrap = init.querySelector<HTMLElement>('[data-overlap-slider-collection]');
+    const slider = init.querySelector<HTMLElement>('[data-overlap-slider-list]');
+    const slides = Array.from(init.querySelectorAll<HTMLElement>('[data-overlap-slider-item]'));
+    const root = init.closest('[data-faq]') as HTMLElement | null;
+    const prevBtn = root?.querySelector<HTMLButtonElement>('[data-overlap-slider-prev]') ?? null;
+    const nextBtn = root?.querySelector<HTMLButtonElement>('[data-overlap-slider-next]') ?? null;
+
+    if (!wrap || !slider || !slides.length) return () => {};
+
+    wrap.setAttribute('role', 'region');
+    wrap.setAttribute('aria-roledescription', 'carousel');
+    wrap.setAttribute('aria-label', 'Frequently asked questions by category');
+
+    let spacing = 0;
+    let offsets: number[] = [];
+    let maxScroll = 0;
+    let posX = 0;
+    let currentIndex = 0;
+    let active = false;
+
+    const clamp = (v: number) => (maxScroll <= 0 ? 0 : Math.min(Math.max(v, 0), maxScroll));
+
+    function syncControls() {
+      // índice = card cuja posição real (offsetLeft) está mais próxima do translate atual
+      currentIndex = offsets.reduce(
+        (best, off, i) => (Math.abs(posX - off) < Math.abs(posX - offsets[best]) ? i : best),
+        0,
+      );
+      if (prevBtn) prevBtn.disabled = currentIndex <= 0;
+      if (nextBtn) nextBtn.disabled = currentIndex >= slides.length - 1;
+      wrap!.setAttribute('aria-label', `Category ${currentIndex + 1} of ${slides.length}`);
+    }
+
+    function update() {
+      gsap.set(slider, { x: -posX });
+
+      if (reduced) {
+        // reduced-motion: sem escala/rotação/sobreposição — só translada o track
+        slides.forEach((slide) => gsap.set(slide, { x: 0, scale: 1, rotation: 0 }));
+        syncControls();
+        return;
+      }
+
+      slides.forEach((slide, i) => {
+        const local = Math.max(0, posX - offsets[i]);
+        const t = spacing > 0 ? Math.min(local / spacing, 1) : 0;
+        gsap.set(slide, {
+          x: local,
+          scale: 1 - (1 - minScale) * t,
+          rotation: maxRotation * t,
+          transformOrigin: '75% center',
+        });
+      });
+      syncControls();
+    }
+
+    function recalc() {
+      // Posição REAL (fracionária) de cada card, não múltiplos de um spacing arredondado —
+      // elimina a deriva sub-pixel que cortava a borda esquerda dos cards após o 1º.
+      // Zera os transforms para medir o layout estático; update() os reaplica em seguida.
+      gsap.set(slider, { x: 0 });
+      slides.forEach((s) => gsap.set(s, { x: 0, scale: 1, rotation: 0 }));
+      const base = wrap!.getBoundingClientRect().left;
+      offsets = slides.map((s) => s.getBoundingClientRect().left - base);
+      spacing = offsets.length > 1 ? offsets[1] - offsets[0] : 1; // só p/ normalizar o t (escala/rotação)
+      maxScroll = offsets[offsets.length - 1];
+      posX = clamp(posX);
+      update();
+    }
+
+    function goToSlide(idx: number) {
+      const clamped = Math.max(0, Math.min(idx, slides.length - 1));
+      const target = clamp(offsets[clamped]);
+      if (reduced) {
+        posX = target;
+        update();
+        return;
+      }
+      gsap.to(
+        { value: posX },
+        {
+          value: target,
+          duration: 0.55,
+          ease: 'power4.out',
+          onUpdate() {
+            posX = (this.targets()[0] as { value: number }).value;
+            update();
+          },
+        },
+      );
+    }
+
+    const ro = new ResizeObserver(() => recalc());
+    ro.observe(init);
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        active = entries[0].isIntersecting;
+      },
+      { threshold: 0.25 },
+    );
+    io.observe(init);
+
+    const onKey = (e: KeyboardEvent) => {
+      if (!active) return;
+      const tag = (e.target as HTMLElement)?.tagName?.toLowerCase();
+      if (tag === 'input' || tag === 'textarea' || tag === 'select') return;
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        goToSlide(currentIndex - 1);
+      }
+      if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        goToSlide(currentIndex + 1);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+
+    const onPrev = () => goToSlide(currentIndex - 1);
+    const onNext = () => goToSlide(currentIndex + 1);
+    prevBtn?.addEventListener('click', onPrev);
+    nextBtn?.addEventListener('click', onNext);
+
+    recalc();
+
+    // cleanup — chamado pelo createMotion ao trocar de breakpoint/reduced-motion
+    return () => {
+      ro.disconnect();
+      io.disconnect();
+      window.removeEventListener('keydown', onKey);
+      prevBtn?.removeEventListener('click', onPrev);
+      nextBtn?.removeEventListener('click', onNext);
+      slides.forEach((s) => gsap.set(s, { clearProps: 'all' }));
+      gsap.set(slider, { clearProps: 'all' });
+    };
+  }
+
+  function initFaq() {
+    const section = document.querySelector<HTMLElement>('[data-faq]');
+    if (!section) return;
+
+    initAccordions(section);
+
+    const slider = section.querySelector<HTMLElement>('[data-overlap-slider-init]');
+    if (slider) {
+      // Regra do projeto: todo GSAP passa por createMotion() (branch reduced-motion garantido).
+      createMotion(section, (ctx) => initOverlapSlider(slider, { reducedMotion: ctx.reducedMotion }));
+    }
+  }
+
+  if (document.readyState !== 'loading') initFaq();
+  else document.addEventListener('DOMContentLoaded', initFaq);
+</script>
