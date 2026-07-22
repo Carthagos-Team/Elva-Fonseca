@@ -1,0 +1,122 @@
+---
+// Programs / WhatIsNext — Fase 3. Fiel ao Figma (node 3222:2, "SEC 4-new").
+// Grid estático de 3 cards + reveal em stagger no scroll (cards sobem/fade/leve rotação e assentam
+// no grid quando a seção entra na tela). Sem pin/scrub/Lenis. Motion via createMotion() com branch
+// reduced-motion. Conteúdo placeholder pré-modelado p/ Sanity (Fase 4).
+
+const cards = [
+  {
+    image: '/images/programs/next-mobility.jpg',
+    imageAlt: 'Community members joining hands',
+    titleLines: ['Mobility', 'for all'],
+    body: 'We plan to open new community dining spaces across the municipality, ensuring that more children and elderly individuals have consistent access to nourishing meals and shared connection.',
+  },
+  {
+    image: '/images/programs/next-skills.jpg',
+    imageAlt: 'A girl standing at the doorway of her home',
+    titleLines: ['Growing skills,', 'growing futures'],
+    body: 'We’re expanding our vocational training programs to help more individuals gain the tools and knowledge they need to build brighter, self-sustaining futures for themselves and their families.',
+  },
+  {
+    image: '/images/programs/next-meals.jpg',
+    imageAlt: 'Fresh cassava and vegetables in crates',
+    titleLines: ['More meals,', 'more towns'],
+    body: 'We plan to open new community dining spaces across the municipality, ensuring that more children and elderly individuals have consistent access to nourishing meals and shared connection.',
+  },
+];
+---
+
+<section data-reveal-section data-what-next class="border-t border-orchid-200 bg-orchid-100 py-16 lg:py-20">
+  <div class="mx-auto flex max-w-[120rem] flex-col items-center gap-12 px-6 sm:px-10 lg:gap-16 lg:px-16">
+    {/* Header */}
+    <div class="flex flex-col items-center gap-6 text-center">
+      <img src="/images/cta/rose.svg" alt="" aria-hidden="true" width="68" height="64" class="h-16 w-auto" />
+      <h2 class="font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-ink text-[2.5rem] sm:text-5xl lg:text-[4rem]">
+        What is next?
+      </h2>
+      <p class="max-w-[29rem] font-sans text-base font-medium leading-relaxed tracking-[-0.02em] text-ink/80">
+        We’re just getting started. Guided by our values and inspired by Elva’s legacy, we’re committed
+        to expanding our reach and deepening our impact in the communities that need it most.
+      </p>
+    </div>
+
+    {/* Grid de 3 cards */}
+    <ul class="grid w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        cards.map((c) => (
+          <li data-next-card class="flex h-full flex-col gap-8 rounded-lg border-[1.5px] border-woodsmoke bg-cerulean-200 p-2">
+            <div class="h-[15.375rem] shrink-0 overflow-hidden rounded-md border-[1.5px] border-woodsmoke bg-orchid-100">
+              <img
+                src={c.image}
+                alt={c.imageAlt}
+                class="size-full object-cover"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <div class="flex flex-col gap-6 px-6 pb-9">
+              <h3 class="font-display uppercase leading-[0.85] tracking-[-0.04em] text-ink text-[2rem]">
+                {c.titleLines.map((line, j) => (
+                  <>
+                    {line}
+                    {j < c.titleLines.length - 1 && <br />}
+                  </>
+                ))}
+              </h3>
+              <p class="font-sans text-base font-medium leading-[1.4] tracking-[-0.02em] text-ink/80">
+                {c.body}
+              </p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<script>
+  import { createMotion, gsap } from '../../lib/gsap';
+
+  function initWhatNext() {
+    const section = document.querySelector<HTMLElement>('[data-what-next]');
+    if (!section) return;
+    const cards = gsap.utils.toArray<HTMLElement>(section.querySelectorAll('[data-next-card]'));
+    if (!cards.length) return;
+
+    createMotion(section, (ctx) => {
+      // reduced-motion: cards visíveis, sem animação.
+      if (ctx.reducedMotion) {
+        gsap.set(cards, { clearProps: 'all' });
+        return () => {};
+      }
+
+      // Reveal em stagger na entrada (sabor "deal/shuffle" resolvendo no grid do Figma).
+      // Duração curta + ease com leve overshoot = cada card "estala" no lugar (dinâmico);
+      // o intervalo maior entre cards (stagger) é o que dá a leitura de cascata/sequência.
+      const tween = gsap.from(cards, {
+        y: 56,
+        autoAlpha: 0,
+        rotate: -3,
+        scale: 0.96,
+        transformOrigin: '50% 100%',
+        duration: 0.6,
+        ease: 'back.out(1.7)',
+        stagger: 0.35,
+        scrollTrigger: {
+          trigger: section,
+          start: 'top 75%',
+          once: true,
+        },
+      });
+
+      return () => {
+        tween.scrollTrigger?.kill();
+        tween.kill();
+        gsap.set(cards, { clearProps: 'all' });
+      };
+    });
+  }
+
+  if (document.readyState !== 'loading') initWhatNext();
+  else document.addEventListener('DOMContentLoaded', initWhatNext);
+</script>
