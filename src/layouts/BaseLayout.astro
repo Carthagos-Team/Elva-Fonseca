@@ -9,9 +9,10 @@ interface Props {
   description: string;
   ogImage?: string;
   headerTheme?: 'light' | 'dark';
+  headerBackground?: 'transparent' | 'solid';
 }
 
-const { title, description, ogImage, headerTheme = 'dark' } = Astro.props;
+const { title, description, ogImage, headerTheme = 'dark', headerBackground = 'transparent' } = Astro.props;
 ---
 
 <!doctype html>
@@ -26,7 +27,7 @@ const { title, description, ogImage, headerTheme = 'dark' } = Astro.props;
     <SEO {title} {description} {ogImage} />
   </head>
   <body class="flex min-h-dvh flex-col">
-    <Header theme={headerTheme} />
+    <Header theme={headerTheme} background={headerBackground} />
     <main id="main" class="flex-1">
       <slot />
     </main>

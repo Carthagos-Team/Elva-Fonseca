@@ -1,15 +1,17 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import ContactHero from '../components/contact/ContactHero.astro';
 import CtaVolunteer from '../components/global/CtaVolunteer.astro';
 import Faq from '../components/home/Faq.astro';
 import CtaBand from '../components/global/CtaBand.astro';
 ---
 
-<BaseLayout title="Contact" description="Get in touch with the Elva Fonseca Foundation.">
-  <section class="px-10 py-20">
-    <h1 class="font-display text-4xl">Contact</h1>
-    <p class="mt-4 max-w-prose text-ink/70">Get in touch with the Elva Fonseca Foundation.</p>
-  </section>
+<BaseLayout
+  title="Contact"
+  description="Get in touch with the Elva Fonseca Foundation."
+  headerBackground="solid"
+>
+  <ContactHero />
 
   {/* TODO: confirmar com o Jonathan o link real do Transparency Report (PDF/página) — href="#" é placeholder. */}
   <CtaVolunteer

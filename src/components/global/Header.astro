@@ -7,11 +7,24 @@
 // theme:
 //  - 'light' (páginas com hero escuro): logo/nav/texto orchid, fundo transparente
 //  - 'dark'  (Contact/Thank You e stubs sem hero escuro): logo/nav/texto woodsmoke
+// background:
+//  - 'transparent' (default): header `absolute`, sobreposto ao hero (overlay)
+//  - 'solid': header em fluxo (`relative`) + fundo orchid-100, para páginas sem hero escuro
+//    (ex.: Contact/Thank You) — empurra o conteúdo em vez de sobrepor. Fiel ao Figma 3196:1156:
+//    barra ~93px (md:py-6), alinhada ao conteúdo (lg:px-16) e botão Donate laranja+borda.
 
 interface Props {
   theme?: 'light' | 'dark';
+  background?: 'transparent' | 'solid';
 }
-const { theme = 'dark' } = Astro.props;
+const { theme = 'dark', background = 'transparent' } = Astro.props;
+const isSolid = background === 'solid';
+
+const donateBase =
+  'hidden min-h-11 items-center justify-center font-display text-lg leading-none tracking-[-0.04em] text-ink transition-transform duration-150 ease-out active:scale-[0.97] md:inline-flex';
+const donateDesktop = isSolid
+  ? `${donateBase} rounded-sm border-[1.5px] border-woodsmoke bg-buckthorn px-5 py-3.5 transition-[transform,filter] hover:brightness-105`
+  : `${donateBase} rounded-md bg-orchid px-5 py-3`;
 
 // Nav do Header = Figma (4 itens) + botão Donate. Stories/Contact ficam no footer.
 const nav = [
@@ -33,11 +46,16 @@ const logo = isLight ? '/images/brand/logo-lockup-light.svg' : '/images/brand/lo
   data-header
   data-theme={theme}
   class:list={[
-    'absolute inset-x-0 top-0 z-50',
+    isSolid ? 'relative z-50 bg-orchid-100' : 'absolute inset-x-0 top-0 z-50',
     isLight ? 'text-orchid' : 'text-ink',
   ]}
 >
-  <div class="mx-auto flex max-w-[120rem] items-center justify-between px-6 py-10 sm:px-10">
+  <div
+    class:list={[
+      'mx-auto flex max-w-[120rem] items-center justify-between',
+      isSolid ? 'px-6 py-10 sm:px-10 md:py-6 lg:px-16' : 'px-6 py-10 sm:px-10',
+    ]}
+  >
     <a href="/" aria-label="Elva Fonseca Foundation — home" class="shrink-0">
       <img src={logo} alt="Fundación Elva Fonseca" width="143" height="40" class="h-10 w-auto" />
     </a>
@@ -60,10 +78,7 @@ const logo = isLight ? '/images/brand/logo-lockup-light.svg' : '/images/brand/lo
       </ul>
     </nav>
 
-    <a
-      href="/donate"
-      class="hidden min-h-11 items-center justify-center rounded-md bg-orchid px-5 py-3 font-display text-lg leading-none tracking-[-0.04em] text-ink transition-transform duration-150 ease-out active:scale-[0.97] md:inline-flex"
-    >
+    <a href="/donate" class={donateDesktop}>
       Donate now
     </a>
   </div>
