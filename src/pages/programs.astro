@@ -1,10 +1,29 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/global/Hero.astro';
+import CtaBand from '../components/global/CtaBand.astro';
 ---
 
-<BaseLayout title="Programs" description="Community programs supported by the Elva Fonseca Foundation.">
-  <section class="px-10 py-20">
-    <h1 class="font-display text-4xl">Programs</h1>
-    <p class="mt-4 max-w-prose text-ink/70">Community programs supported by the Elva Fonseca Foundation.</p>
-  </section>
+<BaseLayout
+  title="Programs"
+  description="Community programs supported by the Elva Fonseca Foundation."
+  headerTheme="light"
+>
+  <Hero
+    titleLines={['Our Programs']}
+    subcopy="Elva Fonseca's legacy is one of care, courage, and generosity, transforming her community through everyday acts of love and solidarity."
+    image="/images/hero/programs.jpg"
+    imageAlt="A girl standing in a river holding recyclable containers"
+  />
+
+  <CtaBand
+    titleLines={['Do you have a dream project that could benefit your community?']}
+    body={[
+      "Whether it's a ceramics workshop, cooking classes, a gardening club, or something entirely new, we'd love to hear it.",
+    ]}
+    ctaLabel="Volunteer"
+    ctaHref="/volunteer"
+    secondaryLabel="Get in touch"
+    secondaryHref="/contact"
+  />
 </BaseLayout>
