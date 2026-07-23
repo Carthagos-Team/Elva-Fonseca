@@ -85,7 +85,7 @@ const slides = [
 ---
 
 <section data-reveal-section data-programs-slider class="bg-surface py-16 lg:py-20">
-  <div class="mx-auto flex max-w-[120rem] flex-col gap-12 px-6 sm:px-10 lg:px-16">
+  <div class="mx-auto flex max-w-[120rem] flex-col gap-8 px-6 sm:px-10 lg:px-16">
     <div data-ps-list class="ps-list">
       {
         slides.map((s, i) => {
@@ -94,7 +94,7 @@ const slides = [
             <article
               data-ps-item
               aria-hidden={i !== 0 ? 'true' : 'false'}
-              class:list={['ps-item flex flex-col gap-8 lg:gap-12', i === 0 && 'is-active']}
+              class:list={['ps-item flex flex-col gap-6 lg:gap-8', i === 0 && 'is-active']}
             >
               {/* Badge */}
               <span data-ps-badge class:list={['grid size-11 place-items-center rounded-md', t.badge]}>
