@@ -1,0 +1,84 @@
+---
+// Volunteer / VolunteerForm — Fiel ao Figma "SEC 03" (node 3272:230, base 1440).
+// Mesmo padrão de envio do ContactHero.astro (Web3Forms, 100% estático, sem backend —
+// docs/ARCHITECTURE.md). Campos diferentes: Name (um só) / Email / Add a message (sem
+// select de interesse). subject/from_name próprios pra diferenciar do Contact na mesma
+// caixa de entrada (mesma PUBLIC_WEB3FORMS_KEY, único mecanismo de diferenciação do
+// Web3Forms). Ícone reaproveita /images/cta/flower-01.webp (mesmo asset do Figma
+// "Elva_Texture-01", confirmado visualmente).
+
+const accessKey = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '';
+const thankYouUrl = new URL('/thank-you', Astro.site).toString();
+
+const fieldWrap = 'flex flex-col gap-2';
+const label = 'font-sans text-base font-medium tracking-[-0.02em] text-ink/80';
+const control =
+  'w-full border-0 border-b border-woodsmoke/20 bg-transparent py-2.5 font-sans text-base text-ink placeholder-ink/40 transition-colors outline-none focus:border-punch';
+---
+
+<section data-reveal-section class="border-t border-woodsmoke/10 bg-orchid-100">
+  <div class="mx-auto grid max-w-[120rem] grid-cols-1 gap-12 px-6 py-16 sm:px-10 lg:grid-cols-2 lg:items-stretch lg:gap-x-12 lg:px-16 lg:py-20">
+    {/* Coluna esquerda — foto */}
+    <div class="relative aspect-[4/5] overflow-hidden rounded-md border-[1.5px] border-woodsmoke bg-orchid-050 lg:aspect-auto lg:h-full lg:min-h-[32rem]">
+      <img
+        src="/images/volunteer/form.jpg"
+        alt="A boy standing in a doorway"
+        width="1800"
+        height="2700"
+        class="absolute inset-0 size-full object-cover"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+
+    {/* Coluna direita — header + formulário */}
+    <div class="flex min-w-0 flex-col justify-center gap-10">
+      <div class="flex flex-col gap-6">
+        <img src="/images/cta/flower-01.webp" alt="" width="64" height="64" class="h-16 w-auto self-start" aria-hidden="true" />
+        <div class="flex flex-col gap-4">
+          <h2 class="font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-ink text-[2rem] sm:text-[2.5rem] lg:text-5xl">
+            Ready to lend a hand?
+          </h2>
+          <p class="max-w-[34rem] font-sans text-base font-medium leading-relaxed tracking-[-0.02em] text-ink/80">
+            Leave your info below and we’ll be in touch soon. We’d love to learn more about
+            you and how you’d like to get involved.
+          </p>
+        </div>
+      </div>
+
+      <form action="https://api.web3forms.com/submit" method="POST" class="flex flex-col gap-9">
+        {/* Web3Forms — campos de controle */}
+        <input type="hidden" name="access_key" value={accessKey} />
+        <input type="hidden" name="subject" value="New volunteer application — Elva Fonseca Foundation" />
+        <input type="hidden" name="from_name" value="Elva Fonseca Website — Volunteer Form" />
+        <input type="hidden" name="redirect" value={thankYouUrl} />
+        {/* Honeypot anti-spam (deve ficar vazio) */}
+        <input type="checkbox" name="botcheck" class="hidden" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+        <div class="flex flex-col gap-6">
+          <div class={fieldWrap}>
+            <label for="name" class={label}>Name</label>
+            <input id="name" name="name" type="text" autocomplete="name" required class={control} />
+          </div>
+
+          <div class={fieldWrap}>
+            <label for="email" class={label}>Email</label>
+            <input id="email" name="email" type="email" autocomplete="email" required class={control} />
+          </div>
+
+          <div class={fieldWrap}>
+            <label for="message" class={label}>Add a message</label>
+            <textarea id="message" name="message" rows="1" required class={`${control} resize-none`}></textarea>
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          class="inline-flex min-h-11 w-fit items-center justify-center rounded-md border-[1.5px] border-woodsmoke bg-buckthorn px-6 py-3.5 font-display font-black text-base uppercase tracking-[-0.01em] text-ink transition-[transform,filter] duration-150 ease-out hover:brightness-105 active:scale-[0.97]"
+        >
+          Send
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
