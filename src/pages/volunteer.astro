@@ -1,15 +1,17 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import CtaBand from '../components/global/CtaBand.astro';
-import CtaDonate from '../components/global/CtaDonate.astro';
+import Hero from '../components/global/Hero.astro';
 ---
 
-<BaseLayout title="Volunteer" description="Join us — volunteer with the Elva Fonseca Foundation.">
-  <section class="px-10 py-20">
-    <h1 class="font-display text-4xl">Volunteer</h1>
-    <p class="mt-4 max-w-prose text-ink/70">Join us — volunteer with the Elva Fonseca Foundation.</p>
-  </section>
-
-  <CtaDonate />
-  <CtaBand />
+<BaseLayout
+  title="Volunteer"
+  description="Join us — volunteer with the Elva Fonseca Foundation."
+  headerTheme="light"
+>
+  <Hero
+    titleLines={['Ready to help?', 'Start here']}
+    subcopy="Every contribution counts. Support our mission and make lasting impact today."
+    image="/images/hero/volunteer.jpg"
+    imageAlt="Aerial view of the community at sunset, with a river winding through green fields and homes"
+  />
 </BaseLayout>
