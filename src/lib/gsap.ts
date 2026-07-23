@@ -12,8 +12,14 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
+import { CustomEase } from 'gsap/CustomEase';
 
-gsap.registerPlugin(ScrollTrigger, SplitText);
+gsap.registerPlugin(ScrollTrigger, SplitText, CustomEase);
+
+// Easing padrão pra qualquer wipe/troca de slide que precise de sensação "premium"
+// (ref. Osmo Parallax Gallery). Nomeada aqui pra ser reutilizável em qualquer slider —
+// não redeclarar esse bezier solto dentro de um componente.
+CustomEase.create('smooth-wipe', '0.6, 0.08, 0.02, 0.99');
 
 export const BREAKPOINTS = {
   desktop: '(min-width: 1024px)',
@@ -61,4 +67,4 @@ export function createMotion(
   return mm;
 }
 
-export { gsap, ScrollTrigger, SplitText };
+export { gsap, ScrollTrigger, SplitText, CustomEase };

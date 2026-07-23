@@ -1,0 +1,401 @@
+---
+// Programs / VoicesOfCommunity — Fase 3. Fiel ao Figma "SEC 5" (node 3248:144, base 1440).
+// Testemunhos com foto grande + quote à esquerda, coluna de 3 miniaturas clicáveis à direita
+// (miniatura ativa em opacidade cheia, as outras a 50% — só 3 no Figma = 3 testemunhos no total).
+// Troca por clique na miniatura (ou teclado ↑/↓): foto faz um "wipe" vertical com parallax na
+// camada interna (ref. Osmo Parallax Gallery, eixo adaptado pro nosso layout de miniaturas
+// verticais) e o texto (quote + nome/cargo) revela por linhas via SplitText (ref. Osmo Line
+// Reveal Testimonials) — entrada do novo conteúdo sobreposta à saída do antigo, sem "degrau".
+// Motion via createMotion() com branch reduced-motion + cleanup. Conteúdo pré-modelado p/
+// Sanity (Fase 4): testemunho 1 fiel ao Figma; 2 e 3 são placeholder genérico (mesmas fotos
+// já usadas no design, nome/cargo/quote inventados, mesmo espírito Lorem ipsum do restante
+// do site pré-CMS).
+
+// Quotes curtas (~92 chars, iguais) — cabem na altura da foto com type 2.5rem.
+const testimonials = [
+  {
+    name: 'Lillian Fernandez',
+    role: 'Volunteer',
+    quote:
+      '"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt”.',
+    image: '/images/programs/voices-01.jpg',
+    imageAlt: 'Lillian smiling outdoors, wearing a Fundación Elva Fonseca t-shirt',
+    imagePosition: 'object-[50%_16%]',
+    thumbPosition: 'object-[50%_8%]',
+  },
+  {
+    name: 'Marcos Herrera',
+    role: 'Program Participant',
+    quote:
+      '"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip, ex ea”.',
+    image: '/images/programs/voices-02.jpg',
+    imageAlt: 'Marcos standing outdoors, wearing a Fundación Elva Fonseca t-shirt',
+    imagePosition: 'object-[50%_16%]',
+    thumbPosition: 'object-[50%_22%]',
+  },
+  {
+    name: 'Carla Méndez',
+    role: 'Community Coordinator',
+    quote:
+      '"Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat ut”.',
+    image: '/images/programs/voices-03.jpg',
+    imageAlt: 'Carla standing outdoors, wearing a Fundación Elva Fonseca polo shirt',
+    imagePosition: 'object-[50%_16%]',
+    thumbPosition: 'object-[42%_27%]',
+  },
+] as const;
+---
+
+<section data-reveal-section data-voices class="bg-punch py-16 lg:py-20">
+  <div class="mx-auto flex max-w-[120rem] flex-col gap-20 px-6 sm:px-10 lg:px-16">
+    {/* Cabeçalho */}
+    <div class="flex flex-col gap-6">
+      <img src="/images/cta/rose-light.svg" alt="" aria-hidden="true" width="68" height="64" class="w-[4.25rem]" />
+      <h2 class="font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-orchid text-[2.75rem] sm:text-6xl lg:text-[6.2rem]">
+        Voices of<br />the community:
+      </h2>
+    </div>
+
+    {/* Conteúdo: card de quote + coluna de miniaturas */}
+    <div class="flex flex-col gap-6 lg:flex-row">
+      <div class="flex flex-1 flex-col gap-8 rounded-2xl border-[1.5px] border-woodsmoke bg-orchid p-6 lg:flex-row lg:items-stretch lg:gap-20">
+        {/* Foto (pilha, um ativo por vez) — altura Figma 539 → define o card no desktop */}
+        <div data-vc-photo-list class="vc-photo-list relative aspect-[485/539] w-full shrink-0 overflow-hidden rounded-xl lg:h-[33.7rem] lg:w-[30.3rem]">
+          {
+            testimonials.map((t, i) => (
+              <div
+                data-vc-photo
+                aria-hidden={i !== 0 ? 'true' : 'false'}
+                class:list={['vc-photo relative size-full overflow-hidden', i === 0 && 'is-active']}
+              >
+                <img
+                  data-vc-photo-inner
+                  src={t.image}
+                  alt={t.imageAlt}
+                  class:list={['absolute inset-0 size-full object-cover', t.imagePosition]}
+                  loading={i === 0 ? 'eager' : 'lazy'}
+                  decoding="async"
+                />
+              </div>
+            ))
+          }
+        </div>
+
+        {/* Quote + meta: mesma altura da foto no desktop (justify-between, sem gap fixo) */}
+        <div data-vc-text-list class="vc-text-list relative flex-1 lg:h-[33.7rem] lg:min-h-0">
+          {
+            testimonials.map((t, i) => (
+              <div
+                data-vc-text-item
+                aria-hidden={i !== 0 ? 'true' : 'false'}
+                class:list={['vc-text-item flex h-full min-h-0 flex-col justify-between', i === 0 && 'is-active']}
+              >
+                <p data-vc-quote class="font-display leading-[1.05] tracking-[-0.04em] text-ink text-xl sm:text-2xl lg:text-[2.5rem]">
+                  {t.quote}
+                </p>
+                <p data-vc-meta class="font-sans text-base leading-[1.4] tracking-[-0.02em] text-ink/80">
+                  <span class="font-display font-black">{t.name}</span>
+                  <br />
+                  {t.role}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Miniaturas */}
+      <div data-vc-thumbs class="flex flex-row gap-6 lg:w-[8.75rem] lg:flex-col" role="tablist" aria-label="Testimonials">
+        {
+          testimonials.map((t, i) => (
+            <button
+              type="button"
+              data-vc-thumb
+              data-index={i}
+              role="tab"
+              aria-selected={i === 0 ? 'true' : 'false'}
+              aria-label={`Show ${t.name}'s testimonial`}
+              class:list={[
+                'vc-thumb relative size-20 shrink-0 overflow-hidden rounded-[0.625rem] border-[1.5px] border-woodsmoke lg:size-auto lg:flex-1',
+                i === 0 && 'is-active',
+              ]}
+            >
+              <img
+                src={t.image}
+                alt=""
+                aria-hidden="true"
+                class:list={['absolute inset-0 size-full object-cover', t.thumbPosition]}
+                loading="lazy"
+                decoding="async"
+              />
+            </button>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Foto e texto empilhados na mesma célula do grid (padrão já usado no ProgramsSlider).
+     Fotos: só visibility no guard pré-JS — opacity/autoAlpha fica 100% no GSAP pra não
+     matar o wipe no meio do tween. Texto: opacity+visibility até o JS hidratar. */
+  .vc-photo-list,
+  .vc-text-list {
+    display: grid;
+  }
+  .vc-photo,
+  .vc-text-item {
+    grid-area: 1 / 1;
+  }
+  .vc-photo:not(.is-active) {
+    visibility: hidden;
+  }
+  .vc-text-item:not(.is-active) {
+    visibility: hidden;
+    opacity: 0;
+  }
+  [data-vc-photo][aria-hidden='true'],
+  [data-vc-text-item][aria-hidden='true'] {
+    pointer-events: none;
+  }
+
+  /* Miniaturas: inativa a 50% (Figma), ativa cheia — transição CSS simples, sem tween JS. */
+  .vc-thumb {
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+  }
+  .vc-thumb.is-active {
+    opacity: 1;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .vc-thumb:hover {
+      opacity: 0.75;
+    }
+    .vc-thumb.is-active:hover {
+      opacity: 1;
+    }
+  }
+</style>
+
+<script>
+  import { createMotion, gsap, ScrollTrigger, SplitText } from '../../lib/gsap';
+
+  function initVoices() {
+    const section = document.querySelector<HTMLElement>('[data-voices]');
+    if (!section) return;
+
+    const photoEls = Array.from(section.querySelectorAll<HTMLElement>('[data-vc-photo]'));
+    const textEls = Array.from(section.querySelectorAll<HTMLElement>('[data-vc-text-item]'));
+    const thumbs = Array.from(section.querySelectorAll<HTMLButtonElement>('[data-vc-thumb]'));
+    if (!photoEls.length || !textEls.length) return;
+
+    createMotion(section, (ctx) => {
+      const reduced = ctx.reducedMotion;
+      let active = 0;
+      let animating = false;
+      let inView = true;
+      let entered = false;
+      let st: ScrollTrigger | null = null;
+
+      const items = photoEls.map((photo, i) => {
+        const textItem = textEls[i];
+        const inner = photo.querySelector<HTMLElement>('[data-vc-photo-inner]');
+        const splitTargets = [
+          textItem.querySelector<HTMLElement>('[data-vc-quote]'),
+          textItem.querySelector<HTMLElement>('[data-vc-meta]'),
+        ].filter((el): el is HTMLElement => !!el);
+
+        return {
+          photo,
+          inner,
+          textItem,
+          splitInstances: reduced ? [] : splitTargets.map((el) => SplitText.create(el, { type: 'lines', mask: 'lines' })),
+        };
+      });
+
+      type Item = (typeof items)[number];
+      const linesOf = (item: Item) => item.splitInstances.flatMap((inst) => inst.lines);
+
+      // Thumbs atualizam na hora (feedback imediato). Photo/text só no onComplete —
+      // senão `.vc-photo:not(.is-active) { visibility:hidden }` mata o wipe no frame 0.
+      function setThumbs(i: number) {
+        thumbs.forEach((el, ii) => {
+          el.classList.toggle('is-active', ii === i);
+          el.setAttribute('aria-selected', String(ii === i));
+        });
+      }
+
+      function setActiveContent(i: number) {
+        photoEls.forEach((el, ii) => {
+          el.classList.toggle('is-active', ii === i);
+          el.setAttribute('aria-hidden', String(ii !== i));
+        });
+        textEls.forEach((el, ii) => {
+          el.classList.toggle('is-active', ii === i);
+          el.setAttribute('aria-hidden', String(ii !== i));
+        });
+      }
+
+      function setActiveVisual(i: number) {
+        setThumbs(i);
+        setActiveContent(i);
+      }
+
+      // Foto revela por clip-wipe vertical + parallax na camada interna (Osmo-style):
+      // a que entra abre por cima da que sai. forward (1) de baixo→cima; back (-1) de cima→baixo.
+      const clipHidden = (direction: number) => (direction === 1 ? 'inset(100% 0 0 0)' : 'inset(0 0 100% 0)');
+
+      function prep(item: Item, direction: number) {
+        // is-active agora: sem isso o guard CSS (visibility:hidden) esconde o wipe.
+        item.photo.classList.add('is-active');
+        item.textItem.classList.add('is-active');
+        gsap.set(item.photo, { autoAlpha: 1, clipPath: clipHidden(direction), zIndex: 2 });
+        if (item.inner) gsap.set(item.inner, { yPercent: direction * 12, scale: 1.08 });
+        gsap.set(linesOf(item), { yPercent: 110 });
+      }
+
+      function buildOut(tl: gsap.core.Timeline, item: Item, _direction: number, at: number) {
+        gsap.set(item.photo, { zIndex: 1 });
+        tl.to(linesOf(item), { yPercent: -110, duration: 0.5, ease: 'power3.out', stagger: { amount: 0.15 } }, at);
+        return tl;
+      }
+
+      function buildIn(tl: gsap.core.Timeline, item: Item, direction: number, at: number) {
+        prep(item, direction);
+        tl.to(item.photo, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.9, ease: 'smooth-wipe' }, at);
+        if (item.inner) {
+          tl.to(item.inner, { yPercent: 0, scale: 1, duration: 1, ease: 'power2.out' }, at);
+        }
+        tl.to(linesOf(item), { yPercent: 0, duration: 0.7, ease: 'power4.inOut', stagger: { amount: 0.3 } }, at + 0.05);
+        return tl;
+      }
+
+      function revealFirst() {
+        if (entered) return;
+        entered = true;
+        buildIn(gsap.timeline(), items[active], 1, 0);
+      }
+
+      function goTo(next: number) {
+        next = ((next % items.length) + items.length) % items.length;
+        if (next === active) return;
+
+        // Se o reveal de entrada ainda não rolou, libera o slide 0 antes de trocar.
+        if (!reduced && !entered) {
+          entered = true;
+          st?.kill();
+          st = null;
+          gsap.set(items[active].photo, { clipPath: 'inset(0% 0% 0% 0%)' });
+          if (items[active].inner) gsap.set(items[active].inner, { yPercent: 0, scale: 1 });
+          gsap.set(linesOf(items[active]), { yPercent: 0 });
+        }
+
+        const direction = next > active ? 1 : -1;
+        const cur = items[active];
+        const nx = items[next];
+
+        if (reduced) {
+          gsap.to(cur.photo, { autoAlpha: 0, duration: 0.3 });
+          gsap.to(cur.textItem, { autoAlpha: 0, duration: 0.3 });
+          gsap.set(nx.photo, { autoAlpha: 1 });
+          gsap.set(nx.textItem, { autoAlpha: 1 });
+          active = next;
+          setActiveVisual(next);
+          return;
+        }
+
+        if (animating) return;
+        animating = true;
+        setThumbs(next);
+        gsap.set(nx.textItem, { autoAlpha: 1 });
+
+        const tl = gsap.timeline({
+          onComplete: () => {
+            gsap.set(cur.photo, { autoAlpha: 0, clearProps: 'clipPath,zIndex' });
+            gsap.set(nx.photo, { clearProps: 'clipPath,zIndex' });
+            if (cur.inner) gsap.set(cur.inner, { clearProps: 'transform' });
+            gsap.set(cur.textItem, { autoAlpha: 0 });
+            active = next;
+            setActiveContent(next);
+            animating = false;
+          },
+        });
+        buildOut(tl, cur, direction, 0);
+        // Sobreposição: entrada começa antes da saída terminar — evita o "degrau".
+        buildIn(tl, nx, direction, 0.2);
+      }
+
+      // ---- Estado inicial ----
+      items.forEach((item, i) => {
+        gsap.set(item.photo, { autoAlpha: i === active ? 1 : 0 });
+        gsap.set(item.textItem, { autoAlpha: i === active ? 1 : 0 });
+      });
+      setActiveVisual(active);
+
+      if (reduced) {
+        entered = true;
+      } else {
+        prep(items[active], 1);
+        // Garante visibility no ativo enquanto o clip ainda está fechado (CSS guard).
+        items[active].photo.classList.add('is-active');
+        st = ScrollTrigger.create({
+          trigger: section,
+          start: 'top 75%',
+          once: true,
+          onEnter: revealFirst,
+        });
+        // Refresh mid-page / deep link: se já passou do start, dispara na hora.
+        if (st.progress > 0 || ScrollTrigger.isInViewport(section)) {
+          revealFirst();
+        }
+      }
+
+      // ---- Navegação ----
+      const thumbHandlers = thumbs.map((btn, i) => {
+        const h = () => goTo(i);
+        btn.addEventListener('click', h);
+        return h;
+      });
+
+      const onKey = (e: KeyboardEvent) => {
+        if (!inView) return;
+        const target = e.target as HTMLElement | null;
+        const tag = target?.tagName?.toLowerCase();
+        if (tag === 'input' || tag === 'textarea' || tag === 'select' || target?.isContentEditable) return;
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          goTo(active + 1);
+        }
+        if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          goTo(active - 1);
+        }
+      };
+      window.addEventListener('keydown', onKey);
+
+      const io = new IntersectionObserver(
+        (entries) => {
+          inView = entries[0].isIntersecting;
+        },
+        { threshold: 0.1 },
+      );
+      io.observe(section);
+
+      // cleanup — chamado pelo createMotion ao trocar breakpoint/reduced-motion
+      return () => {
+        st?.kill();
+        io.disconnect();
+        window.removeEventListener('keydown', onKey);
+        thumbs.forEach((btn, i) => btn.removeEventListener('click', thumbHandlers[i]));
+        items.forEach((item) => item.splitInstances.forEach((inst) => inst.revert()));
+        const inners = items.map((item) => item.inner).filter((el): el is HTMLElement => !!el);
+        gsap.set([...photoEls, ...textEls, ...inners], { clearProps: 'all' });
+      };
+    });
+  }
+
+  if (document.readyState !== 'loading') initVoices();
+  else document.addEventListener('DOMContentLoaded', initVoices);
+</script>
