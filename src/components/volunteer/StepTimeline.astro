@@ -1,0 +1,226 @@
+---
+// Volunteer / StepTimeline — Fase 3. Fiel ao Figma "SEC 02" (node 3273:251, base 1440).
+// 4 cards alternados (imagem/texto) ligados por uma linha vertical fina. O próprio Figma
+// já demonstra os estados: card 1 em opacidade cheia, cards 2-4 pré-setados a opacity-50
+// (ainda não alcançados) — e o 1º conector aparece parcialmente preenchido (~61%), mostrando
+// o meio de um scroll-fill. Motion: cada conector tem sua própria timeline "scrub" (presa à
+// posição do scroll, contínua e reversível — não um reveal de uma vez só) que preenche a
+// linha E acende o card seguinte (opacity 0.5→1 + leve y) em sincronia. Conteúdo pré-modelado
+// p/ Sanity (Fase 4); card 3 tem corpo estruturado (intro + 2 sub-blocos "Days X:").
+
+const THEME: Record<string, string> = {
+  cerulean: 'bg-cerulean-200',
+  malachite: 'bg-malachite-200',
+  buckthorn: 'bg-buckthorn-200',
+  studio: 'bg-studio-200',
+};
+
+const steps = [
+  {
+    theme: 'cerulean',
+    title: 'Explore your cause',
+    body: 'From supporting children to serving meals or planting trees, our programs offer many ways to help. Find the one that feels right for you.',
+    image: '/images/volunteer/step-01.jpg',
+    imageAlt: 'A boy wading through a river, holding a cup and a bag of collected recyclables',
+    imageSide: 'left' as const,
+  },
+  {
+    theme: 'malachite',
+    title: 'Submit your application',
+    body: 'Fill out the volunteer application form below. Let us know your interests and availability, and once we receive it, a member of our team will reach out to guide you through the next steps.',
+    image: '/images/volunteer/step-02.jpg',
+    imagePosition: 'object-[50%_10%]',
+    imageAlt: 'A young girl standing in a doorway',
+    imageSide: 'right' as const,
+  },
+  {
+    theme: 'buckthorn',
+    title: 'Join our training program',
+    intro: 'All new volunteers go through a 5-day training journey:',
+    subSteps: [
+      {
+        label: 'Days 1 & 2:',
+        text: 'Introductory sessions to understand our values, safety protocols, and program goals.',
+      },
+      {
+        label: 'Days 3 to 5:',
+        text: 'Hands-on shadowing and real-life experiences, tailored to the program you’ll join.',
+      },
+    ],
+    image: '/images/volunteer/step-03.jpg',
+    imageAlt: 'A group of volunteers seated indoors during a training session',
+    imageSide: 'left' as const,
+  },
+  {
+    theme: 'studio',
+    title: 'Start your journey with us',
+    body: 'After training, you’ll officially become part of our volunteer team — ready to support, grow, and bring positive change to our community.',
+    image: '/images/volunteer/step-04.jpg',
+    imageAlt: 'Volunteers and children gathered together outdoors under a tree',
+    imageSide: 'right' as const,
+  },
+];
+---
+
+<section data-reveal-section data-step-timeline class="bg-surface py-16 lg:py-20">
+  <div class="mx-auto max-w-[75rem] px-6 sm:px-10 lg:px-16">
+    <div class="flex flex-col">
+      {
+        steps.map((step, i) => (
+          <>
+            <div
+              data-step-item
+              data-index={i}
+              class:list={[
+                'flex flex-col gap-6 rounded-lg border-[1.5px] border-woodsmoke p-2 lg:gap-20',
+                'lg:h-[30rem]',
+                step.imageSide === 'left' ? 'lg:flex-row' : 'lg:flex-row-reverse',
+                THEME[step.theme],
+              ]}
+            >
+              <div class="relative aspect-[715/477] w-full shrink-0 overflow-hidden rounded-md border-[1.5px] border-woodsmoke bg-orchid-100 lg:h-full lg:w-auto lg:flex-1">
+                <img
+                  src={step.image}
+                  alt={step.imageAlt}
+                  class:list={[
+                    'absolute inset-0 size-full object-cover',
+                    'imagePosition' in step ? step.imagePosition : 'object-center',
+                  ]}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+
+              <div
+                class:list={[
+                  'flex flex-1 flex-col justify-center gap-6 px-4 py-6 lg:py-9',
+                  step.imageSide === 'left' ? 'lg:pl-0 lg:pr-20' : 'lg:pr-0 lg:pl-20',
+                ]}
+              >
+                <h3 class="font-display leading-[0.8] tracking-[-0.04em] text-ink text-3xl sm:text-5xl lg:text-[4.5rem]">
+                  {step.title}
+                </h3>
+
+                {'body' in step && (
+                  <p class="font-sans text-base leading-[1.4] tracking-[-0.02em] text-ink/80">{step.body}</p>
+                )}
+
+                {'subSteps' in step && (
+                  <div class="flex flex-col gap-4">
+                    <p class="font-sans text-base leading-[1.4] tracking-[-0.02em] text-ink/80">{step.intro}</p>
+                    {step.subSteps.map((s) => (
+                      <div class="flex flex-col gap-2">
+                        <p class="font-sans text-base font-semibold leading-[1.4] tracking-[-0.02em] text-ink/80">
+                          {s.label}
+                        </p>
+                        <p class="font-sans text-base leading-[1.4] tracking-[-0.02em] text-ink/80">{s.text}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {i < steps.length - 1 && (
+              <div
+                data-step-connector
+                class:list={[
+                  'relative mx-auto flex w-[3px] flex-col items-center',
+                  i === 0 ? 'h-32 lg:h-[10.25rem]' : 'h-16 lg:h-[5.75rem]',
+                ]}
+              >
+                {i === 0 && (
+                  <img
+                    src="/images/cta/rose.svg"
+                    alt=""
+                    aria-hidden="true"
+                    width="58"
+                    height="56"
+                    class="absolute top-0 h-14 w-auto"
+                  />
+                )}
+                <div class="relative mt-auto h-16 w-full overflow-hidden rounded-full bg-woodsmoke/10 lg:h-24">
+                  <div
+                    data-step-fill
+                    class="absolute inset-x-0 top-0 h-full w-full origin-top bg-woodsmoke/80"
+                  />
+                </div>
+              </div>
+            )}
+          </>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  import { createMotion, gsap, ScrollTrigger } from '../../lib/gsap';
+
+  function initStepTimeline() {
+    const section = document.querySelector<HTMLElement>('[data-step-timeline]');
+    if (!section) return;
+
+    const items = Array.from(section.querySelectorAll<HTMLElement>('[data-step-item]'));
+    const connectors = Array.from(section.querySelectorAll<HTMLElement>('[data-step-connector]'));
+    if (!items.length) return;
+
+    createMotion(section, (ctx) => {
+      const reduced = ctx.reducedMotion;
+      const triggers: ScrollTrigger[] = [];
+
+      // Card 1 já nasce ativo (sem scroll) — mesmo estado inicial do Figma.
+      gsap.set(items[0], { autoAlpha: 1, y: 0 });
+
+      if (reduced) {
+        // Sem scrub: tudo no estado final — linhas cheias, cards todos acesos.
+        connectors.forEach((c) => {
+          const fill = c.querySelector<HTMLElement>('[data-step-fill]');
+          if (fill) gsap.set(fill, { scaleY: 1 });
+        });
+        items.slice(1).forEach((item) => gsap.set(item, { autoAlpha: 1, y: 0 }));
+        return;
+      }
+
+      // Cada conector liga o card i ao card i+1: uma timeline só, presa ao scroll (scrub),
+      // preenchendo a linha e "acendendo" o próximo card ao mesmo tempo — contínuo e
+      // reversível (rolar pra cima esvazia a linha e escurece o card de novo).
+      connectors.forEach((connector, i) => {
+        const fill = connector.querySelector<HTMLElement>('[data-step-fill]');
+        const nextItem = items[i + 1];
+        if (!fill || !nextItem) return;
+
+        gsap.set(fill, { scaleY: 0, transformOrigin: 'top' });
+        gsap.set(nextItem, { autoAlpha: 0.5, y: 24 });
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: connector,
+            start: 'top 70%',
+            end: 'bottom 70%',
+            scrub: true,
+          },
+        });
+        tl.fromTo(fill, { scaleY: 0 }, { scaleY: 1, ease: 'none' }, 0).fromTo(
+          nextItem,
+          { autoAlpha: 0.5, y: 24 },
+          { autoAlpha: 1, y: 0, ease: 'none' },
+          0,
+        );
+        if (tl.scrollTrigger) triggers.push(tl.scrollTrigger);
+      });
+
+      return () => {
+        triggers.forEach((st) => st.kill());
+        gsap.set(items, { clearProps: 'all' });
+        connectors.forEach((c) => {
+          const fill = c.querySelector<HTMLElement>('[data-step-fill]');
+          if (fill) gsap.set(fill, { clearProps: 'all' });
+        });
+      };
+    });
+  }
+
+  if (document.readyState !== 'loading') initStepTimeline();
+  else document.addEventListener('DOMContentLoaded', initStepTimeline);
+</script>
