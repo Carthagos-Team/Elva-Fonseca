@@ -1,0 +1,514 @@
+---
+// Programs / ImpactSlider — Fase 3. Fiel ao Figma "SEC 01" (nodes 3238:2, 3031:34561,
+// 3031:34813, 3031:35188, base 1440). Slider full-width de 4 categorias: a cada troca há
+// reveal por linhas do título (SplitText, ref. Osmo "Line Reveal") + box reveal (clip) da
+// imagem e dos stat-cards; ao fim do box reveal os números rolam num odômetro (ref. Osmo
+// "Number Odometer", portado p/ ser disparado pelo slider e re-executado a cada visita).
+// Navegação só manual (Prev/dots/Next + teclado), sem autoplay. Motion via createMotion()
+// (branch reduced-motion + cleanup). Conteúdo placeholder pré-modelado p/ Sanity (Fase 4).
+
+// Cor por tema (fundo do card sólido + tinta pareada, exatamente como o Figma):
+//  salem/studio → texto claro (orchid); punch/buckthorn → título/descrição escuros (ink).
+//  O número (stat-value) é sempre orchid; o label varia por tema.
+const THEME = {
+  salem:     { badge: 'bg-salem/8',     icon: 'text-salem',     card: 'bg-salem',     title: 'text-orchid', body: 'text-orchid/80', num: 'text-orchid', label: 'text-orchid/80' },
+  punch:     { badge: 'bg-punch/8',     icon: 'text-punch',     card: 'bg-punch',     title: 'text-ink',    body: 'text-ink/80',    num: 'text-orchid', label: 'text-orchid'    },
+  studio:    { badge: 'bg-studio/8',    icon: 'text-studio',    card: 'bg-studio',    title: 'text-orchid', body: 'text-orchid/80', num: 'text-orchid', label: 'text-orchid/80' },
+  buckthorn: { badge: 'bg-buckthorn/8', icon: 'text-buckthorn', card: 'bg-buckthorn', title: 'text-ink',    body: 'text-ink/80',    num: 'text-orchid', label: 'text-ink/80'    },
+} as const;
+
+// Ícones de badge (Lucide-style, viewBox 24) — inline como no Faq.astro. `palette` usa
+// círculos com fill currentColor; o resto é traço.
+const ICONS: Record<string, string> = {
+  'cooking-pot':
+    '<path d="M2 12h20"/><path d="M20 12v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8"/><path d="m4 8 16-4"/><path d="m8.9 6.8-.5-1.8a2 2 0 0 1 1.5-2.4l1.9-.5a2 2 0 0 1 2.4 1.5l.5 1.8"/>',
+  heart:
+    '<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>',
+  atom:
+    '<circle cx="12" cy="12" r="1"/><path d="M20.2 20.2c2.04-2.03.02-7.36-4.5-11.9-4.54-4.52-9.87-6.54-11.9-4.5-2.04 2.03-.02 7.36 4.5 11.9 4.54 4.52 9.87 6.54 11.9 4.5Z"/><path d="M15.7 15.7c4.52-4.54 6.54-9.87 4.5-11.9-2.03-2.04-7.36-.02-11.9 4.5-4.52 4.54-6.54 9.87-4.5 11.9 2.03 2.04 7.36.02 11.9-4.5Z"/>',
+  palette:
+    '<circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.93 0 1.65-.75 1.65-1.69 0-.44-.18-.83-.44-1.12-.29-.29-.44-.65-.44-1.13a1.64 1.64 0 0 1 1.67-1.66h2c3.05 0 5.55-2.5 5.55-5.56C21.97 6.01 17.46 2 12 2Z"/>',
+};
+
+// Dados fiéis ao Figma (get_design_context). `wide` = card que ocupa as 2 colunas.
+const slides = [
+  {
+    theme: 'salem', icon: 'cooking-pot', dot: '/icons/programs/flower-1.svg',
+    titleLines: ['Basic Needs &', 'Personal Growth'],
+    image: '/images/programs/slider-01.jpg',
+    // Crop do Figma (node 3238:8) é ancorado no topo da foto, não centralizado —
+    // object-cover puro mostrava pernas/chão demais e cortava o enquadramento pretendido.
+    imagePosition: 'object-[50%_16%]',
+    imageAlt: 'A woman smiling warmly while shelling corn outdoors',
+    cards: [
+      { title: 'Community dining', desc: 'Daily meals served to elderly individuals and children ages 5–14.', value: '132,480', label: 'Meals served' },
+      { title: 'Community kitchens', desc: 'Kitchens providing nutritious meals for families and individuals experiencing food insecurity.', value: '4,230', label: 'Families nourished' },
+      { title: 'Direct support', desc: 'Food, clothing, scholarships, and vital resources donated to individuals and families in urgent need.', value: '18,720', label: 'Essential items donated', wide: true },
+    ],
+  },
+  {
+    theme: 'punch', icon: 'heart', dot: '/icons/programs/flower-2.svg',
+    titleLines: ['Health &', 'Mobility'],
+    image: '/images/programs/slider-02.jpg',
+    imageAlt: 'A colorful colonial street framed by a yellow archway',
+    cards: [
+      { title: 'Mobility support', desc: 'Distribution of wheelchairs, walkers, and canes to promote independence.', value: '1,045', label: 'Mobility aids delivered' },
+      { title: 'Community health', desc: 'Free medical outreach, medication donations, physical activity and hygiene supply distributions.', value: '6,310', label: 'Health services provided' },
+      { title: 'Elderly support program', desc: '“Solidarity for Seniors” offers care, connection, and essential aid to elderly individuals.', value: '895', label: 'Seniors supported', wide: true },
+    ],
+  },
+  {
+    theme: 'studio', icon: 'atom', dot: '/icons/programs/flower-3.svg',
+    titleLines: ['Education &', 'Technology'],
+    image: '/images/programs/slider-03.jpg',
+    imageAlt: 'A bright classroom with wooden desks and chairs',
+    cards: [
+      { title: 'Free access to technology and printing', desc: 'Computers and printing services available for schoolwork and essential tasks.', value: '1,045', label: '3,680' },
+      { title: 'Digital classrooms', desc: 'Modern, inclusive education through digital resources — especially in underserved areas.', value: '2,140', label: 'Students reached' },
+      { title: 'Sensory room and play area', desc: 'A specially designed space for children with different abilities to play and grow.', value: '510', label: 'Therapeutic sessions held' },
+      { title: 'Education and culture', desc: 'Reading workshops, school supply donations, literacy events, and cultural festivals.', value: '115', label: 'Learning events hosted' },
+    ],
+  },
+  {
+    theme: 'buckthorn', icon: 'palette', dot: '/icons/programs/flower-2.svg',
+    titleLines: ['Art, Culture', '& Environment'],
+    image: '/images/programs/slider-04.jpg',
+    imageAlt: 'Papel picado banners strung above a lively market street',
+    cards: [
+      { title: 'Cultural growth', desc: 'Free classes in painting, carpentry, hair cutting, and traditional music/dance workshops.', value: '320', label: 'Creative workshops conducted' },
+      { title: 'Art workshops for children', desc: 'Drawing contests and art sessions that promote creativity and self-expression.', value: '740', label: 'Young artists engaged' },
+      { title: 'Cause-based events', desc: 'Events like “Mano Solidaria Market” highlight local talent, promote recycling, and celebrate values.', value: '42', label: 'Community events held' },
+      { title: 'Environment', desc: 'Tree planting, reforestation efforts, and community clean-up campaigns.', value: '8,700', label: 'Trees planted' },
+    ],
+  },
+] as const;
+---
+
+<section data-reveal-section data-programs-slider class="bg-surface py-16 lg:py-20">
+  <div class="mx-auto flex max-w-[120rem] flex-col gap-12 px-6 sm:px-10 lg:px-16">
+    <div data-ps-list class="ps-list">
+      {
+        slides.map((s, i) => {
+          const t = THEME[s.theme as keyof typeof THEME];
+          return (
+            <article
+              data-ps-item
+              aria-hidden={i !== 0 ? 'true' : 'false'}
+              class:list={['ps-item flex flex-col gap-8 lg:gap-12', i === 0 && 'is-active']}
+            >
+              {/* Badge */}
+              <span data-ps-badge class:list={['grid size-11 place-items-center rounded-md', t.badge]}>
+                <svg
+                  class:list={['size-6', t.icon]}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                  set:html={ICONS[s.icon]}
+                />
+              </span>
+
+              {/* Título */}
+              <h2
+                data-ps-title
+                class="font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-ink text-[2.5rem] sm:text-5xl lg:text-[4rem]"
+              >
+                {s.titleLines.map((line, j) => (
+                  <>
+                    {line}
+                    {j < s.titleLines.length - 1 && <br />}
+                  </>
+                ))}
+              </h2>
+
+              {/* Main: imagem + grid de cards */}
+              <div class="flex flex-col gap-8 lg:h-[34rem] lg:flex-row lg:items-center lg:gap-12">
+                <div
+                  data-ps-image
+                  class="relative aspect-[632/544] w-full overflow-hidden rounded-xl lg:aspect-auto lg:h-full lg:flex-1"
+                >
+                  <img
+                    src={s.image}
+                    alt={s.imageAlt}
+                    class:list={['absolute inset-0 size-full object-cover', 'imagePosition' in s ? s.imagePosition : 'object-center']}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <div class="absolute inset-0 rounded-xl bg-black/20" aria-hidden="true" />
+                </div>
+
+                <div class="w-full shrink-0 lg:w-[39.5rem]">
+                  <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    {
+                      s.cards.map((c) => (
+                        <div
+                          data-ps-card
+                          class:list={[
+                            'flex flex-col justify-between gap-4 rounded-2xl border-[1.5px] border-woodsmoke p-5 lg:h-[16.5rem]',
+                            t.card,
+                            'wide' in c && c.wide && 'sm:col-span-2',
+                          ]}
+                        >
+                          <div class="flex flex-col gap-4">
+                            <h3 class:list={['font-display uppercase leading-[0.9] tracking-[-0.04em] text-2xl', t.title]}>
+                              {c.title}
+                            </h3>
+                            <p class:list={['font-sans text-base font-medium leading-[1.4] tracking-[-0.02em]', t.body]}>
+                              {c.desc}
+                            </p>
+                          </div>
+                          <div class="flex flex-col gap-1">
+                            <p
+                              data-ps-count
+                              data-value={c.value}
+                              class:list={[
+                                'font-display font-black leading-[1.05] tracking-[-0.04em] whitespace-nowrap text-[3rem] sm:text-[3.5rem] lg:text-[4rem]',
+                                t.num,
+                              ]}
+                            >
+                              {c.value}
+                            </p>
+                            <p class:list={['font-sans text-sm font-medium leading-[1.4] tracking-[-0.02em]', t.label]}>
+                              {c.label}
+                            </p>
+                          </div>
+                        </div>
+                      ))
+                    }
+                  </div>
+                </div>
+              </div>
+            </article>
+          );
+        })
+      }
+    </div>
+
+    {/* Controles (Prev — dots-flor — Next). Um único controle compartilhado. */}
+    <div class="flex items-center gap-8 sm:gap-12">
+      <button
+        type="button"
+        data-ps-prev
+        aria-label="Previous program"
+        class="font-display uppercase leading-none tracking-[-0.04em] text-ink text-[1.75rem] sm:text-[2rem] transition-opacity duration-150 hover:opacity-60 active:scale-[0.97]"
+      >
+        Prev
+      </button>
+
+      <div class="flex items-center gap-[0.5625rem]" role="tablist" aria-label="Programs">
+        {
+          slides.map((s, i) => (
+            <button
+              type="button"
+              data-ps-dot
+              data-index={i}
+              role="tab"
+              aria-selected={i === 0 ? 'true' : 'false'}
+              aria-label={s.titleLines.join(' ')}
+              class:list={['ps-dot grid size-6 place-items-center', i === 0 && 'is-active']}
+            >
+              <img src={s.dot} alt="" aria-hidden="true" class="size-full object-contain" />
+            </button>
+          ))
+        }
+      </div>
+
+      <button
+        type="button"
+        data-ps-next
+        aria-label="Next program"
+        class="font-display uppercase leading-none tracking-[-0.04em] text-ink text-[1.75rem] sm:text-[2rem] transition-opacity duration-150 hover:opacity-60 active:scale-[0.97]"
+      >
+        Next
+      </button>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Slides empilhados na mesma célula do grid (padrão Osmo) → altura = maior slide,
+     um ativo por vez. Antes do JS, esconde os inativos p/ evitar flash da pilha. */
+  .ps-list {
+    display: grid;
+  }
+  .ps-item {
+    grid-area: 1 / 1;
+  }
+  .ps-item:not(.is-active) {
+    visibility: hidden;
+    opacity: 0;
+  }
+  .ps-item[aria-hidden='true'] {
+    pointer-events: none;
+  }
+
+  /* Dots-flor: inativos esmaecidos (Figma opacity 20), ativo cheio. */
+  .ps-dot {
+    cursor: pointer;
+    opacity: 0.2;
+    transition: opacity 0.3s ease;
+  }
+  .ps-dot.is-active {
+    opacity: 1;
+  }
+  .ps-dot:hover {
+    opacity: 0.6;
+  }
+  .ps-dot.is-active:hover {
+    opacity: 1;
+  }
+</style>
+
+<script>
+  import { createMotion, gsap, ScrollTrigger, SplitText } from '../../lib/gsap';
+
+  // Odômetro (ref. Osmo "Number Odometer", compactado): constrói um roller de dígitos por
+  // algarismo e rola todos a mesma distância (2 ciclos) até o valor final. Vírgulas/símbolos
+  // ficam estáticos. Disparado pelo slider (não por scroll) e reconstruído a cada visita.
+  //
+  // Duas fases (para nunca deixar o texto final estático visível antes do roll):
+  //  - primeCounter(): constrói os rollers já na posição zero — chamada em prep(), enquanto
+  //    o card ainda está com clipPath fechado, então nada disso aparece ainda.
+  //  - spinCounter(): só a animação dos rollers já existentes — chamada junto com o clip-path
+  //    do card abrindo, não depois. Assim o número já nasce contando por baixo do reveal.
+  const ROLL_STEP = 1.05; // casa com leading-[1.05] do número
+  const ROLL_CYCLES = 2;
+  const counterRollers = new WeakMap<HTMLElement, HTMLElement[]>();
+
+  function buildRollers(el: HTMLElement, finalText: string): HTMLElement[] {
+    el.textContent = '';
+    el.style.display = 'inline-flex';
+    el.style.alignItems = 'flex-end';
+
+    const rollers: HTMLElement[] = [];
+    for (const ch of finalText) {
+      if (!/\d/.test(ch)) {
+        const s = document.createElement('span');
+        s.textContent = ch;
+        s.setAttribute('aria-hidden', 'true');
+        s.style.display = 'inline-block';
+        s.style.height = ROLL_STEP + 'em';
+        s.style.lineHeight = String(ROLL_STEP);
+        el.appendChild(s);
+        continue;
+      }
+      const mask = document.createElement('span');
+      mask.setAttribute('aria-hidden', 'true');
+      mask.style.display = 'inline-block';
+      mask.style.overflow = 'hidden';
+      mask.style.height = ROLL_STEP + 'em';
+      const roller = document.createElement('span');
+      roller.style.display = 'block';
+      roller.style.lineHeight = String(ROLL_STEP);
+      roller.style.whiteSpace = 'pre';
+      roller.style.textAlign = 'center';
+      const seq: number[] = [];
+      for (let c = 0; c < ROLL_CYCLES; c++) for (let d = 0; d < 10; d++) seq.push(d);
+      seq.push(parseInt(ch, 10));
+      roller.textContent = seq.join('\n');
+      mask.appendChild(roller);
+      el.appendChild(mask);
+      rollers.push(roller);
+    }
+    return rollers;
+  }
+
+  function primeCounter(el: HTMLElement, reduced: boolean) {
+    const finalText = (el.getAttribute('data-value') || el.textContent || '').trim();
+    el.setAttribute('aria-label', finalText); // acessível mesmo com os rollers no DOM
+
+    if (reduced) {
+      el.textContent = finalText;
+      return;
+    }
+
+    const rollers = buildRollers(el, finalText);
+    gsap.set(rollers, { y: 0 });
+    counterRollers.set(el, rollers);
+  }
+
+  function spinCounter(el: HTMLElement, reduced: boolean, { duration = 1.1, delay = 0 } = {}) {
+    if (reduced) return; // texto final já escrito por primeCounter
+    const rollers = counterRollers.get(el);
+    if (!rollers) return;
+    const dist = ROLL_CYCLES * 10 * ROLL_STEP; // distância uniforme p/ todos os algarismos
+    gsap.to(rollers, { y: -dist + 'em', duration, delay, ease: 'power3.out', stagger: { each: 0.06, from: 'end' } });
+  }
+
+  function initProgramsSlider() {
+    const section = document.querySelector<HTMLElement>('[data-programs-slider]');
+    if (!section) return;
+
+    const items = Array.from(section.querySelectorAll<HTMLElement>('[data-ps-item]'));
+    if (!items.length) return;
+    const prevBtn = section.querySelector<HTMLButtonElement>('[data-ps-prev]');
+    const nextBtn = section.querySelector<HTMLButtonElement>('[data-ps-next]');
+    const dots = Array.from(section.querySelectorAll<HTMLButtonElement>('[data-ps-dot]'));
+
+    createMotion(section, (ctx) => {
+      const reduced = ctx.reducedMotion;
+      let active = 0;
+      let animating = false;
+      let inView = true;
+      let st: ScrollTrigger | null = null;
+
+      const slides = items.map((item) => ({
+        item,
+        badge: item.querySelector<HTMLElement>('[data-ps-badge]'),
+        image: item.querySelector<HTMLElement>('[data-ps-image]'),
+        cards: gsap.utils.toArray<HTMLElement>(item.querySelectorAll('[data-ps-card]')),
+        counts: gsap.utils.toArray<HTMLElement>(item.querySelectorAll('[data-ps-count]')),
+        split: reduced
+          ? null
+          : SplitText.create(item.querySelector<HTMLElement>('[data-ps-title]')!, {
+              type: 'lines',
+              mask: 'lines',
+            }),
+      }));
+
+      type Slide = (typeof slides)[number];
+      const linesOf = (s: Slide) => (s.split ? s.split.lines : []);
+
+      function setActiveVisual(i: number) {
+        dots.forEach((d, di) => {
+          d.classList.toggle('is-active', di === i);
+          d.setAttribute('aria-selected', String(di === i));
+        });
+        items.forEach((it, ii) => it.setAttribute('aria-hidden', String(ii !== i)));
+      }
+
+      function primeCounters(s: Slide) {
+        s.counts.forEach((el) => primeCounter(el, reduced));
+      }
+
+      function runCounters(s: Slide) {
+        s.counts.forEach((el, idx) => spinCounter(el, reduced, { duration: 1.1, delay: idx * 0.08 }));
+      }
+
+      // Estado "pré-entrada" de um slide (tudo escondido, pronto p/ o reveal). O odômetro já
+      // é montado aqui (na posição zero) enquanto o card ainda está com o clip fechado — assim
+      // nunca aparece o texto final estático antes do roll começar.
+      function prep(s: Slide) {
+        gsap.set(s.badge, { autoAlpha: 0, scale: 0.8, y: 8 });
+        gsap.set(linesOf(s), { yPercent: 110 });
+        gsap.set(s.image, { clipPath: 'inset(0 100% 0 0)' });
+        gsap.set(s.cards, { autoAlpha: 0, clipPath: 'inset(0 0 100% 0)' });
+        primeCounters(s);
+      }
+
+      function buildIn(tl: gsap.core.Timeline, s: Slide, at: number) {
+        tl.to(s.badge, { autoAlpha: 1, scale: 1, y: 0, duration: 0.5, ease: 'power3.out' }, at)
+          .to(linesOf(s), { yPercent: 0, duration: 0.7, ease: 'power4.inOut', stagger: { amount: 0.25 } }, at + 0.05)
+          .to(s.image, { clipPath: 'inset(0 0% 0 0)', duration: 0.8, ease: 'power4.inOut' }, at + 0.1)
+          .to(s.cards, { autoAlpha: 1, clipPath: 'inset(0 0 0% 0)', duration: 0.6, ease: 'power3.out', stagger: 0.08 }, at + 0.2)
+          .add(() => runCounters(s), at + 0.2);
+        return tl;
+      }
+
+      function buildOut(tl: gsap.core.Timeline, s: Slide, at: number) {
+        tl.to(linesOf(s), { yPercent: -110, duration: 0.5, ease: 'power4.in', stagger: { amount: 0.12 } }, at)
+          .to(s.cards, { autoAlpha: 0, clipPath: 'inset(0 0 100% 0)', duration: 0.4, ease: 'power2.in', stagger: 0.05 }, at)
+          .to(s.badge, { autoAlpha: 0, duration: 0.35 }, at)
+          .to(s.image, { clipPath: 'inset(0 100% 0 0)', duration: 0.5, ease: 'power3.in' }, at);
+        return tl;
+      }
+
+      function goTo(next: number) {
+        next = ((next % slides.length) + slides.length) % slides.length;
+        if (next === active) return;
+
+        if (reduced) {
+          gsap.to(slides[active].item, { autoAlpha: 0, duration: 0.3 });
+          gsap.set(slides[next].item, { autoAlpha: 1 });
+          primeCounters(slides[next]);
+          active = next;
+          setActiveVisual(next);
+          return;
+        }
+
+        if (animating) return;
+        animating = true;
+        const cur = slides[active];
+        const nx = slides[next];
+        prep(nx);
+        gsap.set(nx.item, { autoAlpha: 1 });
+        const tl = gsap.timeline({
+          onComplete: () => {
+            gsap.set(cur.item, { autoAlpha: 0 });
+            active = next;
+            animating = false;
+          },
+        });
+        buildOut(tl, cur, 0);
+        buildIn(tl, nx, 0.3);
+        setActiveVisual(next);
+      }
+
+      // ---- Estado inicial ----
+      slides.forEach((s, i) => gsap.set(s.item, { autoAlpha: i === active ? 1 : 0 }));
+      setActiveVisual(active);
+
+      if (reduced) {
+        primeCounters(slides[active]);
+      } else {
+        prep(slides[active]);
+        st = ScrollTrigger.create({
+          trigger: section,
+          start: 'top 75%',
+          once: true,
+          onEnter: () => buildIn(gsap.timeline(), slides[active], 0),
+        });
+      }
+
+      // ---- Navegação ----
+      const onPrev = () => goTo(active - 1);
+      const onNext = () => goTo(active + 1);
+      prevBtn?.addEventListener('click', onPrev);
+      nextBtn?.addEventListener('click', onNext);
+      const dotHandlers = dots.map((d, i) => {
+        const h = () => goTo(i);
+        d.addEventListener('click', h);
+        return h;
+      });
+
+      const onKey = (e: KeyboardEvent) => {
+        if (!inView) return;
+        const target = e.target as HTMLElement | null;
+        const tag = target?.tagName?.toLowerCase();
+        if (tag === 'input' || tag === 'textarea' || tag === 'select' || target?.isContentEditable) return;
+        if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          goTo(active - 1);
+        }
+        if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          goTo(active + 1);
+        }
+      };
+      window.addEventListener('keydown', onKey);
+
+      const io = new IntersectionObserver((entries) => {
+        inView = entries[0].isIntersecting;
+      }, { threshold: 0.1 });
+      io.observe(section);
+
+      // cleanup — chamado pelo createMotion ao trocar breakpoint/reduced-motion
+      return () => {
+        st?.kill();
+        io.disconnect();
+        window.removeEventListener('keydown', onKey);
+        prevBtn?.removeEventListener('click', onPrev);
+        nextBtn?.removeEventListener('click', onNext);
+        dots.forEach((d, i) => d.removeEventListener('click', dotHandlers[i]));
+        slides.forEach((s) => s.split?.revert());
+        gsap.set(items, { clearProps: 'all' });
+      };
+    });
+  }
+
+  if (document.readyState !== 'loading') initProgramsSlider();
+  else document.addEventListener('DOMContentLoaded', initProgramsSlider);
+</script>
