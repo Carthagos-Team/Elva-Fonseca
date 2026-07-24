@@ -1,0 +1,64 @@
+---
+// About / Our Team — Fase 3. Fiel ao Figma SEC 07 (node 3292:458, base 1440).
+// Grid 3×2 de cards; fotos ainda não existem → placeholder cerulean sólido.
+// Estático (sem motion); data-reveal-section como hook para Fase 5.
+
+interface Member {
+  name: string;
+  role: string;
+  image?: string;
+  imageAlt?: string;
+}
+
+const members: Member[] = [
+  { name: 'Manuel Toto', role: 'President' },
+  { name: 'Alexia Díaz', role: 'Director' },
+  { name: 'Deidamia Reyes', role: 'Secretary' },
+  { name: 'Yasmín López', role: 'Treasurer' },
+  { name: 'Isabel Ruíz', role: 'Volunteer' },
+  { name: 'Carlos Toto', role: 'Volunteer' },
+];
+---
+
+<section data-reveal-section class="border-t border-orchid-200 bg-orchid-100">
+  <div
+    class="mx-auto flex max-w-[120rem] flex-col items-center gap-9 px-6 py-10 sm:px-10 lg:gap-9 lg:p-16"
+  >
+    <h2
+      class="font-display font-black text-[2.25rem] uppercase leading-[1.05] tracking-[-0.04em] text-ink sm:text-5xl lg:text-[4rem]"
+    >
+      our team
+    </h2>
+
+    <ul class="grid w-full grid-cols-1 gap-9 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        members.map((m) => (
+          <li class="flex h-auto flex-col gap-9 rounded-lg border-[1.5px] border-woodsmoke bg-cerulean-200 p-2 lg:h-[30rem]">
+            <div class="min-h-[14rem] flex-1 overflow-hidden rounded-md border-[1.5px] border-woodsmoke bg-cerulean sm:min-h-[16rem]">
+              {m.image ? (
+                <img
+                  src={m.image}
+                  alt={m.imageAlt ?? m.name}
+                  class="size-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                />
+              ) : (
+                <div class="size-full" aria-hidden="true" />
+              )}
+            </div>
+
+            <div class="flex flex-col gap-6 px-4 pb-9 pr-9">
+              <p class="font-display text-[2rem] leading-[0.8] tracking-[-0.04em] text-ink sm:text-[2.25rem]">
+                {m.name}
+              </p>
+              <p class="font-sans text-base font-normal leading-[1.4] tracking-[-0.02em] text-ink/80">
+                {m.role}
+              </p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

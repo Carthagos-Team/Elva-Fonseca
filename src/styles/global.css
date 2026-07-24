@@ -71,6 +71,7 @@ html {
   /* Paleta de categoria — pastéis de fundo + tinta de texto pareada, usados em
      cards/tags de Programs (borda 1.5px woodsmoke + radius 12px no Figma).
      Mapeamento categoria↔cor é conteúdo: atribuição final na Fase 3/4. */
+  --color-cerulean: #1357ce; /* placeholder de foto (About / Our Team) até assets reais */
   --color-cerulean-200: #d8e1f2;
   --color-malachite-200: #bbf0ce;
   --color-buckthorn-200: #fadbb2;

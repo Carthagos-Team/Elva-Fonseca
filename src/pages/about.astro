@@ -3,6 +3,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/global/Hero.astro';
 import Story from '../components/about/Story.astro';
 import CtaDonate from '../components/global/CtaDonate.astro';
+import Team from '../components/about/Team.astro';
+import CtaBand from '../components/global/CtaBand.astro';
 ---
 
 <BaseLayout
@@ -27,5 +29,19 @@ import CtaDonate from '../components/global/CtaDonate.astro';
   <CtaDonate
     titleLines={['Our mission']}
     body="With empathy and open hands, we work to ensure that no one is left behind. Our goal is to stand beside those who need it, offering care, resources, and dignity to the most vulnerable members of our community."
+  />
+
+  <Team />
+
+  {/* Figma 3292:493 — CtaBand; só troca de copy nesta instância. */}
+  <CtaBand
+    titleLines={['Ready to lend a hand?']}
+    body={[
+      "Your support helps us keep Elva's legacy alive, turning compassion into action, and small gestures into lasting change. Every contribution helps nourish, educate, and uplift those who need it most.",
+    ]}
+    ctaLabel="Donate Now"
+    ctaHref="/donate"
+    secondaryLabel="Volunteer"
+    secondaryHref="/volunteer"
   />
 </BaseLayout>
