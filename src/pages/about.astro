@@ -1,10 +1,31 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/global/Hero.astro';
+import Story from '../components/about/Story.astro';
+import CtaDonate from '../components/global/CtaDonate.astro';
 ---
 
-<BaseLayout title="About" description="Who we are — the story and mission of the Elva Fonseca Foundation.">
-  <section class="px-10 py-20">
-    <h1 class="font-display text-4xl">About</h1>
-    <p class="mt-4 max-w-prose text-ink/70">Who we are — the story and mission of the Elva Fonseca Foundation.</p>
-  </section>
+<BaseLayout
+  title="About"
+  description="Who we are — the story and mission of the Elva Fonseca Foundation."
+  headerTheme="light"
+>
+  <Hero
+    titleLines={['A story of care']}
+    subcopy={[
+      'Fundación Elva Fonseca is a nonprofit organization working to support vulnerable communities, especially in rural areas of Veracruz, Mexico.',
+      'We lead initiatives focused on health, education, environmental care, women’s empowerment, and child development, always with a human-centered approach.',
+    ]}
+    image="/images/hero/about.jpg"
+    imageAlt="A person loading flatbreads into a traditional wood-fired oven"
+    cta={{ label: 'Learn more', href: '#story' }}
+  />
+
+  <Story />
+
+  {/* Figma 3288:321 — mesma estrutura de CtaDonate; só troca de copy nesta instância. */}
+  <CtaDonate
+    titleLines={['Our mission']}
+    body="With empathy and open hands, we work to ensure that no one is left behind. Our goal is to stand beside those who need it, offering care, resources, and dignity to the most vulnerable members of our community."
+  />
 </BaseLayout>

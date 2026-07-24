@@ -1,0 +1,52 @@
+---
+// About / Story — Fase 3. Fiel ao Figma "SEC 05" (node 3288:337, base 1440).
+// Foto panorâmica full-bleed + 2 parágrafos à esquerda + 7 motifs geométricos à direita.
+// id="story" ancora o CTA "Learn more" do Hero. Estático (sem motion) neste passo.
+
+const paragraphs = [
+  'This foundation is also a celebration of progress. It was inspired not only by Elva’s life, but by the first generation of her grandchildren to gain access to higher education.',
+  'We carry her dream forward by working to ensure that future generations — especially those from humble beginnings — have the resources and opportunities to grow, thrive, and transform their own lives.',
+] as const;
+
+const motifs = [
+  { src: '/images/about/motifs/01.svg', w: 37, h: 36 },
+  { src: '/images/about/motifs/02.svg', w: 40, h: 41 },
+  { src: '/images/about/motifs/03.svg', w: 39, h: 39 },
+  { src: '/images/about/motifs/04.svg', w: 40, h: 39 },
+  { src: '/images/about/motifs/05.svg', w: 35, h: 40 },
+  { src: '/images/about/motifs/06.svg', w: 40, h: 41 },
+  { src: '/images/about/motifs/07.svg', w: 40, h: 40 },
+] as const;
+---
+
+<section id="story" data-reveal-section class="border-y border-orchid-200 bg-orchid-025">
+  <div class="h-[22rem] w-full overflow-hidden sm:h-[28rem] lg:h-[34rem]">
+    <img
+      src="/images/about/story.jpg"
+      alt="Community members gathered outdoors in front of a cream-colored building"
+      width="2400"
+      height="906"
+      class="size-full object-cover"
+      loading="lazy"
+      decoding="async"
+    />
+  </div>
+
+  <div
+    class="mx-auto flex max-w-[120rem] flex-col gap-10 px-6 pb-12 pt-10 sm:px-10 lg:flex-row lg:items-start lg:justify-between lg:gap-16 lg:px-16 lg:pt-10"
+  >
+    <div class="flex max-w-[40rem] flex-col gap-4 font-sans text-base font-medium leading-[1.4] tracking-[-0.02em] text-ink">
+      {paragraphs.map((p) => (
+        <p>{p}</p>
+      ))}
+    </div>
+
+    <div class="flex shrink-0 flex-wrap items-center gap-3 lg:justify-end" aria-hidden="true">
+      {
+        motifs.map((m) => (
+          <img src={m.src} alt="" width={m.w} height={m.h} class="h-10 w-auto" loading="lazy" decoding="async" />
+        ))
+      }
+    </div>
+  </div>
+</section>
