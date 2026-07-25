@@ -1,0 +1,55 @@
+---
+// Faixa de missão + alocação de doações (donut 85/10/5) + CTA.
+// Origem: Home / Stories (Figma 3137:237). Reusada em Donate (Figma 3312:18733).
+// Colunas 1–2 fixas; coluna CTA via props (defaults = Home).
+
+import MissionBandCard from './MissionBandCard.astro';
+
+interface Props {
+  ctaTitle?: string;
+  ctaBody?: string;
+  primaryLabel?: string;
+  primaryHref?: string;
+  secondaryLabel?: string;
+  secondaryHref?: string;
+  /** Classe de fundo da section (ex.: bg-surface, bg-orchid-050). Ignorado se bare. */
+  sectionBg?: string;
+  /**
+   * Quando true, renderiza só o card (sem <section>).
+   * Usar dentro de Stories.astro, que já é a section pai.
+   */
+  bare?: boolean;
+}
+
+const {
+  ctaTitle = 'Be part of the change',
+  ctaBody = "Your support keeps Elva's legacy alive, turning compassion into action.",
+  primaryLabel = 'Donate now',
+  primaryHref = '/donate',
+  secondaryLabel = 'Become a volunteer',
+  secondaryHref = '/volunteer',
+  sectionBg = 'bg-surface',
+  bare = false,
+} = Astro.props;
+
+const cardProps = {
+  ctaTitle,
+  ctaBody,
+  primaryLabel,
+  primaryHref,
+  secondaryLabel,
+  secondaryHref,
+};
+---
+
+{
+  bare ? (
+    <MissionBandCard {...cardProps} />
+  ) : (
+    <section data-reveal-section class:list={[sectionBg]}>
+      <div class="mx-auto flex max-w-[120rem] flex-col px-6 py-12 sm:px-10 lg:px-16">
+        <MissionBandCard {...cardProps} />
+      </div>
+    </section>
+  )
+}

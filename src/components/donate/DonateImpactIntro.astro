@@ -1,0 +1,47 @@
+---
+// Donate / Impact Intro — Fase 3. Fiel ao Figma SEC 3 (node 3309:90, base 1440).
+// Fileira de 7 texturas + título + corpo centralizados. Estático; hooks data-reveal p/ Fase 5.
+// Ordem das texturas = mesma do CtaDonate / Figma.
+
+const row = ['02', '06', '04', '01', '07', '05', '03'] as const;
+---
+
+<section data-reveal-section class="bg-surface px-6 py-12 text-center sm:px-10 lg:px-16 lg:pb-16">
+  <div class="mx-auto flex max-w-[75rem] flex-col items-center gap-12">
+    {/* Fileira decorativa — cada .cta-petal individual → stagger na Fase 5 */}
+    <div
+      class="flex w-full max-w-[44.25rem] items-center justify-center"
+      aria-hidden="true"
+    >
+      {
+        row.map((tex) => (
+          <img
+            src={`/images/cta/flower-${tex}.webp`}
+            alt=""
+            width="101"
+            height="96"
+            loading="lazy"
+            decoding="async"
+            class="cta-petal h-auto w-full min-w-0 flex-1"
+            data-reveal="petal"
+          />
+        ))
+      }
+    </div>
+
+    <div class="flex w-full max-w-[42.125rem] flex-col items-center gap-6">
+      <h2
+        class="max-w-full font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-ink text-[2.25rem] sm:text-5xl lg:text-[4rem]"
+      >
+        Open hands,
+        <br />
+        meaningful changes.
+      </h2>
+      <p class="max-w-[34.375rem] font-sans text-base font-normal leading-[1.4] tracking-[-0.02em] text-ink">
+        Every donation is put to work across the causes that matter most to our community: education
+        and scholarships, health campaigns, nutrition support, senior care, and workshops that
+        strengthen the community as a whole. Your generosity becomes someone's opportunity.
+      </p>
+    </div>
+  </div>
+</section>
