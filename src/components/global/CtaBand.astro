@@ -1,6 +1,7 @@
 ---
 // CtaBand — Fase 2/3. Banda de CTA reutilizável (acima do footer, repete em várias páginas).
 // Fiel ao Figma "volunteer-cta" (node 3098:2384). Conteúdo via props; default = volunteer.
+// Thank You (3073:72): props opcionais receipt / prompt / secondaryAction="share".
 //
 // Flores laterais = elementos DOM individuais (classe .cta-petal), NUNCA imagem única.
 // Estruturadas para o reveal em stagger com GSAP ScrollTrigger que entra na FASE 5
@@ -13,6 +14,12 @@ interface Props {
   ctaHref?: string;
   secondaryLabel?: string;
   secondaryHref?: string;
+  /** Thank You: linha de confirmação com ícone check */
+  receipt?: string;
+  /** Texto acima da row de botões (ex.: "Want to do even more?") */
+  prompt?: string;
+  /** Quando 'share', secondary vira botão Web Share (fallback: copiar URL) */
+  secondaryAction?: 'share';
 }
 
 const {
@@ -25,7 +32,17 @@ const {
   ctaHref = '/volunteer#apply',
   secondaryLabel,
   secondaryHref,
+  receipt,
+  prompt,
+  secondaryAction,
 } = Astro.props;
+
+const isThankYou = Boolean(receipt);
+const showSecondaryLink = Boolean(secondaryLabel && secondaryHref && secondaryAction !== 'share');
+const showSecondaryShare = Boolean(secondaryLabel && secondaryAction === 'share');
+
+const btnSecondary =
+  'inline-flex min-h-11 items-center justify-center rounded-md border-[1.5px] border-woodsmoke bg-surface px-6 py-3.5 font-display font-black text-base uppercase tracking-[-0.01em] text-ink transition-[transform,filter] duration-150 ease-out hover:brightness-95 active:scale-[0.97]';
 
 // Flores do cluster (posições em % da caixa 601.6×591 do Figma). Ordem = de baixo p/ cima,
 // pensada para o stagger da Fase 5. `mobile` marca as que sobrevivem abaixo de sm (densidade reduzida).
@@ -46,7 +63,10 @@ const flowers = [
 
 <section
   data-cta-band
-  class="relative isolate overflow-clip border-t border-woodsmoke/8 bg-surface px-6 pb-40 pt-14 text-center sm:px-10 lg:px-16 lg:pb-52 lg:pt-20"
+  class:list={[
+    'relative isolate overflow-clip px-6 pb-40 pt-14 text-center sm:px-10 lg:px-16 lg:pb-52 lg:pt-20',
+    isThankYou ? 'bg-orchid-100' : 'border-t border-woodsmoke/8 bg-surface',
+  ]}
 >
   {/* Clusters de flores (decorativos). Cada .cta-petal é individual → stagger na Fase 5. */}
   {
@@ -76,37 +96,99 @@ const flowers = [
   }
 
   {/* Conteúdo */}
-  <div class="relative z-10 mx-auto flex max-w-[75rem] flex-col items-center gap-8">
+  <div class="relative z-10 mx-auto flex max-w-[75rem] flex-col items-center gap-8 lg:gap-12">
     <img src="/images/cta/rose.svg" alt="" aria-hidden="true" width="68" height="64" class="w-[4.25rem]" />
 
-    <h2 class="font-display font-black text-[2.5rem] uppercase leading-none tracking-[-0.04em] text-ink sm:text-6xl lg:text-[4.5rem]">
-      {titleLines.map((line, i) => (
-        <>
-          {line}
-          {i < titleLines.length - 1 && <br />}
-        </>
-      ))}
-    </h2>
+    <div class="flex flex-col items-center gap-6">
+      <h2 class="font-display font-black text-[2.5rem] uppercase leading-none tracking-[-0.04em] text-ink sm:text-6xl lg:text-[4.5rem]">
+        {titleLines.map((line, i) => (
+          <>
+            {line}
+            {i < titleLines.length - 1 && <br />}
+          </>
+        ))}
+      </h2>
 
-    <div class="flex max-w-[34rem] flex-col gap-4 text-ink/85">
-      {body.map((p) => <p class="text-base font-medium leading-relaxed tracking-[-0.01em]">{p}</p>)}
+      <div class="flex max-w-[34rem] flex-col gap-4 text-ink/85">
+        {body.map((p) => <p class="text-base font-medium leading-relaxed tracking-[-0.01em]">{p}</p>)}
+      </div>
+
+      {
+        receipt && (
+          <p class="flex items-center justify-center gap-3 font-sans text-sm font-semibold uppercase leading-[1.4] text-ink">
+            <img
+              src="/images/cta/check-circle.svg"
+              alt=""
+              width="16"
+              height="16"
+              class="size-4 shrink-0"
+              aria-hidden="true"
+            />
+            {receipt}
+          </p>
+        )
+      }
     </div>
 
-    <div class="mt-4 flex flex-col items-center gap-4 sm:flex-row">
-      <a
-        href={ctaHref}
-        class="inline-flex min-h-11 items-center justify-center rounded-md border-[1.5px] border-woodsmoke bg-buckthorn px-6 py-3.5 font-display font-black text-base uppercase tracking-[-0.01em] text-ink transition-[transform,filter] duration-150 ease-out hover:brightness-105 active:scale-[0.97]"
-      >
-        {ctaLabel}
-      </a>
-      {secondaryLabel && secondaryHref && (
+    <div class="flex flex-col items-center gap-6">
+      {prompt && <p class="max-w-[34rem] text-base font-medium leading-relaxed tracking-[-0.02em] text-ink">{prompt}</p>}
+
+      <div class="flex flex-col items-center gap-3 sm:flex-row sm:gap-3">
         <a
-          href={secondaryHref}
-          class="inline-flex min-h-11 items-center justify-center rounded-md border-[1.5px] border-woodsmoke bg-surface px-6 py-3.5 font-display font-black text-base uppercase tracking-[-0.01em] text-ink transition-[transform,filter] duration-150 ease-out hover:brightness-95 active:scale-[0.97]"
+          href={ctaHref}
+          class="inline-flex min-h-11 items-center justify-center rounded-md border-[1.5px] border-woodsmoke bg-buckthorn px-6 py-3.5 font-display font-black text-base uppercase tracking-[-0.01em] text-ink transition-[transform,filter] duration-150 ease-out hover:brightness-105 active:scale-[0.97]"
         >
-          {secondaryLabel}
+          {ctaLabel}
         </a>
-      )}
+        {
+          showSecondaryLink && (
+            <a href={secondaryHref} class={btnSecondary}>
+              {secondaryLabel}
+            </a>
+          )
+        }
+        {
+          showSecondaryShare && (
+            <button type="button" data-cta-share class={btnSecondary}>
+              {secondaryLabel}
+            </button>
+          )
+        }
+      </div>
     </div>
   </div>
 </section>
+
+{
+  showSecondaryShare && (
+    <script>
+      const btn = document.querySelector('[data-cta-share]');
+      if (btn instanceof HTMLButtonElement) {
+        btn.addEventListener('click', async () => {
+          const url = window.location.origin + '/';
+          const title = 'Fundación Elva Fonseca';
+          const text = "Support Elva Fonseca's mission of care and community.";
+          try {
+            if (navigator.share) {
+              await navigator.share({ title, text, url });
+              return;
+            }
+          } catch {
+            /* user cancelled share — no-op */
+            return;
+          }
+          try {
+            await navigator.clipboard.writeText(url);
+            const prev = btn.textContent;
+            btn.textContent = 'Link copied';
+            window.setTimeout(() => {
+              btn.textContent = prev;
+            }, 2000);
+          } catch {
+            /* clipboard unavailable */
+          }
+        });
+      }
+    </script>
+  )
+}
