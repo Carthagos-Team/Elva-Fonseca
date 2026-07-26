@@ -63,8 +63,8 @@ const steps = [
 ---
 
 <section data-reveal-section data-step-timeline class="bg-surface py-16 lg:py-20">
-  <div class="mx-auto max-w-[75rem] px-6 sm:px-10 lg:px-16">
-    <div class="flex flex-col">
+  <div class="mx-auto max-w-360 px-6 sm:px-10 lg:px-16">
+    <div class="flex flex-col gap-9">
       {
         steps.map((step, i) => (
           <>
@@ -131,12 +131,12 @@ const steps = [
               >
                 {i === 0 && (
                   <img
-                    src="/images/cta/rose.svg"
+                    src="/images/volunteer/flower.svg"
                     alt=""
                     aria-hidden="true"
                     width="58"
                     height="56"
-                    class="absolute top-0 h-14 w-auto"
+                    class="absolute top-0 h-14 w-auto max-w-none"
                   />
                 )}
                 <div class="relative mt-auto h-16 w-full overflow-hidden rounded-full bg-woodsmoke/10 lg:h-24">
@@ -182,32 +182,42 @@ const steps = [
         return;
       }
 
-      // Cada conector liga o card i ao card i+1: uma timeline só, presa ao scroll (scrub),
-      // preenchendo a linha e "acendendo" o próximo card ao mesmo tempo — contínuo e
-      // reversível (rolar pra cima esvazia a linha e escurece o card de novo).
+      // Cada conector liga o card i ao card i+1, com 3 ScrollTriggers independentes (mesmo
+      // conector como trigger, ranges diferentes): o fill é uma métrica literal de progresso
+      // (preso ao trânsito físico do conector, ease:'none'); o reveal do próximo card e o
+      // dimming do atual são entradas decorativas — ganham um range bem mais largo (mais
+      // distância de scroll = mais espaço pra perceber o movimento) e uma curva de easing
+      // real (power2.inOut), em vez de ficarem presos ao range apertado do fill.
       connectors.forEach((connector, i) => {
         const fill = connector.querySelector<HTMLElement>('[data-step-fill]');
         const nextItem = items[i + 1];
+        const currentItem = items[i];
         if (!fill || !nextItem) return;
 
         gsap.set(fill, { scaleY: 0, transformOrigin: 'top' });
-        gsap.set(nextItem, { autoAlpha: 0.5, y: 24 });
+        gsap.set(nextItem, { autoAlpha: 0.5, y: 40, scale: 0.96 });
 
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: connector,
-            start: 'top 70%',
-            end: 'bottom 70%',
-            scrub: true,
-          },
+        const fillTl = gsap.timeline({
+          scrollTrigger: { trigger: connector, start: 'top 70%', end: 'bottom 70%', scrub: true },
         });
-        tl.fromTo(fill, { scaleY: 0 }, { scaleY: 1, ease: 'none' }, 0).fromTo(
+        fillTl.fromTo(fill, { scaleY: 0 }, { scaleY: 1, ease: 'none' });
+        if (fillTl.scrollTrigger) triggers.push(fillTl.scrollTrigger);
+
+        const revealTl = gsap.timeline({
+          scrollTrigger: { trigger: connector, start: 'top 80%', end: 'bottom 38%', scrub: true },
+        });
+        revealTl.fromTo(
           nextItem,
-          { autoAlpha: 0.5, y: 24 },
-          { autoAlpha: 1, y: 0, ease: 'none' },
-          0,
+          { autoAlpha: 0.5, y: 40, scale: 0.96 },
+          { autoAlpha: 1, y: 0, scale: 1, ease: 'power2.inOut' },
         );
-        if (tl.scrollTrigger) triggers.push(tl.scrollTrigger);
+        if (revealTl.scrollTrigger) triggers.push(revealTl.scrollTrigger);
+
+        const dimTl = gsap.timeline({
+          scrollTrigger: { trigger: connector, start: 'top 80%', end: 'bottom 38%', scrub: true },
+        });
+        dimTl.fromTo(currentItem, { autoAlpha: 1 }, { autoAlpha: 0.92, ease: 'power2.inOut' });
+        if (dimTl.scrollTrigger) triggers.push(dimTl.scrollTrigger);
       });
 
       return () => {
