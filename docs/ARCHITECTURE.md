@@ -7,6 +7,7 @@
 | Framework | Astro 7, **output estático, sem adapter** | Site de fundação: HTML estático, JS só onde isolado |
 | CSS | Tailwind v4 (`@tailwindcss/vite`), CSS-first via `@theme` | Tokens + raiz fluida num só arquivo (`global.css`) |
 | Motion | GSAP + ScrollTrigger via `src/lib/gsap.ts` | Helper obrigatório com `prefers-reduced-motion` |
+| Motion (parallax por seção) | `LegacyStory.astro` (About) dá a cada flor seu próprio par reveal+drift, escopado à SUA `<section>` (3 reveals com stagger + 6 drifts, ease `power2.inOut`) em vez de 1 drift único espalhado pelas 3 seções — parallax perceptível durante o scroll do "capítulo" ao lado de cada flor | Primeiro precedente de `ctx.isMobile`; múltiplos `ScrollTrigger`s por elemento relacionado já usado em `StepTimeline.astro`; `pin` rejeitado por cobrir 3 seções inteiras (custo de performance/UX desproporcional) |
 | Smooth scroll | Lenis via `src/lib/scroll.ts`, sincronizado ao `gsap.ticker`/`ScrollTrigger.update` | Sem reestruturar o DOM do `BaseLayout` (ao contrário de Locomotive Scroll/ScrollSmoother); desliga sozinho com `prefers-reduced-motion` |
 | Navegação | **MPA puro** (sem `<ClientRouter />`) | Zero cleanup de ScrollTrigger entre rotas; View Transitions só se virarem requisito |
 | CMS | Sanity embutido (`@sanity/astro`, studio em `/admin`) | Sem monorepo para projeto deste porte |
@@ -25,6 +26,7 @@ src/
   pages/                       # 7 rotas + 404 (stubs até Fase 3)
   components/
     global/                    # Header, Footer, SEO; Fase 2: Button, Container, Section, cards…
+    about/                     # Story, LegacyStory, Team — Fase 3, seção a seção
     home/                      # Fase 3, seção a seção
   styles/global.css            # raiz fluida + @theme (fonte: DESIGN_TOKENS.md)
   lib/

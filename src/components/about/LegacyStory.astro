@@ -1,0 +1,340 @@
+---
+// About / LegacyStory — Fase 3. Fiel ao Figma "SEC 8/9/10/04" (nodes 3323:18828, 3323:18851,
+// 3323:19164, 3323:19194, base 1440), confirmado via figma-desktop (get_design_context +
+// get_screenshot). Storytelling em 4 partes entre <Hero> e <Story> em about.astro.
+//
+// Assets reais exportados do Figma pelo usuário em /public/images/about/legacy/. O rabisco
+// "give" (seção 1) e o oval+retrato+assinatura "Elva Fonseca" (seção 2, sec2-illustration.svg)
+// vieram como formas preenchidas (fill), sem stroke real — DrawSVGPlugin não se aplica (mesma
+// limitação já registrada pros motifs do Story.astro). Decisão do usuário: substituir por reveal
+// de clip-path/máscara (mesma técnica de wipe do VoicesOfCommunity, ease 'smooth-wipe'),
+// marcados com data-legacy-wipe.
+//
+// Seção 4 tem só 1 selo (não 2 como os prints sugeriam) — "Fundación Elva Fonseca" é texto
+// estampado na própria foto (camiseta), confirmado no Figma real. Selo (seções 3/4) posicionado
+// com coordenadas exatas do Figma (get_metadata): vaza ~22% pra fora do canto esquerdo/inferior
+// da foto, não fica recuado por dentro.
+//
+// Cluster de flores (parallax) cobre seções 2+3+4 — wrapper <div data-legacy-flowers-scope>
+// evita usar `pin` (mesmo motivo de sempre: custo desproporcional pra um overlay de 3 seções).
+// Desktop: cada flor tem seu próprio par reveal+drift, escopado à SUA seção (não ao scope
+// inteiro) — reveal pontual (tempo fixo, `top 75%`, mesma convenção do resto do arquivo/
+// WhatIsNext.astro) + drift em parallax (`scrub` numérico, `ease:'power2.inOut'` como transfer
+// function scroll-linear -> percepção não-linear; `'none'` fica reservado pro connector-fill do
+// StepTimeline, que é progress-fill literal, caso diferente). Mobile: só reveal em stagger.
+// Reduced motion: estado final direto. Ver src/lib/gsap.ts.
+
+const badges = [
+  { src: '/images/about/legacy/badge-red-rosette.svg', x: 4, y: 6, w: 12, side: 'left' as const, section: 0 as const },
+  { src: '/images/about/legacy/badge-blue-flower.svg', x: 84, y: 14, w: 13, side: 'right' as const, section: 0 as const },
+  { src: '/images/about/legacy/badge-orange-medallion.svg', x: 6, y: 46, w: 12, side: 'left' as const, section: 1 as const },
+  { src: '/images/about/legacy/badge-yellow-gear.svg', x: 86, y: 58, w: 9, side: 'right' as const, section: 1 as const },
+  { src: '/images/about/legacy/badge-red-rosette.svg', x: 3, y: 82, w: 9, side: 'left' as const, section: 2 as const },
+  { src: '/images/about/legacy/badge-blue-flower.svg', x: 85, y: 88, w: 11, side: 'right' as const, section: 2 as const },
+] as const;
+---
+
+<section id="legacy-intro" data-reveal-section data-legacy-section class="bg-surface px-6 py-16 sm:px-10 lg:px-16 lg:py-20">
+  <div class="mx-auto flex max-w-328 flex-col items-center gap-10 text-center">
+    <img
+      src="/images/about/legacy/sec1-badge-rosette-small.svg"
+      alt=""
+      aria-hidden="true"
+      class="h-[4.5rem] w-auto"
+      data-legacy-fade
+      loading="lazy"
+      decoding="async"
+    />
+
+    <div class="relative flex flex-col items-center gap-9">
+      <div
+        class="relative aspect-[382/534] w-full max-w-[23.9rem] overflow-visible rounded-xl border-[1.5px] border-woodsmoke"
+        data-legacy-fade
+      >
+        <img
+          src="/images/about/legacy/sec1-photo-children.png"
+          alt="Two children, an older sibling beside a younger one, in a sepia-toned portrait"
+          width="688"
+          height="960"
+          class="size-full rounded-xl object-cover"
+          loading="lazy"
+          decoding="async"
+        />
+        <img
+          src="/images/about/legacy/sec1-signature.svg"
+          alt=""
+          aria-hidden="true"
+          class="pointer-events-none absolute left-[2%] top-[4%] w-[38%] origin-top-left sm:-left-[42%] sm:top-[18%] sm:w-[62%]"
+          data-legacy-wipe
+        />
+      </div>
+
+      <div class="flex flex-col items-center gap-6">
+        <h2
+          class="font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-ink text-[2.5rem] sm:text-6xl lg:whitespace-nowrap lg:text-[4rem]"
+          data-legacy-split
+        >
+          A life of quiet strength.
+        </h2>
+        <p class="max-w-[34rem] font-sans text-base font-medium leading-relaxed tracking-[-0.02em] text-ink/80" data-legacy-fade>
+          Elva faced many challenges throughout her life. With scarce resources, she worked
+          tirelessly, washing clothes for others to help provide for her family. Despite the
+          hardships, she always found a way to share what little she had.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div data-legacy-flowers-scope class="relative">
+  <div data-legacy-flowers class="pointer-events-none absolute inset-0 z-10 overflow-clip" aria-hidden="true">
+    {
+      badges.map((b) => (
+        <img
+          src={b.src}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          class="legacy-flower absolute"
+          style={`left:${b.x}%;top:${b.y}%;width:${b.w}%`}
+          data-legacy-flower
+          data-legacy-flower-section={b.section}
+          data-side={b.side}
+        />
+      ))
+    }
+  </div>
+
+  <section data-reveal-section data-legacy-section class="relative bg-surface px-6 py-16 sm:px-10 lg:px-16 lg:py-20">
+    <div class="mx-auto flex max-w-[46rem] flex-col items-center gap-12 text-center">
+      <h2
+        class="font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-ink text-[2.5rem] sm:text-6xl lg:text-[4rem]"
+        data-legacy-split
+      >
+        &ldquo;Give what you have, not what&rsquo;s left over.&rdquo;
+      </h2>
+
+      <div class="relative mx-auto aspect-[810/696] w-full max-w-[26rem] sm:max-w-[30rem]" data-legacy-wipe>
+        <img
+          src="/images/about/legacy/sec2-illustration.svg"
+          alt="Illustrated portrait of Elva Fonseca inside an oval frame, with her signature"
+          class="size-full object-contain"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <div class="flex flex-col items-center gap-4" data-legacy-fade>
+        <p class="font-sans text-base font-semibold leading-[1.4] tracking-[-0.02em] text-ink">The heart of a family.</p>
+        <p class="max-w-[34rem] font-sans text-base font-medium leading-relaxed tracking-[-0.02em] text-ink/80">
+          This is one of her most memorable sayings. Through her generosity, she taught us the
+          true meaning of compassion and service, always giving selflessly to those in need, even
+          when she herself had very little.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section data-reveal-section data-legacy-section class="relative bg-surface px-6 py-16 sm:px-10 lg:px-16 lg:py-20">
+    <div class="mx-auto flex max-w-328 flex-col items-center gap-10 text-center">
+      <h2
+        class="font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-ink text-[2.5rem] sm:text-6xl lg:whitespace-nowrap lg:text-[4rem]"
+        data-legacy-split
+      >
+        From her hands, a legacy.
+      </h2>
+
+      <div class="relative aspect-[382/534] w-full max-w-[23.9rem] overflow-visible rounded-xl border-[1.5px] border-woodsmoke" data-legacy-fade>
+        <img
+          src="/images/about/legacy/sec3-photo-girl.png"
+          alt="A girl in a floral dress, standing for a portrait"
+          width="628"
+          height="1280"
+          class="size-full rounded-xl object-cover object-[50%_3%]"
+          loading="lazy"
+          decoding="async"
+        />
+        <img
+          src="/images/about/legacy/seal.svg"
+          alt="Seal: Del Sur de México"
+          class="absolute -left-[22%] top-[77%] w-[44%]"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <p class="max-w-[34rem] font-sans text-base font-semibold leading-[1.4] tracking-[-0.02em] text-ink/80" data-legacy-fade>
+        As her children — Rosa, Antonio, Juan, Leydi, and Adilene — grew, Elva remained the
+        foundation of our family. She cared for her grandchildren and great-grandchildren with
+        the same unconditional love and dedication that defined her entire life.
+      </p>
+    </div>
+  </section>
+
+  <section data-reveal-section data-legacy-section class="relative bg-surface px-6 py-16 sm:px-10 lg:px-16 lg:py-20">
+    <div class="mx-auto flex max-w-328 flex-col items-center gap-10 text-center">
+      <h2
+        class="font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-ink text-[2.5rem] sm:text-6xl lg:whitespace-nowrap lg:text-[4rem]"
+        data-legacy-split
+      >
+        A future shaped by her example.
+      </h2>
+
+      <div class="relative aspect-[382/534] w-full max-w-[23.9rem] overflow-visible rounded-xl border-[1.5px] border-woodsmoke" data-legacy-fade>
+        <img
+          src="/images/about/legacy/sec4-photo-grandma.png"
+          alt="An elderly woman wearing glasses and a Fundación Elva Fonseca t-shirt, outdoors"
+          width="1066"
+          height="1600"
+          class="size-full rounded-xl object-cover"
+          loading="lazy"
+          decoding="async"
+        />
+        <img
+          src="/images/about/legacy/seal.svg"
+          alt="Seal: Del Sur de México"
+          class="absolute -left-[22%] top-[77%] w-[44%]"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <p class="max-w-[34rem] font-sans text-base font-medium leading-relaxed tracking-[-0.02em] text-ink/80" data-legacy-fade>
+        The Elva Fonseca Foundation was created to honor her life, her values, and the love she
+        gave so freely. Our mission is to continue her legacy by serving those in need in our
+        community, just as she did — with open hearts and hands. Her example lives on in
+        everything we do.
+      </p>
+    </div>
+  </section>
+</div>
+
+<script>
+  import { createMotion, gsap, SplitText } from '../../lib/gsap';
+
+  function initLegacySections() {
+    const sections = Array.from(document.querySelectorAll<HTMLElement>('[data-legacy-section]'));
+    if (!sections.length) return;
+
+    sections.forEach((section) => {
+      createMotion(section, (ctx) => {
+        const fadeEls = Array.from(section.querySelectorAll<HTMLElement>('[data-legacy-fade]'));
+        const splitEls = Array.from(section.querySelectorAll<HTMLElement>('[data-legacy-split]'));
+        const wipeEls = Array.from(section.querySelectorAll<HTMLElement>('[data-legacy-wipe]'));
+
+        if (ctx.reducedMotion) {
+          gsap.set([...fadeEls, ...splitEls, ...wipeEls], { clearProps: 'all' });
+          return;
+        }
+
+        const splits = splitEls.map((el) => SplitText.create(el, { type: 'lines', mask: 'lines' }));
+        const lines = splits.flatMap((s) => s.lines);
+
+        gsap.set(fadeEls, { autoAlpha: 0, y: 24 });
+        gsap.set(lines, { yPercent: 110 });
+        gsap.set(wipeEls, { clipPath: 'inset(0 0 100% 0)' });
+
+        const tl = gsap.timeline({
+          scrollTrigger: { trigger: section, start: 'top 75%', once: true },
+        });
+        tl.to(fadeEls, { autoAlpha: 1, y: 0, duration: 0.6, ease: 'power3.out', stagger: 0.12 }, 0);
+        tl.to(lines, { yPercent: 0, duration: 0.7, ease: 'power4.inOut', stagger: { amount: 0.2 } }, 0.1);
+        tl.to(wipeEls, { clipPath: 'inset(0 0 0% 0)', duration: 1.1, ease: 'smooth-wipe' }, 0.25);
+
+        return () => {
+          tl.scrollTrigger?.kill();
+          tl.kill();
+          splits.forEach((s) => s.revert());
+          gsap.set([...fadeEls, ...wipeEls], { clearProps: 'all' });
+        };
+      });
+    });
+  }
+
+  function initLegacyFlowers() {
+    const scope = document.querySelector<HTMLElement>('[data-legacy-flowers-scope]');
+    const flowers = Array.from(document.querySelectorAll<HTMLElement>('[data-legacy-flower]'));
+    if (!scope || !flowers.length) return;
+
+    createMotion(scope, (ctx) => {
+      if (ctx.reducedMotion) {
+        gsap.set(flowers, { clearProps: 'all' });
+        return;
+      }
+
+      if (ctx.isMobile) {
+        const tween = gsap.from(flowers, {
+          autoAlpha: 0,
+          y: 24,
+          scale: 0.9,
+          duration: 0.5,
+          ease: 'back.out(1.6)',
+          stagger: 0.08,
+          scrollTrigger: { trigger: scope, start: 'top 70%', once: true },
+        });
+        return () => {
+          tween.scrollTrigger?.kill();
+          tween.kill();
+          gsap.set(flowers, { clearProps: 'all' });
+        };
+      }
+
+      // Desktop: cada flor tem seu próprio par reveal+drift, escopado à SUA seção (não ao scope
+      // inteiro) — reveal pontual (tempo fixo, mesma cara do mobile) quando aquela seção entra,
+      // + drift em parallax durante o trânsito dela na viewport (top bottom -> bottom top).
+      // Profundidade (depth) varia por flor pra sensação de camadas.
+      gsap.set(flowers, { autoAlpha: 0, y: 32 });
+
+      const sections = Array.from(scope.querySelectorAll<HTMLElement>('[data-legacy-section]'));
+      const tweens: gsap.core.Tween[] = [];
+
+      sections.forEach((section, sectionIndex) => {
+        const sectionFlowers = flowers.filter(
+          (el) => Number(el.dataset.legacyFlowerSection) === sectionIndex,
+        );
+        if (!sectionFlowers.length) return;
+
+        const reveal = gsap.to(sectionFlowers, {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.6,
+          ease: 'back.out(1.6)',
+          stagger: 0.07,
+          scrollTrigger: { trigger: section, start: 'top 75%', once: true },
+        });
+        tweens.push(reveal);
+
+        sectionFlowers.forEach((el) => {
+          const i = flowers.indexOf(el);
+          const depth = 60 + (i % 3) * 25; // 60 / 85 / 110 — camadas de profundidade
+          const drift = gsap.fromTo(
+            el,
+            { yPercent: depth / 2 },
+            {
+              yPercent: -depth / 2,
+              ease: 'power2.inOut',
+              scrollTrigger: { trigger: section, start: 'top bottom', end: 'bottom top', scrub: 0.6 },
+            },
+          );
+          tweens.push(drift);
+        });
+      });
+
+      return () => {
+        tweens.forEach((t) => {
+          t.scrollTrigger?.kill();
+          t.kill();
+        });
+        gsap.set(flowers, { clearProps: 'all' });
+      };
+    });
+  }
+
+  function init() {
+    initLegacySections();
+    initLegacyFlowers();
+  }
+
+  if (document.readyState !== 'loading') init();
+  else document.addEventListener('DOMContentLoaded', init);
+</script>
