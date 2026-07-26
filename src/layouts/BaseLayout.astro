@@ -32,5 +32,12 @@ const { title, description, ogImage, headerTheme = 'dark', headerBackground = 't
       <slot />
     </main>
     <Footer />
+    <script>
+      import { initSmoothScroll } from '../lib/scroll';
+      import { initHoverText } from '../lib/hover-text';
+
+      initSmoothScroll();
+      initHoverText();
+    </script>
   </body>
 </html>

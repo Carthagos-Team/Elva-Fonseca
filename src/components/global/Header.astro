@@ -78,8 +78,11 @@ const logo = isLight ? '/images/brand/logo-lockup-light.svg' : '/images/brand/lo
       </ul>
     </nav>
 
-    <a href="/donate" class={donateDesktop}>
-      Donate now
+    <a href="/donate" class={`hover-text ${donateDesktop}`}>
+      <span class="hover-text__inner">
+        <span class="hover-text__label is--default" data-hover-text-el>Donate now</span>
+        <span aria-hidden="true" class="hover-text__label is--hover" data-hover-text-el>Donate now</span>
+      </span>
     </a>
   </div>
 
@@ -109,9 +112,12 @@ const logo = isLight ? '/images/brand/logo-lockup-light.svg' : '/images/brand/lo
         </ul>
         <a
           href="/donate"
-          class="mt-2 inline-flex min-h-11 w-full items-center justify-center rounded-md bg-orchid px-6 py-3.5 font-display font-black text-base uppercase tracking-[-0.01em] text-ink transition-transform duration-150 ease-out active:scale-[0.97]"
+          class="hover-text mt-2 inline-flex min-h-11 w-full items-center justify-center rounded-md bg-orchid px-6 py-3.5 font-display font-black text-base uppercase tracking-[-0.01em] text-ink transition-transform duration-150 ease-out active:scale-[0.97]"
         >
-          Donate now
+          <span class="hover-text__inner">
+            <span class="hover-text__label is--default" data-hover-text-el>Donate now</span>
+            <span aria-hidden="true" class="hover-text__label is--hover" data-hover-text-el>Donate now</span>
+          </span>
         </a>
       </div>
 

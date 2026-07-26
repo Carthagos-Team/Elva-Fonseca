@@ -46,12 +46,18 @@ const btnBase =
         </div>
 
         <div class="flex flex-col gap-4 sm:flex-row sm:gap-5">
-          <a href={primary.href} class={`${btnBase} bg-buckthorn text-ink hover:brightness-105`}>
-            {primary.label}
+          <a href={primary.href} class={`hover-text ${btnBase} bg-buckthorn text-ink hover:brightness-105`}>
+            <span class="hover-text__inner">
+              <span class="hover-text__label is--default" data-hover-text-el>{primary.label}</span>
+              <span aria-hidden="true" class="hover-text__label is--hover" data-hover-text-el>{primary.label}</span>
+            </span>
           </a>
           {secondary && (
-            <a href={secondary.href} class={`${btnBase} bg-orchid text-ink hover:brightness-105`}>
-              {secondary.label}
+            <a href={secondary.href} class={`hover-text ${btnBase} bg-orchid text-ink hover:brightness-105`}>
+              <span class="hover-text__inner">
+                <span class="hover-text__label is--default" data-hover-text-el>{secondary.label}</span>
+                <span aria-hidden="true" class="hover-text__label is--hover" data-hover-text-el>{secondary.label}</span>
+              </span>
             </a>
           )}
         </div>

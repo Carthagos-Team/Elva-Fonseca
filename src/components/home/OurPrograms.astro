@@ -54,7 +54,12 @@ const programs = [
       <h2 class="font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-ink text-[2.5rem] sm:text-6xl lg:text-[4rem]">
         Our Programs
       </h2>
-      <a href="/donate" class={btnBase}>Donate now</a>
+      <a href="/donate" class={`hover-text ${btnBase}`}>
+        <span class="hover-text__inner">
+          <span class="hover-text__label is--default" data-hover-text-el>Donate now</span>
+          <span aria-hidden="true" class="hover-text__label is--hover" data-hover-text-el>Donate now</span>
+        </span>
+      </a>
     </div>
 
     <ul class="grid w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -96,9 +101,12 @@ const programs = [
           />
           <a
             href="/programs"
-            class="absolute bottom-4 left-4 inline-flex min-h-9 items-center justify-center whitespace-nowrap rounded-md border-[1.5px] border-woodsmoke bg-buckthorn px-4 py-3 font-display font-black text-sm uppercase tracking-[-0.01em] text-ink transition-[transform,filter] duration-150 ease-out hover:brightness-105 active:scale-[0.97]"
+            class="hover-text absolute bottom-4 left-4 inline-flex min-h-9 items-center justify-center whitespace-nowrap rounded-md border-[1.5px] border-woodsmoke bg-buckthorn px-4 py-3 font-display font-black text-sm uppercase tracking-[-0.01em] text-ink transition-[transform,filter] duration-150 ease-out hover:brightness-105 active:scale-[0.97]"
           >
-            Explore our programs
+            <span class="hover-text__inner">
+              <span class="hover-text__label is--default" data-hover-text-el>Explore our programs</span>
+              <span aria-hidden="true" class="hover-text__label is--hover" data-hover-text-el>Explore our programs</span>
+            </span>
           </a>
         </div>
       </li>

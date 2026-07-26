@@ -77,7 +77,12 @@ const btnBase =
             ))
           }
         </ul>
-        <a href="/donate" class={`${btnBase} mt-auto bg-ink text-orchid hover:brightness-110`}>Support us</a>
+        <a href="/donate" class={`hover-text ${btnBase} mt-auto bg-ink text-orchid hover:brightness-110`}>
+          <span class="hover-text__inner">
+            <span class="hover-text__label is--default" data-hover-text-el>Support us</span>
+            <span aria-hidden="true" class="hover-text__label is--hover" data-hover-text-el>Support us</span>
+          </span>
+        </a>
       </aside>
     </div>
 

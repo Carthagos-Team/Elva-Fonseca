@@ -86,12 +86,18 @@ const btnBase =
     <div class="flex flex-col gap-3 sm:flex-row">
       <a
         href={primaryHref}
-        class={`${btnBase} flex-1 border-viking-900 bg-buckthorn text-orchid-025 hover:brightness-105`}
+        class={`hover-text ${btnBase} flex-1 border-viking-900 bg-buckthorn text-orchid-025 hover:brightness-105`}
       >
-        {primaryLabel}
+        <span class="hover-text__inner">
+          <span class="hover-text__label is--default" data-hover-text-el>{primaryLabel}</span>
+          <span aria-hidden="true" class="hover-text__label is--hover" data-hover-text-el>{primaryLabel}</span>
+        </span>
       </a>
-      <a href={secondaryHref} class={`${btnBase} flex-1 bg-transparent text-ink hover:bg-woodsmoke/5`}>
-        {secondaryLabel}
+      <a href={secondaryHref} class={`hover-text ${btnBase} flex-1 bg-transparent text-ink hover:bg-woodsmoke/5`}>
+        <span class="hover-text__inner">
+          <span class="hover-text__label is--default" data-hover-text-el>{secondaryLabel}</span>
+          <span aria-hidden="true" class="hover-text__label is--hover" data-hover-text-el>{secondaryLabel}</span>
+        </span>
       </a>
     </div>
   </div>

@@ -7,6 +7,7 @@
 | Framework | Astro 7, **output estático, sem adapter** | Site de fundação: HTML estático, JS só onde isolado |
 | CSS | Tailwind v4 (`@tailwindcss/vite`), CSS-first via `@theme` | Tokens + raiz fluida num só arquivo (`global.css`) |
 | Motion | GSAP + ScrollTrigger via `src/lib/gsap.ts` | Helper obrigatório com `prefers-reduced-motion` |
+| Smooth scroll | Lenis via `src/lib/scroll.ts`, sincronizado ao `gsap.ticker`/`ScrollTrigger.update` | Sem reestruturar o DOM do `BaseLayout` (ao contrário de Locomotive Scroll/ScrollSmoother); desliga sozinho com `prefers-reduced-motion` |
 | Navegação | **MPA puro** (sem `<ClientRouter />`) | Zero cleanup de ScrollTrigger entre rotas; View Transitions só se virarem requisito |
 | CMS | Sanity embutido (`@sanity/astro`, studio em `/admin`) | Sem monorepo para projeto deste porte |
 | Donate/Contact | Provedores estáticos (Stripe Payment Link / Web3Forms etc.) | Mantém build 100% estático; adapter só se surgir rota server real |
@@ -28,6 +29,8 @@ src/
   styles/global.css            # raiz fluida + @theme (fonte: DESIGN_TOKENS.md)
   lib/
     gsap.ts                    # createMotion() — todo motion passa por aqui
+    scroll.ts                  # initSmoothScroll() — Lenis + prefers-reduced-motion
+    hover-text.ts              # initHoverText() — split de chars (SplitText) p/ flip no hover
     sanity.ts                  # client GROQ (sanity:client)
   animations/                  # Fase 3+ (ex.: home-hero.ts)
 sanity/schemas/                # siteSettings (Fase 4: stat, program, faqItem, story, homePage)

@@ -142,4 +142,109 @@ html {
       scroll-behavior: auto !important;
     }
   }
+
+  /* Lenis assume o scroll nativo — scroll-behavior: smooth do CSS entraria em
+     conflito com o lerp do Lenis (src/lib/scroll.ts) */
+  html.lenis {
+    scroll-behavior: auto;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Hover text-flip — lógica portada do Osmo "Button 004" (src/lib/hover-text.ts
+   faz o split por char via SplitText; aqui só a mecânica do flip escalonado).
+   Cor/raio/padding/click-scale/focus-ring ficam 100% com o design já aprovado
+   (Tailwind nas classes do próprio botão/link) — nada disso é reimplementado.
+--------------------------------------------------------------------------- */
+@layer components {
+  :root {
+    --hover-text-translate-y: 1.25em;
+    --hover-text-rotate-max: 36deg;
+    --hover-text-ease: cubic-bezier(0.675, 0.15, 0.1, 1);
+  }
+
+  .hover-text {
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+
+  .hover-text__inner {
+    display: grid;
+  }
+
+  .hover-text__label {
+    grid-area: 1 / 1;
+    perspective: 10em;
+    transform-style: preserve-3d;
+  }
+
+  /* Camada hover some por padrão enquanto o SplitText não rodou (reduced-motion
+     ou JS indisponível) — sem isso o texto duplicado ficaria visível por cima
+     do texto default. Assim que o split cria os .hover-text__split-char, este
+     seletor deixa de bater e a visibilidade passa a ser por char (abaixo). */
+  .hover-text__label.is--hover:not(:has(.hover-text__split-char)) {
+    opacity: 0;
+  }
+
+  .hover-text__split-char {
+    --base-delay: 0.05s;
+    --max-extra: 2.9s;
+    --t: calc(var(--index) / max(var(--max-index), 1));
+    --curve: sin(calc(var(--t) * 1.5deg));
+    --delay: calc(var(--base-delay) + (var(--curve) * var(--max-extra)));
+    --rot-t: calc(var(--index) / max(var(--max-index), 1));
+    --rot-curve: sin(calc(var(--rot-t) * 30deg));
+    --rot-sign: clamp(-1, var(--signed-index), 1);
+    display: inline-block;
+  }
+
+  .hover-text__label.is--default .hover-text__split-char {
+    transition:
+      transform 0.325s var(--hover-text-ease),
+      translate 0.425s var(--hover-text-ease),
+      rotate 0.45s var(--hover-text-ease),
+      opacity 0.15s ease-out;
+  }
+
+  .hover-text__label.is--hover .hover-text__split-char {
+    transition:
+      transform 0.35s var(--hover-text-ease),
+      translate 0.35s var(--hover-text-ease),
+      rotate 0.35s var(--hover-text-ease),
+      opacity 0.15s 0.1s ease-out;
+    rotate: 1 0 0 -72deg;
+    transform: rotateZ(calc(var(--rot-sign) * var(--rot-curve) * var(--hover-text-rotate-max) * -1)) scale(0.65);
+    translate: calc(var(--signed-index) * 0.125em) var(--hover-text-translate-y) 0;
+    opacity: 0;
+  }
+
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .hover-text__split-char {
+      will-change: transform, translate, rotate, opacity;
+    }
+
+    .hover-text:is(:hover, :focus-visible) .hover-text__label.is--default .hover-text__split-char {
+      translate: calc(var(--signed-index) * 0.125em) calc(var(--hover-text-translate-y) * -1) 0;
+      rotate: 1 0 0 72deg;
+      transform: rotateZ(calc(var(--rot-sign) * var(--rot-curve) * var(--hover-text-rotate-max) * -1)) scale(0.65);
+      opacity: 0;
+      transition:
+        transform 0.35s var(--delay) var(--hover-text-ease),
+        translate 0.35s var(--delay) var(--hover-text-ease),
+        rotate 0.35s var(--delay) var(--hover-text-ease),
+        opacity 0.15s calc(var(--delay) + 0.1s) ease-out;
+    }
+
+    .hover-text:is(:hover, :focus-visible) .hover-text__label.is--hover .hover-text__split-char {
+      translate: 0 0 0;
+      rotate: 1 0 0 0deg;
+      transform: rotateZ(0deg) scale(1);
+      opacity: 1;
+      transition:
+        transform 0.325s calc(var(--delay) + 0.05s) var(--hover-text-ease),
+        translate 0.425s calc(var(--delay) + 0.05s) var(--hover-text-ease),
+        rotate 0.45s calc(var(--delay) + 0.05s) var(--hover-text-ease),
+        opacity 0.15s calc(var(--delay) + 0.075s) ease-out;
+    }
+  }
 }

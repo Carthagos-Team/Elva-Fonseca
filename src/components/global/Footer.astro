@@ -54,9 +54,12 @@ const isCurrent = (href: string) =>
                 <a
                   href={href}
                   aria-current={isCurrent(href) ? 'page' : undefined}
-                  class="footer-navlink inline-flex py-2 font-display text-2xl uppercase tracking-[-0.04em] transition-opacity hover:opacity-70 aria-[current=page]:opacity-60"
+                  class="footer-navlink hover-text inline-flex py-2 font-display text-2xl uppercase tracking-[-0.04em] aria-[current=page]:opacity-60"
                 >
-                  {label}
+                  <span class="hover-text__inner">
+                    <span class="hover-text__label is--default" data-hover-text-el>{label}</span>
+                    <span aria-hidden="true" class="hover-text__label is--hover" data-hover-text-el>{label}</span>
+                  </span>
                 </a>
               </li>
             ))
@@ -71,9 +74,12 @@ const isCurrent = (href: string) =>
       {/* CTA Donate — mobile (a aba vertical some abaixo de md) */}
       <a
         href={donateUrl}
-        class="flex min-h-11 w-full items-center justify-center rounded-md bg-orchid px-6 py-3 font-display text-lg uppercase tracking-[-0.02em] text-jacko-bean-950 transition-opacity hover:opacity-90 md:hidden"
+        class="hover-text flex min-h-11 w-full items-center justify-center rounded-md bg-orchid px-6 py-3 font-display text-lg uppercase tracking-[-0.02em] text-jacko-bean-950 transition-opacity hover:opacity-90 md:hidden"
       >
-        Donate
+        <span class="hover-text__inner">
+          <span class="hover-text__label is--default" data-hover-text-el>Donate</span>
+          <span aria-hidden="true" class="hover-text__label is--hover" data-hover-text-el>Donate</span>
+        </span>
       </a>
 
       {/* Linha legal + crédito */}
@@ -84,9 +90,12 @@ const isCurrent = (href: string) =>
               <li>
                 <a
                   href={href}
-                  class="footer-legal text-[0.9375rem] font-semibold transition-opacity hover:opacity-70"
+                  class="footer-legal hover-text text-[0.9375rem] font-semibold"
                 >
-                  {label}
+                  <span class="hover-text__inner">
+                    <span class="hover-text__label is--default" data-hover-text-el>{label}</span>
+                    <span aria-hidden="true" class="hover-text__label is--hover" data-hover-text-el>{label}</span>
+                  </span>
                 </a>
               </li>
             ))
@@ -96,9 +105,12 @@ const isCurrent = (href: string) =>
           href="https://carthagos.com"
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex items-center gap-2 text-[0.9375rem] transition-opacity hover:opacity-70"
+          class="hover-text inline-flex items-center gap-2 text-[0.9375rem]"
         >
-          <span class="opacity-80">designed by</span>
+          <span class="hover-text__inner opacity-80">
+            <span class="hover-text__label is--default" data-hover-text-el>designed by</span>
+            <span aria-hidden="true" class="hover-text__label is--hover" data-hover-text-el>designed by</span>
+          </span>
           <img src="/images/footer/crt.svg" alt="Carthagos" width="62" height="18" class="h-[1.1em] w-auto" />
         </a>
       </div>

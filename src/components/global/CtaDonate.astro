@@ -60,9 +60,12 @@ const row = ['02', '06', '04', '01', '07', '05', '03'];
 
       <a
         href={ctaHref}
-        class="inline-flex min-h-11 items-center justify-center rounded-md border-[1.5px] border-woodsmoke bg-orchid px-6 py-3.5 font-display font-black text-base uppercase tracking-[-0.01em] text-ink transition-transform duration-150 ease-out active:scale-[0.97]"
+        class="hover-text inline-flex min-h-11 items-center justify-center rounded-md border-[1.5px] border-woodsmoke bg-orchid px-6 py-3.5 font-display font-black text-base uppercase tracking-[-0.01em] text-ink transition-transform duration-150 ease-out active:scale-[0.97]"
       >
-        {ctaLabel}
+        <span class="hover-text__inner">
+          <span class="hover-text__label is--default" data-hover-text-el>{ctaLabel}</span>
+          <span aria-hidden="true" class="hover-text__label is--hover" data-hover-text-el>{ctaLabel}</span>
+        </span>
       </a>
     </div>
   </div>
