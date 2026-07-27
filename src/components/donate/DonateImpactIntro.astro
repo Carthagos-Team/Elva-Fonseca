@@ -6,7 +6,7 @@
 const row = ['02', '06', '04', '01', '07', '05', '03'] as const;
 ---
 
-<section data-reveal-section class="bg-surface px-6 py-12 text-center sm:px-10 lg:px-16 lg:pb-16">
+<section data-reveal-section data-donate-impact-intro class="bg-surface px-6 py-12 text-center sm:px-10 lg:px-16 lg:pb-16">
   <div class="mx-auto flex max-w-[75rem] flex-col items-center gap-12">
     {/* Fileira decorativa — cada .cta-petal individual → stagger na Fase 5 */}
     <div
@@ -29,7 +29,7 @@ const row = ['02', '06', '04', '01', '07', '05', '03'] as const;
       }
     </div>
 
-    <div class="flex w-full max-w-[42.125rem] flex-col items-center gap-6">
+    <div data-donate-impact-content class="flex w-full max-w-[42.125rem] flex-col items-center gap-6">
       <h2
         class="max-w-full font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-ink text-[2.25rem] sm:text-5xl lg:text-[4rem]"
       >
@@ -45,3 +45,55 @@ const row = ['02', '06', '04', '01', '07', '05', '03'] as const;
     </div>
   </div>
 </section>
+
+<script>
+  import { createMotion, gsap } from '../../lib/gsap';
+
+  function initDonateImpactIntro() {
+    const section = document.querySelector<HTMLElement>('[data-donate-impact-intro]');
+    if (!section) return;
+    const petals = Array.from(section.querySelectorAll<HTMLElement>('[data-reveal="petal"]'));
+    const content = section.querySelector<HTMLElement>('[data-donate-impact-content]');
+
+    createMotion(section, (ctx) => {
+      if (ctx.reducedMotion) {
+        gsap.set(petals, { clearProps: 'all' });
+        if (content) gsap.set(content.children, { clearProps: 'all' });
+        return;
+      }
+
+      const petalsTween = gsap.from(petals, {
+        autoAlpha: 0,
+        y: 16,
+        scale: 0.9,
+        duration: 0.5,
+        ease: 'back.out(1.6)',
+        stagger: 0.05,
+        scrollTrigger: { trigger: section, start: 'top 70%', once: true },
+      });
+
+      const contentTween = content
+        ? gsap.from(content.children, {
+            y: 24,
+            autoAlpha: 0,
+            duration: 0.6,
+            ease: 'power3.out',
+            stagger: 0.12,
+            scrollTrigger: { trigger: section, start: 'top 65%', once: true },
+          })
+        : null;
+
+      return () => {
+        [petalsTween, contentTween].forEach((t) => {
+          t?.scrollTrigger?.kill();
+          t?.kill();
+        });
+        gsap.set(petals, { clearProps: 'all' });
+        if (content) gsap.set(content.children, { clearProps: 'all' });
+      };
+    });
+  }
+
+  if (document.readyState !== 'loading') initDonateImpactIntro();
+  else document.addEventListener('DOMContentLoaded', initDonateImpactIntro);
+</script>

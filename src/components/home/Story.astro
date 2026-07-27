@@ -19,15 +19,15 @@ const {
   eyebrow = 'About us',
   titleLines = ['Rooted in love,', 'grown through action.'],
   body = 'The Elva Fonseca Foundation was born from one woman’s strength, compassion, and commitment to her community. What started with small, selfless acts continues today as a legacy of care and opportunity for those who need it most.',
-  image = '/images/about/story.jpg',
+  image = '/images/about/story.webp',
   imageAlt = 'Members of the community greeting each other at a shared meal',
   imagePosition = 'center',
   cta = { label: 'Discover our story', href: '/about' },
 } = Astro.props;
 ---
 
-<section data-reveal-section class="border-y border-orchid-200 bg-orchid-025">
-  <div class="h-[20rem] w-full overflow-hidden sm:h-[26rem] lg:h-[34rem]">
+<section data-reveal-section data-home-story class="border-y border-orchid-200 bg-orchid-025">
+  <div data-story-photo class="h-[20rem] w-full overflow-hidden sm:h-[26rem] lg:h-[34rem]">
     <img
       src={image}
       alt={imageAlt}
@@ -42,7 +42,7 @@ const {
 
   {/* Figma Donate 3315:18819: flex Fill × Hug, gap 208, colunas 582 / 535 (space-between). */}
   <div class="mx-auto flex w-full max-w-[120rem] flex-col gap-8 px-6 pb-12 pt-9 sm:px-10 lg:flex-row lg:items-start lg:justify-between lg:gap-[13rem] lg:px-16">
-    <div class="flex w-full max-w-[36.375rem] shrink-0 flex-col gap-3">
+    <div data-story-heading class="flex w-full max-w-[36.375rem] shrink-0 flex-col gap-3">
       <p class="font-sans text-sm font-semibold uppercase tracking-[0.08em] text-ink">
         {eyebrow}
       </p>
@@ -58,7 +58,7 @@ const {
       </h2>
     </div>
 
-    <div class="flex w-full max-w-[33.4375rem] shrink-0 flex-col items-start gap-6">
+    <div data-story-body class="flex w-full max-w-[33.4375rem] shrink-0 flex-col items-start gap-6">
       <p class="text-base font-medium leading-relaxed tracking-[-0.02em] text-ink/85">
         {body}
       </p>
@@ -74,3 +74,43 @@ const {
     </div>
   </div>
 </section>
+
+<script>
+  import { createMotion, gsap } from '../../lib/gsap';
+
+  function initHomeStory() {
+    const section = document.querySelector<HTMLElement>('[data-home-story]');
+    if (!section) return;
+    const slots = [
+      section.querySelector<HTMLElement>('[data-story-photo]'),
+      section.querySelector<HTMLElement>('[data-story-heading]'),
+      section.querySelector<HTMLElement>('[data-story-body]'),
+    ].filter((el): el is HTMLElement => !!el);
+    if (!slots.length) return;
+
+    createMotion(section, (ctx) => {
+      if (ctx.reducedMotion) {
+        gsap.set(slots, { clearProps: 'all' });
+        return;
+      }
+
+      const tween = gsap.from(slots, {
+        y: 24,
+        autoAlpha: 0,
+        duration: 0.6,
+        ease: 'power3.out',
+        stagger: 0.12,
+        scrollTrigger: { trigger: section, start: 'top 65%', once: true },
+      });
+
+      return () => {
+        tween.scrollTrigger?.kill();
+        tween.kill();
+        gsap.set(slots, { clearProps: 'all' });
+      };
+    });
+  }
+
+  if (document.readyState !== 'loading') initHomeStory();
+  else document.addEventListener('DOMContentLoaded', initHomeStory);
+</script>

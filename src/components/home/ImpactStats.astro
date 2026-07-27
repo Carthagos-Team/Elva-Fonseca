@@ -25,9 +25,9 @@ const impact = [
 ];
 ---
 
-<section data-reveal-section class="bg-surface">
+<section data-reveal-section data-impact-stats class="bg-surface">
   <div class="mx-auto flex max-w-[120rem] flex-col items-center gap-10 px-6 py-16 text-center sm:px-10 lg:gap-16 lg:px-16">
-    <div class="flex flex-col items-center gap-3">
+    <div data-stats-heading class="flex flex-col items-center gap-3">
       <p class="font-sans text-sm font-semibold uppercase tracking-[0.08em] text-buckthorn">
         Our Social Impact
       </p>
@@ -59,3 +59,56 @@ const impact = [
     </ul>
   </div>
 </section>
+
+<script>
+  import { createMotion, gsap } from '../../lib/gsap';
+
+  function initImpactStats() {
+    const section = document.querySelector<HTMLElement>('[data-impact-stats]');
+    if (!section) return;
+    const heading = section.querySelector<HTMLElement>('[data-stats-heading]');
+    const cards = Array.from(section.querySelectorAll<HTMLElement>('li'));
+
+    createMotion(section, (ctx) => {
+      if (ctx.reducedMotion) {
+        if (heading) gsap.set(heading, { clearProps: 'all' });
+        gsap.set(cards, { clearProps: 'all' });
+        return;
+      }
+
+      const headingTween = heading
+        ? gsap.from(heading, {
+            y: 24,
+            autoAlpha: 0,
+            duration: 0.6,
+            ease: 'power3.out',
+            scrollTrigger: { trigger: section, start: 'top 65%', once: true },
+          })
+        : null;
+
+      const cardsTween = gsap.from(cards, {
+        y: 56,
+        autoAlpha: 0,
+        rotate: -3,
+        scale: 0.96,
+        transformOrigin: '50% 100%',
+        duration: 0.6,
+        ease: 'back.out(1.7)',
+        stagger: 0.12,
+        scrollTrigger: { trigger: section, start: 'top 65%', once: true },
+      });
+
+      return () => {
+        headingTween?.scrollTrigger?.kill();
+        headingTween?.kill();
+        cardsTween.scrollTrigger?.kill();
+        cardsTween.kill();
+        if (heading) gsap.set(heading, { clearProps: 'all' });
+        gsap.set(cards, { clearProps: 'all' });
+      };
+    });
+  }
+
+  if (document.readyState !== 'loading') initImpactStats();
+  else document.addEventListener('DOMContentLoaded', initImpactStats);
+</script>

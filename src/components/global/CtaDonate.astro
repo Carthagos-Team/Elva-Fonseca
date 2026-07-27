@@ -25,6 +25,7 @@ const row = ['02', '06', '04', '01', '07', '05', '03'];
 
 <section
   data-cta-band="donate"
+  data-cta-donate
   class="flex flex-col items-center bg-brand px-6 pb-16 pt-12 text-center text-orchid sm:px-10 lg:px-16"
 >
   <div class="flex flex-col items-center gap-12">
@@ -45,7 +46,7 @@ const row = ['02', '06', '04', '01', '07', '05', '03'];
     </div>
 
     {/* Texto + botão */}
-    <div class="flex flex-col items-center gap-9 px-4">
+    <div data-cta-donate-content class="flex flex-col items-center gap-9 px-4">
       <div class="flex flex-col items-center gap-6">
         <h2 class="font-display font-black text-[2.25rem] uppercase leading-[1.05] tracking-[-0.04em] sm:text-5xl lg:text-[4rem]">
           {titleLines.map((line, i) => (
@@ -70,3 +71,55 @@ const row = ['02', '06', '04', '01', '07', '05', '03'];
     </div>
   </div>
 </section>
+
+<script>
+  import { createMotion, gsap } from '../../lib/gsap';
+
+  function initCtaDonate() {
+    const section = document.querySelector<HTMLElement>('[data-cta-donate]');
+    if (!section) return;
+    const petals = Array.from(section.querySelectorAll<HTMLElement>('[data-reveal="petal"]'));
+    const content = section.querySelector<HTMLElement>('[data-cta-donate-content]');
+
+    createMotion(section, (ctx) => {
+      if (ctx.reducedMotion) {
+        gsap.set(petals, { clearProps: 'all' });
+        if (content) gsap.set(content, { clearProps: 'all' });
+        return;
+      }
+
+      const petalsTween = gsap.from(petals, {
+        autoAlpha: 0,
+        y: 16,
+        scale: 0.9,
+        duration: 0.5,
+        ease: 'back.out(1.6)',
+        stagger: 0.05,
+        scrollTrigger: { trigger: section, start: 'top 70%', once: true },
+      });
+
+      const contentTween = content
+        ? gsap.from(content.children, {
+            y: 24,
+            autoAlpha: 0,
+            duration: 0.6,
+            ease: 'power3.out',
+            stagger: 0.12,
+            scrollTrigger: { trigger: section, start: 'top 65%', once: true },
+          })
+        : null;
+
+      return () => {
+        [petalsTween, contentTween].forEach((t) => {
+          t?.scrollTrigger?.kill();
+          t?.kill();
+        });
+        gsap.set(petals, { clearProps: 'all' });
+        if (content) gsap.set(content.children, { clearProps: 'all' });
+      };
+    });
+  }
+
+  if (document.readyState !== 'loading') initCtaDonate();
+  else document.addEventListener('DOMContentLoaded', initCtaDonate);
+</script>

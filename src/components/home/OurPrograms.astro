@@ -47,9 +47,9 @@ const programs = [
 ];
 ---
 
-<section data-reveal-section class="border-t border-orchid-200 bg-orchid-100">
+<section data-reveal-section data-our-programs class="border-t border-orchid-200 bg-orchid-100">
   <div class="mx-auto flex max-w-[120rem] flex-col items-center gap-10 px-6 py-16 text-center sm:px-10 lg:px-16">
-    <div class="flex flex-col items-center gap-6">
+    <div data-programs-heading class="flex flex-col items-center gap-6">
       <img src="/images/cta/rose.svg" alt="" class="h-16 w-auto" aria-hidden="true" />
       <h2 class="font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-ink text-[2.5rem] sm:text-6xl lg:text-[4rem]">
         Our Programs
@@ -91,7 +91,7 @@ const programs = [
       <li class="flex h-[22rem] flex-col rounded-lg border-[1.5px] border-woodsmoke bg-orchid-050 p-2 sm:h-[26rem] lg:h-[30rem]">
         <div class="relative flex-1 overflow-hidden rounded-md border-[1.5px] border-woodsmoke">
           <img
-            src="/images/programs/explore.jpg"
+            src="/images/programs/explore.webp"
             alt="A volunteer wearing a Fundación Elva Fonseca t-shirt"
             width="1066"
             height="1600"
@@ -113,3 +113,56 @@ const programs = [
     </ul>
   </div>
 </section>
+
+<script>
+  import { createMotion, gsap } from '../../lib/gsap';
+
+  function initOurPrograms() {
+    const section = document.querySelector<HTMLElement>('[data-our-programs]');
+    if (!section) return;
+    const heading = section.querySelector<HTMLElement>('[data-programs-heading]');
+    const cards = Array.from(section.querySelectorAll<HTMLElement>('li'));
+
+    createMotion(section, (ctx) => {
+      if (ctx.reducedMotion) {
+        if (heading) gsap.set(heading, { clearProps: 'all' });
+        gsap.set(cards, { clearProps: 'all' });
+        return;
+      }
+
+      const headingTween = heading
+        ? gsap.from(heading, {
+            y: 24,
+            autoAlpha: 0,
+            duration: 0.6,
+            ease: 'power3.out',
+            scrollTrigger: { trigger: section, start: 'top 65%', once: true },
+          })
+        : null;
+
+      const cardsTween = gsap.from(cards, {
+        y: 56,
+        autoAlpha: 0,
+        rotate: -3,
+        scale: 0.96,
+        transformOrigin: '50% 100%',
+        duration: 0.6,
+        ease: 'back.out(1.7)',
+        stagger: 0.15,
+        scrollTrigger: { trigger: section, start: 'top 65%', once: true },
+      });
+
+      return () => {
+        headingTween?.scrollTrigger?.kill();
+        headingTween?.kill();
+        cardsTween.scrollTrigger?.kill();
+        cardsTween.kill();
+        if (heading) gsap.set(heading, { clearProps: 'all' });
+        gsap.set(cards, { clearProps: 'all' });
+      };
+    });
+  }
+
+  if (document.readyState !== 'loading') initOurPrograms();
+  else document.addEventListener('DOMContentLoaded', initOurPrograms);
+</script>

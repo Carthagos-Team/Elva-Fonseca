@@ -63,6 +63,7 @@ const flowers = [
 
 <section
   data-cta-band
+  data-cta-band-reveal
   class:list={[
     'relative isolate overflow-clip px-6 pb-40 pt-14 text-center sm:px-10 lg:px-16 lg:pb-52 lg:pt-20',
     isThankYou ? 'bg-orchid-100' : 'border-t border-woodsmoke/8 bg-surface',
@@ -96,7 +97,7 @@ const flowers = [
   }
 
   {/* Conteúdo */}
-  <div class="relative z-10 mx-auto flex max-w-[75rem] flex-col items-center gap-8 lg:gap-12">
+  <div data-cta-band-content class="relative z-10 mx-auto flex max-w-[75rem] flex-col items-center gap-8 lg:gap-12">
     <img src="/images/cta/rose.svg" alt="" aria-hidden="true" width="68" height="64" class="w-[4.25rem]" />
 
     <div class="flex flex-col items-center gap-6">
@@ -167,6 +168,58 @@ const flowers = [
     </div>
   </div>
 </section>
+
+<script>
+  import { createMotion, gsap } from '../../lib/gsap';
+
+  function initCtaBand() {
+    const section = document.querySelector<HTMLElement>('[data-cta-band-reveal]');
+    if (!section) return;
+    const petals = Array.from(section.querySelectorAll<HTMLElement>('[data-reveal="petal"]'));
+    const content = section.querySelector<HTMLElement>('[data-cta-band-content]');
+
+    createMotion(section, (ctx) => {
+      if (ctx.reducedMotion) {
+        gsap.set(petals, { clearProps: 'all' });
+        if (content) gsap.set(content.children, { clearProps: 'all' });
+        return;
+      }
+
+      const petalsTween = gsap.from(petals, {
+        autoAlpha: 0,
+        y: 16,
+        scale: 0.9,
+        duration: 0.5,
+        ease: 'back.out(1.6)',
+        stagger: 0.04,
+        scrollTrigger: { trigger: section, start: 'top 70%', once: true },
+      });
+
+      const contentTween = content
+        ? gsap.from(content.children, {
+            y: 24,
+            autoAlpha: 0,
+            duration: 0.6,
+            ease: 'power3.out',
+            stagger: 0.12,
+            scrollTrigger: { trigger: section, start: 'top 65%', once: true },
+          })
+        : null;
+
+      return () => {
+        [petalsTween, contentTween].forEach((t) => {
+          t?.scrollTrigger?.kill();
+          t?.kill();
+        });
+        gsap.set(petals, { clearProps: 'all' });
+        if (content) gsap.set(content.children, { clearProps: 'all' });
+      };
+    });
+  }
+
+  if (document.readyState !== 'loading') initCtaBand();
+  else document.addEventListener('DOMContentLoaded', initCtaBand);
+</script>
 
 {
   showSecondaryShare && (

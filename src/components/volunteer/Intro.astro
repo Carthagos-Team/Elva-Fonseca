@@ -4,7 +4,7 @@
 // Estático (sem motion) — mesma convenção do cabeçalho de WhatIsNext.astro.
 ---
 
-<section data-reveal-section class="bg-surface py-16 lg:py-20">
+<section data-reveal-section data-volunteer-intro class="bg-surface py-16 lg:py-20">
   <div class="mx-auto flex max-w-[120rem] flex-col items-center gap-6 px-6 text-center sm:px-10 lg:px-16">
     <img src="/images/cta/rose.svg" alt="" aria-hidden="true" width="68" height="64" class="h-16 w-auto" />
     <h2 class="font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-ink text-[2.5rem] sm:text-5xl lg:text-[4rem]">
@@ -15,3 +15,39 @@
     </p>
   </div>
 </section>
+
+<script>
+  import { createMotion, gsap } from '../../lib/gsap';
+
+  function initVolunteerIntro() {
+    const section = document.querySelector<HTMLElement>('[data-volunteer-intro]');
+    if (!section) return;
+    const slots = Array.from(section.querySelectorAll<HTMLElement>(':scope > div > *'));
+    if (!slots.length) return;
+
+    createMotion(section, (ctx) => {
+      if (ctx.reducedMotion) {
+        gsap.set(slots, { clearProps: 'all' });
+        return;
+      }
+
+      const tween = gsap.from(slots, {
+        y: 24,
+        autoAlpha: 0,
+        duration: 0.6,
+        ease: 'power3.out',
+        stagger: 0.12,
+        scrollTrigger: { trigger: section, start: 'top 65%', once: true },
+      });
+
+      return () => {
+        tween.scrollTrigger?.kill();
+        tween.kill();
+        gsap.set(slots, { clearProps: 'all' });
+      };
+    });
+  }
+
+  if (document.readyState !== 'loading') initVolunteerIntro();
+  else document.addEventListener('DOMContentLoaded', initVolunteerIntro);
+</script>

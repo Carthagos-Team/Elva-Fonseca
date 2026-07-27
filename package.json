@@ -7,9 +7,14 @@
   },
   "scripts": {
     "dev": "astro dev",
+    "prebuild": "npm run optimize-images",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "optimize-images": "node scripts/optimize-images.mjs"
+  },
+  "devDependencies": {
+    "sharp": "^0.35.3"
   },
   "dependencies": {
     "@astrojs/react": "^6.0.1",

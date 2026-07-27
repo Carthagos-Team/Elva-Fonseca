@@ -14,7 +14,7 @@ interface Props {
 const {
   titleLines = ['There are many ways', 'to make a difference.'],
   subcopy = "Whether donating, volunteering, or sharing our message, you are part of something greater. Help us continue Elva's legacy of compassion and service.",
-  image = '/images/cta/volunteer.jpg',
+  image = '/images/cta/volunteer.webp',
   imageAlt = 'A community member the foundation supports',
   primary = { label: 'Donate now', href: '/donate' },
   secondary = { label: 'Become a volunteer', href: '/volunteer' },
@@ -24,11 +24,11 @@ const btnBase =
   'inline-flex min-h-11 items-center justify-center whitespace-nowrap rounded-md border-[1.5px] border-woodsmoke px-6 py-3.5 font-display font-black text-base uppercase tracking-[-0.01em] transition-[transform,filter] duration-150 ease-out active:scale-[0.97]';
 ---
 
-<section data-reveal-section class="border-t border-orchid-200 bg-surface">
+<section data-reveal-section data-cta-volunteer class="border-t border-orchid-200 bg-surface">
   <div class="mx-auto max-w-[120rem] px-6 py-12 sm:px-10 sm:py-16 lg:px-16">
     <div class="grid overflow-hidden rounded-xl border-[1.5px] border-woodsmoke bg-brand lg:grid-cols-2 lg:h-130">
       {/* Conteúdo */}
-      <div class="flex flex-col justify-between gap-10 p-8 sm:p-12">
+      <div data-cta-volunteer-content class="flex flex-col justify-between gap-10 p-8 sm:p-12">
         <div class="flex flex-col gap-6">
           <h2 class="font-display font-black uppercase leading-none tracking-[-0.04em] text-orchid text-[1.75rem] sm:text-4xl lg:text-[2.5rem] min-[1300px]:text-[3.25rem]">
             {
@@ -65,7 +65,7 @@ const btnBase =
 
       {/* Foto — position:absolute p/ não influenciar o auto-sizing da linha do grid
           (a proporção retrato da foto senão vence o cálculo e estica o card). */}
-      <div class="relative h-56 w-full overflow-hidden sm:h-72 lg:h-auto">
+      <div data-cta-volunteer-photo class="relative h-56 w-full overflow-hidden sm:h-72 lg:h-auto">
         <img
           src={image}
           alt={imageAlt}
@@ -77,3 +77,42 @@ const btnBase =
     </div>
   </div>
 </section>
+
+<script>
+  import { createMotion, gsap } from '../../lib/gsap';
+
+  function initCtaVolunteer() {
+    const section = document.querySelector<HTMLElement>('[data-cta-volunteer]');
+    if (!section) return;
+    const slots = [
+      section.querySelector<HTMLElement>('[data-cta-volunteer-content]'),
+      section.querySelector<HTMLElement>('[data-cta-volunteer-photo]'),
+    ].filter((el): el is HTMLElement => !!el);
+    if (!slots.length) return;
+
+    createMotion(section, (ctx) => {
+      if (ctx.reducedMotion) {
+        gsap.set(slots, { clearProps: 'all' });
+        return;
+      }
+
+      const tween = gsap.from(slots, {
+        y: 24,
+        autoAlpha: 0,
+        duration: 0.6,
+        ease: 'power3.out',
+        stagger: 0.12,
+        scrollTrigger: { trigger: section, start: 'top 65%', once: true },
+      });
+
+      return () => {
+        tween.scrollTrigger?.kill();
+        tween.kill();
+        gsap.set(slots, { clearProps: 'all' });
+      };
+    });
+  }
+
+  if (document.readyState !== 'loading') initCtaVolunteer();
+  else document.addEventListener('DOMContentLoaded', initCtaVolunteer);
+</script>

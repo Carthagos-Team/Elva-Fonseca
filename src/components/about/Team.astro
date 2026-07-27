@@ -20,11 +20,12 @@ const members: Member[] = [
 ];
 ---
 
-<section data-reveal-section class="border-t border-orchid-200 bg-orchid-100">
+<section data-reveal-section data-team class="border-t border-orchid-200 bg-orchid-100">
   <div
     class="mx-auto flex max-w-[120rem] flex-col items-center gap-9 px-6 py-10 sm:px-10 lg:gap-9 lg:p-16"
   >
     <h2
+      data-team-heading
       class="font-display font-black text-[2.25rem] uppercase leading-[1.05] tracking-[-0.04em] text-ink sm:text-5xl lg:text-[4rem]"
     >
       our team
@@ -33,7 +34,7 @@ const members: Member[] = [
     <ul class="grid w-full grid-cols-1 gap-9 sm:grid-cols-2 lg:grid-cols-3">
       {
         members.map((m) => (
-          <li class="flex h-auto flex-col gap-9 rounded-lg border-[1.5px] border-woodsmoke bg-cerulean-200 p-2 lg:h-[30rem]">
+          <li data-team-card class="flex h-auto flex-col gap-9 rounded-lg border-[1.5px] border-woodsmoke bg-cerulean-200 p-2 lg:h-[30rem]">
             <div class="min-h-[14rem] flex-1 overflow-hidden rounded-md border-[1.5px] border-woodsmoke bg-cerulean sm:min-h-[16rem]">
               {m.image ? (
                 <img
@@ -62,3 +63,56 @@ const members: Member[] = [
     </ul>
   </div>
 </section>
+
+<script>
+  import { createMotion, gsap } from '../../lib/gsap';
+
+  function initTeam() {
+    const section = document.querySelector<HTMLElement>('[data-team]');
+    if (!section) return;
+    const heading = section.querySelector<HTMLElement>('[data-team-heading]');
+    const cards = Array.from(section.querySelectorAll<HTMLElement>('[data-team-card]'));
+
+    createMotion(section, (ctx) => {
+      if (ctx.reducedMotion) {
+        if (heading) gsap.set(heading, { clearProps: 'all' });
+        gsap.set(cards, { clearProps: 'all' });
+        return;
+      }
+
+      const headingTween = heading
+        ? gsap.from(heading, {
+            y: 24,
+            autoAlpha: 0,
+            duration: 0.6,
+            ease: 'power3.out',
+            scrollTrigger: { trigger: section, start: 'top 65%', once: true },
+          })
+        : null;
+
+      const cardsTween = gsap.from(cards, {
+        y: 56,
+        autoAlpha: 0,
+        rotate: -3,
+        scale: 0.96,
+        transformOrigin: '50% 100%',
+        duration: 0.6,
+        ease: 'back.out(1.7)',
+        stagger: 0.12,
+        scrollTrigger: { trigger: section, start: 'top 65%', once: true },
+      });
+
+      return () => {
+        headingTween?.scrollTrigger?.kill();
+        headingTween?.kill();
+        cardsTween.scrollTrigger?.kill();
+        cardsTween.kill();
+        if (heading) gsap.set(heading, { clearProps: 'all' });
+        gsap.set(cards, { clearProps: 'all' });
+      };
+    });
+  }
+
+  if (document.readyState !== 'loading') initTeam();
+  else document.addEventListener('DOMContentLoaded', initTeam);
+</script>

@@ -55,6 +55,11 @@ Cada fase só começa com a anterior aprovada. Detalhe no plano aprovado e em AG
 ## Performance (rules)
 
 - GSAP: import só em `<script>` client; nunca hidratar Header/Footer inteiros
-- Imagens: `astro:assets` para locais; Sanity CDN + width/height para CMS
+- Imagens: hoje via `scripts/optimize-images.mjs` (Sharp) — converte todo `.jpg`/`.jpeg`/`.png`
+  de `public/images/` pra `.webp` (cap de largura 2400px, quality 80), roda sozinho antes de
+  `npm run build` (`prebuild`) ou manual via `npm run optimize-images`. Migração completa pra
+  `astro:assets`/`<Image>` (import como módulo ES, responsive `srcset`) fica como upgrade futuro
+  — não implementada ainda. Sanity CDN + width/height pra CMS também não implementado (Sanity em
+  standby, ver memória do projeto).
 - Fontes: self-host, subset, só pesos usados, preload do peso crítico
 - Sitemap exclui `/admin`; robots.txt bloqueia `/admin`

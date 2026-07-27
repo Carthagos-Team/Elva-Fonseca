@@ -28,19 +28,19 @@ const btnBase =
   'inline-flex min-h-11 items-center justify-center whitespace-nowrap rounded-md border-[1.5px] border-woodsmoke px-6 py-3.5 font-display font-black text-base uppercase tracking-[-0.01em] transition-[transform,filter] duration-150 ease-out active:scale-[0.97]';
 ---
 
-<section data-reveal-section class="bg-surface">
+<section data-reveal-section data-home-stories class="bg-surface">
   <div class="mx-auto flex max-w-[120rem] flex-col gap-10 px-6 py-16 sm:px-10 lg:px-16 lg:py-24">
     {/* Topo: heading + grade (esq.) | card de tiers (dir.) */}
     <div class="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-10">
       <div class="flex flex-1 flex-col gap-8">
-        <h2 class="font-display font-black uppercase leading-none tracking-[-0.04em] text-ink text-[2rem] sm:text-4xl lg:text-[2.75rem]">
+        <h2 data-stories-heading class="font-display font-black uppercase leading-none tracking-[-0.04em] text-ink text-[2rem] sm:text-4xl lg:text-[2.75rem]">
           {heading}
         </h2>
 
         <ul class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
           {
             stories.map(({ img, category, caption }) => (
-              <li class="flex flex-col items-center gap-3 text-center">
+              <li data-story-card class="flex flex-col items-center gap-3 text-center">
                 <div class="aspect-square w-full overflow-hidden rounded-md border-[1.5px] border-woodsmoke bg-orchid-100">
                   <img
                     src={img}
@@ -63,7 +63,7 @@ const btnBase =
       </div>
 
       {/* Card de tiers */}
-      <aside class="flex flex-col gap-6 rounded-xl border-[1.5px] border-woodsmoke bg-buckthorn p-6 text-ink sm:p-8 lg:w-[22rem] lg:shrink-0">
+      <aside data-stories-tiers class="flex flex-col gap-6 rounded-xl border-[1.5px] border-woodsmoke bg-buckthorn p-6 text-ink sm:p-8 lg:w-[22rem] lg:shrink-0">
         <h3 class="font-display font-black uppercase leading-tight tracking-[-0.02em] text-[1.5rem]">
           Your help changes lives
         </h3>
@@ -90,3 +90,69 @@ const btnBase =
     <MissionBand bare />
   </div>
 </section>
+
+<script>
+  import { createMotion, gsap } from '../../lib/gsap';
+
+  function initHomeStories() {
+    const section = document.querySelector<HTMLElement>('[data-home-stories]');
+    if (!section) return;
+    const heading = section.querySelector<HTMLElement>('[data-stories-heading]');
+    const cards = Array.from(section.querySelectorAll<HTMLElement>('[data-story-card]'));
+    const tiers = section.querySelector<HTMLElement>('[data-stories-tiers]');
+
+    createMotion(section, (ctx) => {
+      if (ctx.reducedMotion) {
+        if (heading) gsap.set(heading, { clearProps: 'all' });
+        gsap.set(cards, { clearProps: 'all' });
+        if (tiers) gsap.set(tiers, { clearProps: 'all' });
+        return;
+      }
+
+      const headingTween = heading
+        ? gsap.from(heading, {
+            y: 24,
+            autoAlpha: 0,
+            duration: 0.6,
+            ease: 'power3.out',
+            scrollTrigger: { trigger: section, start: 'top 65%', once: true },
+          })
+        : null;
+
+      const cardsTween = gsap.from(cards, {
+        y: 56,
+        autoAlpha: 0,
+        rotate: -3,
+        scale: 0.96,
+        transformOrigin: '50% 100%',
+        duration: 0.6,
+        ease: 'back.out(1.7)',
+        stagger: 0.1,
+        scrollTrigger: { trigger: section, start: 'top 65%', once: true },
+      });
+
+      const tiersTween = tiers
+        ? gsap.from(tiers, {
+            y: 24,
+            autoAlpha: 0,
+            duration: 0.6,
+            ease: 'power3.out',
+            scrollTrigger: { trigger: section, start: 'top 65%', once: true },
+          })
+        : null;
+
+      return () => {
+        [headingTween, cardsTween, tiersTween].forEach((t) => {
+          t?.scrollTrigger?.kill();
+          t?.kill();
+        });
+        if (heading) gsap.set(heading, { clearProps: 'all' });
+        gsap.set(cards, { clearProps: 'all' });
+        if (tiers) gsap.set(tiers, { clearProps: 'all' });
+      };
+    });
+  }
+
+  if (document.readyState !== 'loading') initHomeStories();
+  else document.addEventListener('DOMContentLoaded', initHomeStories);
+</script>

@@ -19,10 +19,10 @@ const motifs = [
 ] as const;
 ---
 
-<section id="story" data-reveal-section class="border-y border-orchid-200 bg-orchid-025">
-  <div class="h-[22rem] w-full overflow-hidden sm:h-[28rem] lg:h-[34rem]">
+<section id="story" data-reveal-section data-about-story class="border-y border-orchid-200 bg-orchid-025">
+  <div data-story-photo class="h-[22rem] w-full overflow-hidden sm:h-[28rem] lg:h-[34rem]">
     <img
-      src="/images/about/story.jpg"
+      src="/images/about/story.webp"
       alt="Community members shaking hands around a table at a gathering"
       width="2882"
       height="1088"
@@ -35,13 +35,13 @@ const motifs = [
   <div
     class="mx-auto flex max-w-[120rem] flex-col gap-10 px-6 pb-12 pt-10 sm:px-10 lg:flex-row lg:items-start lg:justify-between lg:gap-16 lg:px-16 lg:pt-10"
   >
-    <div class="flex max-w-[40rem] flex-col gap-4 font-sans text-base font-medium leading-[1.4] tracking-[-0.02em] text-ink">
+    <div data-story-heading class="flex max-w-[40rem] flex-col gap-4 font-sans text-base font-medium leading-[1.4] tracking-[-0.02em] text-ink">
       {paragraphs.map((p) => (
         <p>{p}</p>
       ))}
     </div>
 
-    <div class="flex shrink-0 flex-wrap items-center gap-3 lg:justify-end" aria-hidden="true">
+    <div data-story-body class="flex shrink-0 flex-wrap items-center gap-3 lg:justify-end" aria-hidden="true">
       {
         motifs.map((m) => (
           <img src={m.src} alt="" width={m.w} height={m.h} class="h-10 w-auto" loading="lazy" decoding="async" />
@@ -50,3 +50,43 @@ const motifs = [
     </div>
   </div>
 </section>
+
+<script>
+  import { createMotion, gsap } from '../../lib/gsap';
+
+  function initAboutStory() {
+    const section = document.querySelector<HTMLElement>('[data-about-story]');
+    if (!section) return;
+    const slots = [
+      section.querySelector<HTMLElement>('[data-story-photo]'),
+      section.querySelector<HTMLElement>('[data-story-heading]'),
+      section.querySelector<HTMLElement>('[data-story-body]'),
+    ].filter((el): el is HTMLElement => !!el);
+    if (!slots.length) return;
+
+    createMotion(section, (ctx) => {
+      if (ctx.reducedMotion) {
+        gsap.set(slots, { clearProps: 'all' });
+        return;
+      }
+
+      const tween = gsap.from(slots, {
+        y: 24,
+        autoAlpha: 0,
+        duration: 0.6,
+        ease: 'power3.out',
+        stagger: 0.12,
+        scrollTrigger: { trigger: section, start: 'top 65%', once: true },
+      });
+
+      return () => {
+        tween.scrollTrigger?.kill();
+        tween.kill();
+        gsap.set(slots, { clearProps: 'all' });
+      };
+    });
+  }
+
+  if (document.readyState !== 'loading') initAboutStory();
+  else document.addEventListener('DOMContentLoaded', initAboutStory);
+</script>
