@@ -4,13 +4,14 @@
 // à borda inferior. Embed real do widget fica para fase seguinte.
 ---
 
-<section class="bg-surface px-4 pb-16 pt-6 sm:px-5 sm:pb-20">
+<section data-hero class="bg-surface px-4 pb-16 pt-6 sm:px-5 sm:pb-20">
   <div class="relative">
     {/* Card de imagem */}
     <div
       class="relative flex h-[36rem] items-center justify-center overflow-hidden rounded-2xl md:h-[42rem] lg:h-[47rem]"
     >
       <img
+        data-hero-image
         src="/images/hero/donate.webp"
         alt="Volunteers in a circle joining hands together outdoors"
         width="4096"
@@ -18,13 +19,20 @@
         class="absolute inset-0 size-full object-cover"
         fetchpriority="high"
       />
-      <div class="absolute inset-0" style="background-color: rgba(0,0,0,0.25)" aria-hidden="true"></div>
+      <div
+        data-hero-overlay
+        data-overlay-value="0.25"
+        class="absolute inset-0"
+        style="background-color: rgba(0,0,0,0.25)"
+        aria-hidden="true"
+      ></div>
 
       {/* Copy — metade superior do card, acima do slot */}
       <div
         class="relative z-10 mb-[12rem] flex max-w-[49rem] flex-col items-center gap-4 px-6 text-center text-orchid sm:mb-[14rem] lg:mb-[16rem]"
       >
         <h1
+          data-hero-headline
           class="font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-[2.75rem] sm:text-6xl lg:text-[6.2rem]"
         >
           Ready to help?
@@ -32,6 +40,7 @@
           Start here
         </h1>
         <p
+          data-hero-body
           class="max-w-[49rem] text-base font-medium leading-relaxed tracking-[-0.02em] text-orchid/95 sm:text-lg"
         >
           Every contribution counts. Support our mission and make lasting impact today.
@@ -55,3 +64,60 @@
     </div>
   </div>
 </section>
+
+<script>
+  import { createMotion, gsap, SplitText } from '../../lib/gsap';
+
+  function initHero() {
+    const section = document.querySelector<HTMLElement>('[data-hero]');
+    if (!section) return;
+
+    const image = section.querySelector<HTMLElement>('[data-hero-image]');
+    const overlay = section.querySelector<HTMLElement>('[data-hero-overlay]');
+    const headline = section.querySelector<HTMLElement>('[data-hero-headline]');
+    const body = section.querySelector<HTMLElement>('[data-hero-body]');
+    const cta = section.querySelector<HTMLElement>('[data-hero-cta]');
+    const targetOpacity = parseFloat(overlay?.dataset.overlayValue ?? '0.16');
+    const startOpacity = Math.min(targetOpacity + 0.24, 0.6);
+
+    createMotion(section, (ctx) => {
+      const revealEls = [image, overlay, headline, body, cta].filter(
+        (el): el is HTMLElement => !!el,
+      );
+
+      if (ctx.reducedMotion) {
+        gsap.set(revealEls, { clearProps: 'all' });
+        return;
+      }
+
+      const split = headline ? SplitText.create(headline, { type: 'lines', mask: 'lines' }) : null;
+      const lines = split?.lines ?? [];
+
+      if (image) gsap.set(image, { scale: 1.12 });
+      if (overlay) gsap.set(overlay, { backgroundColor: `rgba(0,0,0,${startOpacity})` });
+      if (lines.length) gsap.set(lines, { yPercent: 110 });
+      if (body) gsap.set(body, { autoAlpha: 0, y: 16 });
+      if (cta) gsap.set(cta, { autoAlpha: 0, y: 16 });
+
+      const tl = gsap.timeline({ delay: 0.1 });
+      if (image) tl.to(image, { scale: 1, duration: 1.4, ease: 'power3.out' }, 0);
+      if (overlay) {
+        tl.to(overlay, { backgroundColor: `rgba(0,0,0,${targetOpacity})`, duration: 1.2, ease: 'power2.out' }, 0);
+      }
+      if (lines.length) {
+        tl.to(lines, { yPercent: 0, duration: 0.9, ease: 'power4.inOut', stagger: 0.08 }, 0.25);
+      }
+      if (body) tl.to(body, { autoAlpha: 1, y: 0, duration: 0.6, ease: 'power3.out' }, 0.55);
+      if (cta) tl.to(cta, { autoAlpha: 1, y: 0, duration: 0.5, ease: 'power3.out' }, 0.7);
+
+      return () => {
+        tl.kill();
+        split?.revert();
+        gsap.set(revealEls, { clearProps: 'all' });
+      };
+    });
+  }
+
+  if (document.readyState !== 'loading') initHero();
+  else document.addEventListener('DOMContentLoaded', initHero);
+</script>
