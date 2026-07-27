@@ -6,7 +6,6 @@ const nav = [
   { href: '/', label: 'Home' },
   { href: '/about', label: 'About' },
   { href: '/programs', label: 'Programs' },
-  { href: '/stories', label: 'Stories' },
   { href: '/volunteer', label: 'Volunteer' },
   { href: '/donate', label: 'Donate' },
   { href: '/contact', label: 'Contact' },
@@ -15,7 +14,6 @@ const nav = [
 const legal = [
   { href: '/privacy', label: 'Privacy Policy' },
   { href: '/terms', label: 'Terms of Service' },
-  { href: '/cookies', label: 'Cookies Settings' },
 ];
 
 const donateUrl = '/donate'; // Fase 4: siteSettings.donateUrl (provedor externo)
@@ -47,7 +45,7 @@ const isCurrent = (href: string) =>
     {/* Bloco direito: nav → título → (botão donate mobile) → legal */}
     <div class="flex flex-col items-start gap-8">
       <nav aria-label="Footer">
-        <ul class="grid grid-cols-1 gap-x-12 gap-y-1.5 sm:grid-flow-col sm:grid-rows-4 lg:gap-x-16">
+        <ul class="grid grid-flow-col grid-rows-3 gap-x-8 gap-y-1.5 sm:gap-x-12 lg:gap-x-16">
           {
             nav.map(({ href, label }) => (
               <li>
@@ -83,8 +81,8 @@ const isCurrent = (href: string) =>
       </a>
 
       {/* Linha legal + crédito */}
-      <div class="flex flex-col flex-wrap items-start gap-x-6 gap-y-3 sm:flex-row sm:items-center">
-        <ul class="flex flex-wrap gap-x-6 gap-y-2">
+      <div class="flex flex-col items-start gap-y-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-6">
+        <ul class="flex flex-wrap items-center gap-x-6 gap-y-2">
           {
             legal.map(({ href, label }) => (
               <li>
