@@ -8,11 +8,19 @@ interface Props {
   title: string;
   description: string;
   ogImage?: string;
+  noindex?: boolean;
   headerTheme?: 'light' | 'dark';
   headerBackground?: 'transparent' | 'solid';
 }
 
-const { title, description, ogImage, headerTheme = 'dark', headerBackground = 'transparent' } = Astro.props;
+const {
+  title,
+  description,
+  ogImage,
+  noindex,
+  headerTheme = 'dark',
+  headerBackground = 'transparent',
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -24,7 +32,7 @@ const { title, description, ogImage, headerTheme = 'dark', headerBackground = 't
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="generator" content={Astro.generator} />
-    <SEO {title} {description} {ogImage} />
+    <SEO {title} {description} {ogImage} {noindex} />
   </head>
   <body class="flex min-h-dvh flex-col">
     <Header theme={headerTheme} background={headerBackground} />

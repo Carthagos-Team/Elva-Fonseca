@@ -3,17 +3,41 @@ interface Props {
   title: string;
   description: string;
   ogImage?: string;
+  noindex?: boolean;
 }
 
-const { title, description, ogImage = '/og-default.jpg' } = Astro.props;
+const { title, description, ogImage = '/og-default.jpg', noindex = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
-const fullTitle = title === 'Home' ? 'Elva Fonseca Foundation' : `${title} — Elva Fonseca Foundation`;
+const fullTitle = `${title} — Elva Fonseca Foundation`;
 const ogImageUrl = new URL(ogImage, Astro.site);
+
+const orgSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'NGO',
+  name: 'Elva Fonseca Foundation',
+  alternateName: 'Fundación Elva Fonseca',
+  url: Astro.site?.toString(),
+  logo: new URL('/images/brand/logo-lockup-dark.svg', Astro.site).toString(),
+  description:
+    'Nonprofit foundation supporting health, education, nutrition, and community programs for vulnerable families in Veracruz, Mexico.',
+  areaServed: { '@type': 'Place', name: 'Veracruz, Mexico' },
+};
+
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Elva Fonseca Foundation',
+  url: Astro.site?.toString(),
+};
 ---
 
 <title>{fullTitle}</title>
 <meta name="description" content={description} />
 <link rel="canonical" href={canonical} />
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+
+<script type="application/ld+json" is:inline set:html={JSON.stringify(orgSchema)} />
+<script type="application/ld+json" is:inline set:html={JSON.stringify(websiteSchema)} />
 
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Elva Fonseca Foundation" />
