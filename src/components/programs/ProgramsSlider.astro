@@ -30,58 +30,36 @@ const ICONS: Record<string, string> = {
     '<circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.93 0 1.65-.75 1.65-1.69 0-.44-.18-.83-.44-1.12-.29-.29-.44-.65-.44-1.13a1.64 1.64 0 0 1 1.67-1.66h2c3.05 0 5.55-2.5 5.55-5.56C21.97 6.01 17.46 2 12 2Z"/>',
 };
 
-// Dados fiéis ao Figma (get_design_context). `wide` = card que ocupa as 2 colunas.
-const slides = [
-  {
-    theme: 'salem', icon: 'cooking-pot', dot: '/icons/programs/flower-1.svg',
-    titleLines: ['Basic Needs &', 'Personal Growth'],
-    image: '/images/programs/slider-01.webp',
-    // Crop do Figma (node 3238:8) é ancorado no topo da foto, não centralizado —
-    // object-cover puro mostrava pernas/chão demais e cortava o enquadramento pretendido.
-    imagePosition: 'object-[50%_16%]',
-    imageAlt: 'A woman smiling warmly while shelling corn outdoors',
-    cards: [
-      { title: 'Community dining', desc: 'Daily meals served to elderly individuals and children ages 5–14.', value: '132,480', label: 'Meals served' },
-      { title: 'Community kitchens', desc: 'Kitchens providing nutritious meals for families and individuals experiencing food insecurity.', value: '4,230', label: 'Families nourished' },
-      { title: 'Direct support', desc: 'Food, clothing, scholarships, and vital resources donated to individuals and families in urgent need.', value: '18,720', label: 'Essential items donated', wide: true },
-    ],
-  },
-  {
-    theme: 'punch', icon: 'heart', dot: '/icons/programs/flower-2.svg',
-    titleLines: ['Health &', 'Mobility'],
-    image: '/images/programs/slider-02.webp',
-    imageAlt: 'A colorful colonial street framed by a yellow archway',
-    cards: [
-      { title: 'Mobility support', desc: 'Distribution of wheelchairs, walkers, and canes to promote independence.', value: '1,045', label: 'Mobility aids delivered' },
-      { title: 'Community health', desc: 'Free medical outreach, medication donations, physical activity and hygiene supply distributions.', value: '6,310', label: 'Health services provided' },
-      { title: 'Elderly support program', desc: '“Solidarity for Seniors” offers care, connection, and essential aid to elderly individuals.', value: '895', label: 'Seniors supported', wide: true },
-    ],
-  },
-  {
-    theme: 'studio', icon: 'atom', dot: '/icons/programs/flower-3.svg',
-    titleLines: ['Education &', 'Technology'],
-    image: '/images/programs/slider-03.webp',
-    imageAlt: 'A bright classroom with wooden desks and chairs',
-    cards: [
-      { title: 'Free access to technology and printing', desc: 'Computers and printing services available for schoolwork and essential tasks.', value: '1,045', label: '3,680' },
-      { title: 'Digital classrooms', desc: 'Modern, inclusive education through digital resources — especially in underserved areas.', value: '2,140', label: 'Students reached' },
-      { title: 'Sensory room and play area', desc: 'A specially designed space for children with different abilities to play and grow.', value: '510', label: 'Therapeutic sessions held' },
-      { title: 'Education and culture', desc: 'Reading workshops, school supply donations, literacy events, and cultural festivals.', value: '115', label: 'Learning events hosted' },
-    ],
-  },
-  {
-    theme: 'buckthorn', icon: 'palette', dot: '/icons/programs/flower-2.svg',
-    titleLines: ['Art, Culture', '& Environment'],
-    image: '/images/programs/slider-04.webp',
-    imageAlt: 'Papel picado banners strung above a lively market street',
-    cards: [
-      { title: 'Cultural growth', desc: 'Free classes in painting, carpentry, hair cutting, and traditional music/dance workshops.', value: '320', label: 'Creative workshops conducted' },
-      { title: 'Art workshops for children', desc: 'Drawing contests and art sessions that promote creativity and self-expression.', value: '740', label: 'Young artists engaged' },
-      { title: 'Cause-based events', desc: 'Events like “Mano Solidaria Market” highlight local talent, promote recycling, and celebrate values.', value: '42', label: 'Community events held' },
-      { title: 'Environment', desc: 'Tree planting, reforestation efforts, and community clean-up campaigns.', value: '8,700', label: 'Trees planted' },
-    ],
-  },
+import { defaultLang, useTranslations, type Lang } from '../../i18n/utils';
+
+interface Props {
+  lang?: Lang;
+}
+const { lang = defaultLang } = Astro.props;
+const t = useTranslations(lang).programs.slider;
+
+// Metadados visuais (tema/ícone/imagem/posição) não mudam por idioma; texto vem do dicionário
+// por posição (índice do slide/card). `wide` = card que ocupa as 2 colunas.
+const SLIDE_META = [
+  { theme: 'salem', icon: 'cooking-pot', dot: '/icons/programs/flower-1.svg', image: '/images/programs/slider-01.webp', imagePosition: 'object-[50%_16%]', wideCard: 2 },
+  { theme: 'punch', icon: 'heart', dot: '/icons/programs/flower-2.svg', image: '/images/programs/slider-02.webp', imagePosition: '', wideCard: 2 },
+  { theme: 'studio', icon: 'atom', dot: '/icons/programs/flower-3.svg', image: '/images/programs/slider-03.webp', imagePosition: '', wideCard: null },
+  { theme: 'buckthorn', icon: 'palette', dot: '/icons/programs/flower-2.svg', image: '/images/programs/slider-04.webp', imagePosition: '', wideCard: null },
 ] as const;
+
+const slides = t.slides.map((slide, i) => {
+  const meta = SLIDE_META[i];
+  return {
+    theme: meta.theme,
+    icon: meta.icon,
+    dot: meta.dot,
+    image: meta.image,
+    imagePosition: meta.imagePosition,
+    titleLines: slide.titleLines,
+    imageAlt: slide.imageAlt,
+    cards: slide.cards.map((card, j) => ({ ...card, wide: meta.wideCard === j })),
+  };
+});
 ---
 
 <section data-reveal-section data-programs-slider class="bg-surface py-16 lg:py-20">
@@ -89,7 +67,7 @@ const slides = [
     <div data-ps-list class="ps-list">
       {
         slides.map((s, i) => {
-          const t = THEME[s.theme as keyof typeof THEME];
+          const theme = THEME[s.theme as keyof typeof THEME];
           return (
             <article
               data-ps-item
@@ -97,9 +75,9 @@ const slides = [
               class:list={['ps-item flex flex-col gap-6 lg:gap-8', i === 0 && 'is-active']}
             >
               {/* Badge */}
-              <span data-ps-badge class:list={['grid size-11 place-items-center rounded-md', t.badge]}>
+              <span data-ps-badge class:list={['grid size-11 place-items-center rounded-md', theme.badge]}>
                 <svg
-                  class:list={['size-6', t.icon]}
+                  class:list={['size-6', theme.icon]}
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
@@ -133,7 +111,7 @@ const slides = [
                   <img
                     src={s.image}
                     alt={s.imageAlt}
-                    class:list={['absolute inset-0 size-full object-cover', 'imagePosition' in s ? s.imagePosition : 'object-center']}
+                    class:list={['absolute inset-0 size-full object-cover', s.imagePosition || 'object-center']}
                     loading="lazy"
                     decoding="async"
                   />
@@ -148,15 +126,15 @@ const slides = [
                           data-ps-card
                           class:list={[
                             'flex flex-col justify-between gap-4 rounded-2xl border-[1.5px] border-woodsmoke p-5 lg:h-[16.5rem]',
-                            t.card,
-                            'wide' in c && c.wide && 'sm:col-span-2',
+                            theme.card,
+                            c.wide && 'sm:col-span-2',
                           ]}
                         >
                           <div class="flex flex-col gap-4">
-                            <h3 class:list={['font-display uppercase leading-[0.9] tracking-[-0.04em] text-2xl', t.title]}>
+                            <h3 class:list={['font-display uppercase leading-[0.9] tracking-[-0.04em] text-2xl', theme.title]}>
                               {c.title}
                             </h3>
-                            <p class:list={['font-sans text-base font-medium leading-[1.4] tracking-[-0.02em]', t.body]}>
+                            <p class:list={['font-sans text-base font-medium leading-[1.4] tracking-[-0.02em]', theme.body]}>
                               {c.desc}
                             </p>
                           </div>
@@ -166,12 +144,12 @@ const slides = [
                               data-value={c.value}
                               class:list={[
                                 'font-display font-black leading-[1.05] tracking-[-0.04em] whitespace-nowrap text-[3rem] sm:text-[3.5rem] lg:text-[4rem]',
-                                t.num,
+                                theme.num,
                               ]}
                             >
                               {c.value}
                             </p>
-                            <p class:list={['font-sans text-sm font-medium leading-[1.4] tracking-[-0.02em]', t.label]}>
+                            <p class:list={['font-sans text-sm font-medium leading-[1.4] tracking-[-0.02em]', theme.label]}>
                               {c.label}
                             </p>
                           </div>
@@ -192,13 +170,13 @@ const slides = [
       <button
         type="button"
         data-ps-prev
-        aria-label="Previous program"
+        aria-label={t.prevAriaLabel}
         class="font-display uppercase leading-none tracking-[-0.04em] text-ink text-[1.75rem] sm:text-[2rem] transition-opacity duration-150 hover:opacity-60 active:scale-[0.97]"
       >
-        Prev
+        {t.prevLabel}
       </button>
 
-      <div class="flex items-center gap-[0.5625rem]" role="tablist" aria-label="Programs">
+      <div class="flex items-center gap-[0.5625rem]" role="tablist" aria-label={t.dotsAriaLabel}>
         {
           slides.map((s, i) => (
             <button
@@ -219,10 +197,10 @@ const slides = [
       <button
         type="button"
         data-ps-next
-        aria-label="Next program"
+        aria-label={t.nextAriaLabel}
         class="font-display uppercase leading-none tracking-[-0.04em] text-ink text-[1.75rem] sm:text-[2rem] transition-opacity duration-150 hover:opacity-60 active:scale-[0.97]"
       >
-        Next
+        {t.nextLabel}
       </button>
     </div>
   </div>

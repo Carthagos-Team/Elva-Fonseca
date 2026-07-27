@@ -24,6 +24,14 @@
 // StepTimeline, que é progress-fill literal, caso diferente). Mobile: só reveal em stagger.
 // Reduced motion: estado final direto. Ver src/lib/gsap.ts.
 
+import { defaultLang, useTranslations, type Lang } from '../../i18n/utils';
+
+interface Props {
+  lang?: Lang;
+}
+const { lang = defaultLang } = Astro.props;
+const t = useTranslations(lang).about.legacyStory;
+
 const badges = [
   { src: '/images/about/legacy/badge-red-rosette.svg', x: 4, y: 6, w: 12, side: 'left' as const, section: 0 as const },
   { src: '/images/about/legacy/badge-blue-flower.svg', x: 84, y: 14, w: 13, side: 'right' as const, section: 0 as const },
@@ -53,7 +61,7 @@ const badges = [
       >
         <img
           src="/images/about/legacy/sec1-photo-children.webp"
-          alt="Two children, an older sibling beside a younger one, in a sepia-toned portrait"
+          alt={t.photo1Alt}
           width="688"
           height="960"
           class="size-full rounded-xl object-cover"
@@ -74,12 +82,10 @@ const badges = [
           class="font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-ink text-[2.5rem] sm:text-6xl lg:whitespace-nowrap lg:text-[4rem]"
           data-legacy-split
         >
-          A life of quiet strength.
+          {t.section1Heading}
         </h2>
         <p class="max-w-[34rem] font-sans text-base font-medium leading-relaxed tracking-[-0.02em] text-ink/80" data-legacy-fade>
-          Elva faced many challenges throughout her life. With scarce resources, she worked
-          tirelessly, washing clothes for others to help provide for her family. Despite the
-          hardships, she always found a way to share what little she had.
+          {t.section1Body}
         </p>
       </div>
     </div>
@@ -111,13 +117,13 @@ const badges = [
         class="font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-ink text-[2.5rem] sm:text-6xl lg:text-[4rem]"
         data-legacy-split
       >
-        &ldquo;Give what you have, not what&rsquo;s left over.&rdquo;
+        {t.section2Quote}
       </h2>
 
       <div class="relative mx-auto aspect-[810/696] w-full max-w-[26rem] sm:max-w-[30rem]" data-legacy-wipe>
         <img
           src="/images/about/legacy/sec2-illustration.svg"
-          alt="Illustrated portrait of Elva Fonseca inside an oval frame, with her signature"
+          alt={t.illustrationAlt}
           class="size-full object-contain"
           loading="lazy"
           decoding="async"
@@ -125,11 +131,9 @@ const badges = [
       </div>
 
       <div class="flex flex-col items-center gap-4" data-legacy-fade>
-        <p class="font-sans text-base font-semibold leading-[1.4] tracking-[-0.02em] text-ink">The heart of a family.</p>
+        <p class="font-sans text-base font-semibold leading-[1.4] tracking-[-0.02em] text-ink">{t.section2Label}</p>
         <p class="max-w-[34rem] font-sans text-base font-medium leading-relaxed tracking-[-0.02em] text-ink/80">
-          This is one of her most memorable sayings. Through her generosity, she taught us the
-          true meaning of compassion and service, always giving selflessly to those in need, even
-          when she herself had very little.
+          {t.section2Body}
         </p>
       </div>
     </div>
@@ -141,13 +145,13 @@ const badges = [
         class="font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-ink text-[2.5rem] sm:text-6xl lg:whitespace-nowrap lg:text-[4rem]"
         data-legacy-split
       >
-        From her hands, a legacy.
+        {t.section3Heading}
       </h2>
 
       <div class="relative aspect-[382/534] w-full max-w-[23.9rem] overflow-visible rounded-xl border-[1.5px] border-woodsmoke" data-legacy-fade>
         <img
           src="/images/about/legacy/sec3-photo-girl.webp"
-          alt="A girl in a floral dress, standing for a portrait"
+          alt={t.photo3Alt}
           width="628"
           height="1280"
           class="size-full rounded-xl object-cover object-[50%_3%]"
@@ -156,7 +160,7 @@ const badges = [
         />
         <img
           src="/images/about/legacy/seal.svg"
-          alt="Seal: Del Sur de México"
+          alt={t.sealAlt}
           class="absolute -left-[22%] top-[77%] w-[44%]"
           loading="lazy"
           decoding="async"
@@ -164,9 +168,7 @@ const badges = [
       </div>
 
       <p class="max-w-[34rem] font-sans text-base font-semibold leading-[1.4] tracking-[-0.02em] text-ink/80" data-legacy-fade>
-        As her children — Rosa, Antonio, Juan, Leydi, and Adilene — grew, Elva remained the
-        foundation of our family. She cared for her grandchildren and great-grandchildren with
-        the same unconditional love and dedication that defined her entire life.
+        {t.section3Body}
       </p>
     </div>
   </section>
@@ -177,13 +179,13 @@ const badges = [
         class="font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-ink text-[2.5rem] sm:text-6xl lg:whitespace-nowrap lg:text-[4rem]"
         data-legacy-split
       >
-        A future shaped by her example.
+        {t.section4Heading}
       </h2>
 
       <div class="relative aspect-[382/534] w-full max-w-[23.9rem] overflow-visible rounded-xl border-[1.5px] border-woodsmoke" data-legacy-fade>
         <img
           src="/images/about/legacy/sec4-photo-grandma.webp"
-          alt="An elderly woman wearing glasses and a Fundación Elva Fonseca t-shirt, outdoors"
+          alt={t.photo4Alt}
           width="1066"
           height="1600"
           class="size-full rounded-xl object-cover"
@@ -192,7 +194,7 @@ const badges = [
         />
         <img
           src="/images/about/legacy/seal.svg"
-          alt="Seal: Del Sur de México"
+          alt={t.sealAlt}
           class="absolute -left-[22%] top-[77%] w-[44%]"
           loading="lazy"
           decoding="async"
@@ -200,10 +202,7 @@ const badges = [
       </div>
 
       <p class="max-w-[34rem] font-sans text-base font-medium leading-relaxed tracking-[-0.02em] text-ink/80" data-legacy-fade>
-        The Elva Fonseca Foundation was created to honor her life, her values, and the love she
-        gave so freely. Our mission is to continue her legacy by serving those in need in our
-        community, just as she did — with open hearts and hands. Her example lives on in
-        everything we do.
+        {t.section4Body}
       </p>
     </div>
   </section>

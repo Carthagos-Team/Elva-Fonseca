@@ -24,6 +24,13 @@ const site =
 // https://astro.build/config
 export default defineConfig({
   site,
+  i18n: {
+    defaultLocale: 'en',
+    locales: ['en', 'es'],
+    routing: {
+      prefixDefaultLocale: false
+    }
+  },
   vite: {
     plugins: [tailwindcss()]
   },
@@ -36,6 +43,12 @@ export default defineConfig({
       studioBasePath: '/admin'
     }),
     react(),
-    sitemap({ filter: (page) => !page.includes('/admin') })
+    sitemap({
+      filter: (page) => !page.includes('/admin'),
+      i18n: {
+        defaultLocale: 'en',
+        locales: { en: 'en-US', es: 'es-ES' }
+      }
+    })
   ]
 });

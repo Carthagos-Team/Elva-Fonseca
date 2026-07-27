@@ -6,23 +6,18 @@
 // de missão (texto em viking-900). Estático; hook data-reveal-section reservado p/ motion.
 
 import MissionBand from '../global/MissionBand.astro';
+import { defaultLang, useTranslations, type Lang } from '../../i18n/utils';
 
-const heading = 'Stories that inspire';
+interface Props {
+  lang?: Lang;
+}
+const { lang = defaultLang } = Astro.props;
+const t = useTranslations(lang);
+const prefix = lang === defaultLang ? '' : `/${lang}`;
 
-const stories = [
-  { img: '/images/stories/education.webp', category: 'Education', caption: 'María now dreams big.' },
-  { img: '/images/stories/health.webp', category: 'Health', caption: "We provide care where it's needed most." },
-  { img: '/images/stories/nutrition.webp', category: 'Nutrition', caption: 'A breakfast that changes their day.' },
-  { img: '/images/stories/community.webp', category: 'Community', caption: 'Workshops that create opportunities.' },
-  { img: '/images/stories/senior-adults.webp', category: 'Senior Adults', caption: 'We accompany with love and respect.' },
-];
-
-const tiers = [
-  { amount: '$10 USD', label: 'Feed a child' },
-  { amount: '$25 USD', label: 'Support educational materials' },
-  { amount: '$50 USD', label: 'Fund community workshops' },
-  { amount: '$100 USD', label: 'Drive full programs' },
-];
+const heading = t.home.stories.heading;
+const stories = t.home.stories.items;
+const tiers = t.home.stories.tiers;
 
 const btnBase =
   'inline-flex min-h-11 items-center justify-center whitespace-nowrap rounded-md border-[1.5px] border-woodsmoke px-6 py-3.5 font-display font-black text-base uppercase tracking-[-0.01em] transition-[transform,filter] duration-150 ease-out active:scale-[0.97]';
@@ -65,7 +60,7 @@ const btnBase =
       {/* Card de tiers */}
       <aside data-stories-tiers class="flex flex-col gap-6 rounded-xl border-[1.5px] border-woodsmoke bg-buckthorn p-6 text-ink sm:p-8 lg:w-[22rem] lg:shrink-0">
         <h3 class="font-display font-black uppercase leading-tight tracking-[-0.02em] text-[1.5rem]">
-          Your help changes lives
+          {t.home.stories.tiersHeading}
         </h3>
         <ul class="flex flex-col gap-3">
           {
@@ -77,17 +72,24 @@ const btnBase =
             ))
           }
         </ul>
-        <a href="/donate" class={`hover-text ${btnBase} mt-auto bg-ink text-orchid hover:brightness-110`}>
+        <a href={`${prefix}/donate`} class={`hover-text ${btnBase} mt-auto bg-ink text-orchid hover:brightness-110`}>
           <span class="hover-text__inner">
-            <span class="hover-text__label is--default" data-hover-text-el>Support us</span>
-            <span aria-hidden="true" class="hover-text__label is--hover" data-hover-text-el>Support us</span>
+            <span class="hover-text__label is--default" data-hover-text-el>{t.home.stories.ctaLabel}</span>
+            <span aria-hidden="true" class="hover-text__label is--hover" data-hover-text-el>{t.home.stories.ctaLabel}</span>
           </span>
         </a>
       </aside>
     </div>
 
     {/* Faixa de missão — defaults Home (Figma 3137:237). */}
-    <MissionBand bare />
+    <MissionBand
+      bare
+      lang={lang}
+      ctaTitle={t.home.stories.missionBand.ctaTitle}
+      ctaBody={t.home.stories.missionBand.ctaBody}
+      primaryLabel={t.home.stories.missionBand.primaryLabel}
+      secondaryLabel={t.home.stories.missionBand.secondaryLabel}
+    />
   </div>
 </section>
 

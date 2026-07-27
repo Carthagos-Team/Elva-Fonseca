@@ -3,6 +3,8 @@
 // Grid 3×2 de cards; fotos ainda não existem → placeholder cerulean sólido.
 // Estático (sem motion); data-reveal-section como hook para Fase 5.
 
+import { defaultLang, useTranslations, type Lang } from '../../i18n/utils';
+
 interface Member {
   name: string;
   role: string;
@@ -10,14 +12,12 @@ interface Member {
   imageAlt?: string;
 }
 
-const members: Member[] = [
-  { name: 'Manuel Toto', role: 'President' },
-  { name: 'Alexia Díaz', role: 'Director' },
-  { name: 'Deidamia Reyes', role: 'Secretary' },
-  { name: 'Yasmín López', role: 'Treasurer' },
-  { name: 'Isabel Ruíz', role: 'Volunteer' },
-  { name: 'Carlos Toto', role: 'Volunteer' },
-];
+interface Props {
+  lang?: Lang;
+}
+const { lang = defaultLang } = Astro.props;
+const t = useTranslations(lang).about.team;
+const members: Member[] = [...t.members];
 ---
 
 <section data-reveal-section data-team class="border-t border-orchid-200 bg-orchid-100">
@@ -28,7 +28,7 @@ const members: Member[] = [
       data-team-heading
       class="font-display font-black text-[2.25rem] uppercase leading-[1.05] tracking-[-0.04em] text-ink sm:text-5xl lg:text-[4rem]"
     >
-      our team
+      {t.heading}
     </h2>
 
     <ul class="grid w-full grid-cols-1 gap-9 sm:grid-cols-2 lg:grid-cols-3">

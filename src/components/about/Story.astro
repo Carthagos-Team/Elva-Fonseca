@@ -3,10 +3,15 @@
 // Foto panorâmica full-bleed + 2 parágrafos à esquerda + 7 motifs geométricos à direita.
 // id="story" ancora o CTA "Learn more" do Hero. Estático (sem motion) neste passo.
 
-const paragraphs = [
-  'This foundation is also a celebration of progress. It was inspired not only by Elva’s life, but by the first generation of her grandchildren to gain access to higher education.',
-  'We carry her dream forward by working to ensure that future generations — especially those from humble beginnings — have the resources and opportunities to grow, thrive, and transform their own lives.',
-] as const;
+import { defaultLang, useTranslations, type Lang } from '../../i18n/utils';
+
+interface Props {
+  lang?: Lang;
+}
+const { lang = defaultLang } = Astro.props;
+const t = useTranslations(lang).about.story;
+
+const paragraphs = t.paragraphs;
 
 const motifs = [
   { src: '/images/about/motifs/01.svg', w: 37, h: 36 },
@@ -23,7 +28,7 @@ const motifs = [
   <div data-story-photo class="h-[22rem] w-full overflow-hidden sm:h-[28rem] lg:h-[34rem]">
     <img
       src="/images/about/story.webp"
-      alt="Community members shaking hands around a table at a gathering"
+      alt={t.photoAlt}
       width="2882"
       height="1088"
       class="size-full object-cover"

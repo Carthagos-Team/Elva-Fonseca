@@ -3,6 +3,14 @@
 // Fiel ao Figma (node 3149:295). Ícones = set Lucide, path extraído do Figma via download_assets,
 // cor herdada via currentColor do texto do card. Estático; hook data-reveal-section p/ motion.
 
+import { defaultLang, useTranslations, type Lang } from '../../i18n/utils';
+
+interface Props {
+  lang?: Lang;
+}
+const { lang = defaultLang } = Astro.props;
+const t = useTranslations(lang);
+
 const icons: Record<string, string> = {
   'users-round':
     'M18.8581 21.9997C18.8581 19.777 17.9751 17.6452 16.4032 16.0735C14.8313 14.5018 12.6994 13.6188 10.4764 13.6188M10.4764 13.6188C8.25346 13.6188 6.12155 14.5018 4.54967 16.0735C2.9778 17.6452 2.09473 19.777 2.09473 21.9997M10.4764 13.6188C13.3696 13.6188 15.715 11.2736 15.715 8.38067C15.715 5.48775 13.3696 3.14258 10.4764 3.14258C7.58325 3.14258 5.23787 5.48775 5.23787 8.38067C5.23787 11.2736 7.58325 13.6188 10.4764 13.6188ZM23.0488 20.9523C23.0488 17.4218 20.9534 14.1428 18.8579 12.5714C19.5467 12.0546 20.0975 11.3761 20.4615 10.5958C20.8256 9.81554 20.9916 8.95756 20.945 8.09781C20.8984 7.23806 20.6405 6.40306 20.1943 5.66671C19.748 4.93035 19.1271 4.31534 18.3865 3.87612',
@@ -16,23 +24,17 @@ const icons: Record<string, string> = {
     'M11.5238 14.6668H13.6192C14.1749 14.6668 14.7078 14.446 15.1008 14.0531C15.4938 13.6602 15.7145 13.1273 15.7145 12.5717C15.7145 12.016 15.4938 11.4831 15.1008 11.0902C14.7078 10.6973 14.1749 10.4765 13.6192 10.4765H10.4761C9.84753 10.4765 9.32369 10.686 9.00939 11.1051L3.1424 16.7619M15.1383 14.0274L20.4291 9.11014C21.1582 8.38104 22.0006 7.17634 22.0006 6.02402C22.0007 5.4409 21.8238 4.87147 21.4934 4.39099C21.1629 3.91052 20.6944 3.54163 20.1498 3.3331C19.6052 3.12456 19.0101 3.08619 18.4432 3.22306C17.8763 3.35993 17.3643 3.6656 16.9749 4.09965C16.9478 4.12905 16.9149 4.15251 16.8783 4.16856C16.8417 4.18461 16.8022 4.19289 16.7622 4.19289C16.7222 4.19289 16.6827 4.18461 16.6461 4.16856C16.6095 4.15251 16.5766 4.12905 16.5495 4.09965C16.1601 3.6656 15.6481 3.35993 15.0812 3.22306C14.5143 3.08619 13.9192 3.12456 13.3746 3.3331C12.83 3.54163 12.3614 3.91052 12.031 4.39099C11.7005 4.87147 11.5237 5.4409 11.5238 6.02402C11.5238 7.2811 12.364 8.37894 13.0953 9.11014L16.7622 12.5189M2.09473 15.7143L8.38078 21.9997M7.33311 20.9524L9.00939 19.4859C9.32369 19.0668 9.84753 18.8573 10.4761 18.8573H14.6668C15.8193 18.8573 16.867 18.4383 17.6003 17.6002L22.4196 12.991C22.8239 12.609 23.0599 12.082 23.0756 11.526C23.0913 10.9701 22.8855 10.4306 22.5035 10.0264C22.1214 9.62213 21.5944 9.38619 21.0384 9.37048C20.4823 9.35476 19.9428 9.56055 19.5385 9.94256',
 };
 
-const impact = [
-  { icon: 'users-round', value: '5500+', label: 'Children Benefited', bg: 'bg-studio', text: 'text-orchid' },
-  { icon: 'graduation-cap', value: '200+', label: 'Youth Supported', bg: 'bg-brand', text: 'text-orchid' },
-  { icon: 'cooking-pot', value: '3,000+', label: 'Breakfasts Delivered', bg: 'bg-corn', text: 'text-ink' },
-  { icon: 'user-round', value: '950+', label: 'Seniors Served', bg: 'bg-salem', text: 'text-orchid' },
-  { icon: 'hand-heart', value: '100+', label: 'Active Volunteers', bg: 'bg-corn', text: 'text-ink' },
-];
+const impact = t.home.impactStats.items;
 ---
 
 <section data-reveal-section data-impact-stats class="bg-surface">
   <div class="mx-auto flex max-w-[120rem] flex-col items-center gap-10 px-6 py-16 text-center sm:px-10 lg:gap-16 lg:px-16">
     <div data-stats-heading class="flex flex-col items-center gap-3">
       <p class="font-sans text-sm font-semibold uppercase tracking-[0.08em] text-buckthorn">
-        Our Social Impact
+        {t.home.impactStats.eyebrow}
       </p>
       <h2 class="font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-ink text-[2rem] sm:text-5xl lg:text-[4rem]">
-        Transforming lives, step by step
+        {t.home.impactStats.heading}
       </h2>
     </div>
 

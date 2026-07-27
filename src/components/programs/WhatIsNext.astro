@@ -4,26 +4,16 @@
 // no grid quando a seção entra na tela). Sem pin/scrub/Lenis. Motion via createMotion() com branch
 // reduced-motion. Conteúdo placeholder pré-modelado p/ Sanity (Fase 4).
 
-const cards = [
-  {
-    image: '/images/programs/next-mobility.webp',
-    imageAlt: 'Community members joining hands',
-    titleLines: ['Mobility', 'for all'],
-    body: 'We plan to open new community dining spaces across the municipality, ensuring that more children and elderly individuals have consistent access to nourishing meals and shared connection.',
-  },
-  {
-    image: '/images/programs/next-skills.webp',
-    imageAlt: 'A girl standing at the doorway of her home',
-    titleLines: ['Growing skills,', 'growing futures'],
-    body: 'We’re expanding our vocational training programs to help more individuals gain the tools and knowledge they need to build brighter, self-sustaining futures for themselves and their families.',
-  },
-  {
-    image: '/images/programs/next-meals.webp',
-    imageAlt: 'Fresh cassava and vegetables in crates',
-    titleLines: ['More meals,', 'more towns'],
-    body: 'We plan to open new community dining spaces across the municipality, ensuring that more children and elderly individuals have consistent access to nourishing meals and shared connection.',
-  },
-];
+import { defaultLang, useTranslations, type Lang } from '../../i18n/utils';
+
+interface Props {
+  lang?: Lang;
+}
+const { lang = defaultLang } = Astro.props;
+const t = useTranslations(lang).programs.whatIsNext;
+
+const IMAGES = ['/images/programs/next-mobility.webp', '/images/programs/next-skills.webp', '/images/programs/next-meals.webp'];
+const cards = t.cards.map((c, i) => ({ ...c, image: IMAGES[i] }));
 ---
 
 <section data-reveal-section data-what-next class="border-t border-orchid-200 bg-orchid-100 py-16 lg:py-20">
@@ -32,11 +22,10 @@ const cards = [
     <div class="flex flex-col items-center gap-6 text-center">
       <img src="/images/cta/rose.svg" alt="" aria-hidden="true" width="68" height="64" class="h-16 w-auto" />
       <h2 class="font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-ink text-[2.5rem] sm:text-5xl lg:text-[4rem]">
-        What is next?
+        {t.heading}
       </h2>
       <p class="max-w-[29rem] font-sans text-base font-medium leading-relaxed tracking-[-0.02em] text-ink/80">
-        We’re just getting started. Guided by our values and inspired by Elva’s legacy, we’re committed
-        to expanding our reach and deepening our impact in the communities that need it most.
+        {t.subheading}
       </p>
     </div>
 

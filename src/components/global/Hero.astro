@@ -6,8 +6,8 @@
 // CTA opcional (About): buckthorn + borda woodsmoke; subcopy aceita string ou string[].
 
 interface Props {
-  titleLines: string[];
-  subcopy?: string | string[];
+  titleLines: readonly string[];
+  subcopy?: string | readonly string[];
   image?: string;
   imageAlt?: string;
   overlay?: number; // 0–1, default 0.16 (Figma)

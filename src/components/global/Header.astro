@@ -13,11 +13,16 @@
 //    (ex.: Contact/Thank You) — empurra o conteúdo em vez de sobrepor. Fiel ao Figma 3196:1156:
 //    barra ~93px (md:py-6), alinhada ao conteúdo (lg:px-16) e botão Donate laranja+borda.
 
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import { defaultLang, useTranslations, type Lang } from '../../i18n/utils';
+
 interface Props {
+  lang?: Lang;
   theme?: 'light' | 'dark';
   background?: 'transparent' | 'solid';
 }
-const { theme = 'dark', background = 'transparent' } = Astro.props;
+const { lang = defaultLang, theme = 'dark', background = 'transparent' } = Astro.props;
+const t = useTranslations(lang);
 const isSolid = background === 'solid';
 
 const donateBase =
@@ -27,11 +32,12 @@ const donateDesktop = isSolid
   : `${donateBase} rounded-md bg-orchid px-5 py-3`;
 
 // Nav do Header = Figma (4 itens) + botão Donate. Stories/Contact ficam no footer.
+const prefix = lang === defaultLang ? '' : `/${lang}`;
 const nav = [
-  { href: '/', label: 'Home' },
-  { href: '/about', label: 'About' },
-  { href: '/programs', label: 'Programs' },
-  { href: '/volunteer', label: 'Volunteer' },
+  { href: `${prefix}/`, label: t.common.nav.home },
+  { href: `${prefix}/about`, label: t.common.nav.about },
+  { href: `${prefix}/programs`, label: t.common.nav.programs },
+  { href: `${prefix}/volunteer`, label: t.common.nav.volunteer },
 ];
 
 const path = Astro.url.pathname;
@@ -88,12 +94,15 @@ const logo = isLight ? '/images/brand/logo-lockup-light.svg' : '/images/brand/lo
       </ul>
     </nav>
 
-    <a href="/donate" class={`hover-text ${donateDesktop}`}>
-      <span class="hover-text__inner">
-        <span class="hover-text__label is--default" data-hover-text-el>Donate now</span>
-        <span aria-hidden="true" class="hover-text__label is--hover" data-hover-text-el>Donate now</span>
-      </span>
-    </a>
+    <div class="hidden items-center gap-4 md:flex">
+      <LanguageSwitcher lang={lang} />
+      <a href={`${prefix}/donate`} class={`hover-text ${donateDesktop}`}>
+        <span class="hover-text__inner">
+          <span class="hover-text__label is--default" data-hover-text-el>{t.common.header.donateNow}</span>
+          <span aria-hidden="true" class="hover-text__label is--hover" data-hover-text-el>{t.common.header.donateNow}</span>
+        </span>
+      </a>
+    </div>
   </div>
 
   {/* Menu mobile (scaling hamburger). Some em md+ (nav desktop assume). */}
@@ -104,7 +113,7 @@ const logo = isLight ? '/images/brand/logo-lockup-light.svg' : '/images/brand/lo
       <div class="nav-mobile__surface" aria-hidden="true"></div>
 
       <div id="nav-mobile-panel" class="nav-mobile__group flex min-w-[16rem] flex-col gap-4 py-8 pl-8 pr-6">
-        <p class="font-display text-sm uppercase tracking-[0.1em] text-orchid/70">Menu</p>
+        <p class="font-display text-sm uppercase tracking-[0.1em] text-orchid/70">{t.common.header.menu}</p>
         <ul class="flex flex-col gap-2">
           {
             nav.map(({ href, label }) => {
@@ -131,14 +140,15 @@ const logo = isLight ? '/images/brand/logo-lockup-light.svg' : '/images/brand/lo
           }
         </ul>
         <a
-          href="/donate"
+          href={`${prefix}/donate`}
           class="hover-text mt-2 inline-flex min-h-11 w-full items-center justify-center rounded-md bg-orchid px-6 py-3.5 font-display font-black text-base uppercase tracking-[-0.01em] text-ink transition-transform duration-150 ease-out active:scale-[0.97]"
         >
           <span class="hover-text__inner">
-            <span class="hover-text__label is--default" data-hover-text-el>Donate now</span>
-            <span aria-hidden="true" class="hover-text__label is--hover" data-hover-text-el>Donate now</span>
+            <span class="hover-text__label is--default" data-hover-text-el>{t.common.header.donateNow}</span>
+            <span aria-hidden="true" class="hover-text__label is--hover" data-hover-text-el>{t.common.header.donateNow}</span>
           </span>
         </a>
+        <LanguageSwitcher lang={lang} />
       </div>
 
       <button

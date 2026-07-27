@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import DonateHero from '../donate/DonateHero.astro';
+import DonateImpactIntro from '../donate/DonateImpactIntro.astro';
+import MissionBand from '../global/MissionBand.astro';
+import CtaBand from '../global/CtaBand.astro';
+import Story from '../home/Story.astro';
+import { defaultLang, useTranslations, type Lang } from '../../i18n/utils';
+
+interface Props {
+  lang?: Lang;
+}
+const { lang = defaultLang } = Astro.props;
+const t = useTranslations(lang);
+const prefix = lang === defaultLang ? '' : `/${lang}`;
+---
+
+<BaseLayout lang={lang} title={t.donate.seo.title} description={t.donate.seo.description} headerTheme="light">
+  <DonateHero lang={lang} />
+  <DonateImpactIntro lang={lang} />
+  <MissionBand
+    lang={lang}
+    sectionBg="bg-orchid-050"
+    ctaTitle={t.donate.missionBand.ctaTitle}
+    ctaBody={t.donate.missionBand.ctaBody}
+    primaryLabel={t.donate.missionBand.primaryLabel}
+    primaryHref={`${prefix}/programs`}
+    secondaryLabel={t.donate.missionBand.secondaryLabel}
+  />
+  {/* Figma 3315:18777 — CtaBand; título/CTA = defaults Home; body = 1 parágrafo do Figma Donate. */}
+  <CtaBand
+    titleLines={t.donate.ctaBand.titleLines}
+    body={t.donate.ctaBand.body}
+    ctaLabel={t.donate.ctaBand.ctaLabel}
+    ctaHref={`${prefix}/volunteer#apply`}
+  />
+  {/* Figma 3315:18816 — mesma estrutura de Story (Home); copy + foto de Sponsorship. */}
+  <Story
+    eyebrow={t.donate.sponsorship.eyebrow}
+    titleLines={t.donate.sponsorship.titleLines}
+    body={t.donate.sponsorship.body}
+    image="/images/donate/sponsorship.webp"
+    imageAlt={t.donate.sponsorship.imageAlt}
+    imagePosition="50% 18%"
+    cta={{ label: t.donate.sponsorship.ctaLabel, href: `${prefix}/contact` }}
+  />
+</BaseLayout>

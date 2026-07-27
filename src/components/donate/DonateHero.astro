@@ -2,6 +2,13 @@
 // Donate / Hero — Fase 3. Fiel ao Figma (node 3306:2, base 1440).
 // Card de imagem + copy centrado na metade superior + slot Givebutter sobreposto
 // à borda inferior. Embed real do widget fica para fase seguinte.
+import { defaultLang, useTranslations, type Lang } from '../../i18n/utils';
+
+interface Props {
+  lang?: Lang;
+}
+const { lang = defaultLang } = Astro.props;
+const t = useTranslations(lang).donate.hero;
 ---
 
 <section data-hero class="bg-surface px-4 pb-16 pt-6 sm:px-5 sm:pb-20">
@@ -13,7 +20,7 @@
       <img
         data-hero-image
         src="/images/hero/donate.webp"
-        alt="Volunteers in a circle joining hands together outdoors"
+        alt={t.imageAlt}
         width="4096"
         height="2731"
         class="absolute inset-0 size-full object-cover"
@@ -35,15 +42,15 @@
           data-hero-headline
           class="font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-[2.75rem] sm:text-6xl lg:text-[6.2rem]"
         >
-          Ready to help?
+          {t.headlineLines[0]}
           <br />
-          Start here
+          {t.headlineLines[1]}
         </h1>
         <p
           data-hero-body
           class="max-w-[49rem] text-base font-medium leading-relaxed tracking-[-0.02em] text-orchid/95 sm:text-lg"
         >
-          Every contribution counts. Support our mission and make lasting impact today.
+          {t.subcopy}
         </p>
       </div>
     </div>
@@ -54,11 +61,11 @@
         id="givebutter"
         data-givebutter-slot
         role="region"
-        aria-label="Givebutter donation form — coming soon"
+        aria-label={t.givebutterAriaLabel}
         class="flex min-h-[28rem] w-full max-w-[28rem] flex-col items-center justify-center rounded-2xl border-[1.5px] border-woodsmoke bg-orchid px-6 py-10 text-center sm:min-h-[30rem] lg:min-h-[32rem]"
       >
         <p class="font-sans text-base font-medium leading-relaxed tracking-[-0.02em] text-ink/50">
-          Donation form (Givebutter) — coming soon
+          {t.givebutterText}
         </p>
       </div>
     </div>

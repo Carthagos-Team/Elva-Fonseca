@@ -1,0 +1,56 @@
+---
+// LanguageSwitcher — bandeiras EN/ES no Header. Troca é um <a href> normal de servidor
+// (URL calculada em build-time via getRouteFromUrl, zero JS pra navegar). O único script
+// seta o cookie `ef-lang` no clique, pra essa escolha manual "grudar" e o middleware.ts
+// (redirect por IP) nunca mais sobrescrever esse visitante.
+import { getRouteFromUrl, useTranslations, type Lang } from '../../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const enHref = getRouteFromUrl(Astro.url, 'en');
+const esHref = getRouteFromUrl(Astro.url, 'es');
+---
+
+<div class="flex items-center gap-2" role="group" aria-label="Language">
+  <a
+    href={enHref}
+    hreflang="en"
+    lang="en"
+    data-lang-link="en"
+    aria-label={t.common.languageSwitcher.labelEn}
+    aria-current={lang === 'en' ? 'true' : undefined}
+    class:list={[
+      'rounded-sm border border-woodsmoke/20 p-1 transition-opacity',
+      lang === 'en' ? 'opacity-100' : 'opacity-50 hover:opacity-100',
+    ]}
+  >
+    <img src="/icons/flag-en.svg" width="20" height="14" alt="" class="h-3.5 w-5 rounded-[2px]" />
+  </a>
+  <a
+    href={esHref}
+    hreflang="es"
+    lang="es"
+    data-lang-link="es"
+    aria-label={t.common.languageSwitcher.labelEs}
+    aria-current={lang === 'es' ? 'true' : undefined}
+    class:list={[
+      'rounded-sm border border-woodsmoke/20 p-1 transition-opacity',
+      lang === 'es' ? 'opacity-100' : 'opacity-50 hover:opacity-100',
+    ]}
+  >
+    <img src="/icons/flag-es.svg" width="20" height="14" alt="" class="h-3.5 w-5 rounded-[2px]" />
+  </a>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLAnchorElement>('[data-lang-link]').forEach((link) => {
+    link.addEventListener('click', () => {
+      const target = link.getAttribute('data-lang-link');
+      if (!target) return;
+      document.cookie = `ef-lang=${target}; path=/; max-age=31536000; SameSite=Lax`;
+    });
+  });
+</script>

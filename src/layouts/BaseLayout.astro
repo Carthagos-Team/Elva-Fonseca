@@ -3,8 +3,10 @@ import '../styles/global.css';
 import SEO from '../components/global/SEO.astro';
 import Header from '../components/global/Header.astro';
 import Footer from '../components/global/Footer.astro';
+import { defaultLang, type Lang } from '../i18n/utils';
 
 interface Props {
+  lang?: Lang;
   title: string;
   description: string;
   ogImage?: string;
@@ -14,6 +16,7 @@ interface Props {
 }
 
 const {
+  lang = defaultLang,
   title,
   description,
   ogImage,
@@ -24,7 +27,7 @@ const {
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -32,14 +35,14 @@ const {
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="generator" content={Astro.generator} />
-    <SEO {title} {description} {ogImage} {noindex} />
+    <SEO lang={lang} {title} {description} {ogImage} {noindex} />
   </head>
   <body class="flex min-h-dvh flex-col">
-    <Header theme={headerTheme} background={headerBackground} />
+    <Header lang={lang} theme={headerTheme} background={headerBackground} />
     <main id="main" class="flex-1">
       <slot />
     </main>
-    <Footer />
+    <Footer lang={lang} />
     <script>
       import { initSmoothScroll } from '../lib/scroll';
       import { initHoverText } from '../lib/hover-text';

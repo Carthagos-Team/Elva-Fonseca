@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../global/Hero.astro';
+import LegacyStory from '../about/LegacyStory.astro';
+import Story from '../about/Story.astro';
+import CtaDonate from '../global/CtaDonate.astro';
+import Team from '../about/Team.astro';
+import CtaBand from '../global/CtaBand.astro';
+import { defaultLang, useTranslations, type Lang } from '../../i18n/utils';
+
+interface Props {
+  lang?: Lang;
+}
+const { lang = defaultLang } = Astro.props;
+const t = useTranslations(lang);
+const prefix = lang === defaultLang ? '' : `/${lang}`;
+---
+
+<BaseLayout lang={lang} title={t.about.seo.title} description={t.about.seo.description} headerTheme="light">
+  <Hero
+    titleLines={t.about.hero.titleLines}
+    subcopy={t.about.hero.subcopy}
+    image="/images/hero/about.webp"
+    imageAlt={t.about.hero.imageAlt}
+    cta={{ label: t.about.hero.ctaLabel, href: '#story' }}
+  />
+
+  <LegacyStory lang={lang} />
+
+  <Story lang={lang} />
+
+  {/* Figma 3288:321 — mesma estrutura de CtaDonate; só troca de copy nesta instância. */}
+  <CtaDonate
+    titleLines={t.about.ctaDonate.titleLines}
+    body={t.about.ctaDonate.body}
+    ctaLabel={t.about.ctaDonate.ctaLabel}
+    ctaHref={`${prefix}/donate`}
+  />
+
+  <Team lang={lang} />
+
+  {/* Figma 3292:493 — CtaBand; só troca de copy nesta instância. */}
+  <CtaBand
+    titleLines={t.about.ctaBand.titleLines}
+    body={t.about.ctaBand.body}
+    ctaLabel={t.about.ctaBand.ctaLabel}
+    ctaHref={`${prefix}/donate`}
+    secondaryLabel={t.about.ctaBand.secondaryLabel}
+    secondaryHref={`${prefix}/volunteer`}
+  />
+</BaseLayout>

@@ -8,6 +8,14 @@
 // (Fase 4). Assets: foto e flor baixadas do Figma; ícones de categoria/chevron são SVG inline
 // (trocáveis quando o CMS trouxer os ícones reais).
 
+import { defaultLang, useTranslations, type Lang } from '../../i18n/utils';
+
+interface Props {
+  lang?: Lang;
+}
+const { lang = defaultLang } = Astro.props;
+const t = useTranslations(lang);
+
 // Ícones de categoria (Lucide-style, viewBox 24). set:html dentro de um <svg> compartilhado.
 const ICONS: Record<string, string> = {
   home: '<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
@@ -20,53 +28,24 @@ const ICONS: Record<string, string> = {
     '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
 };
 
-const answer =
-  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis laoreet in odio vel sollicitudin. Nam aliquet augue dolor, quis varius ligula aliquet nec.';
+const answer = t.home.faq.answer;
+const questionItems = [1, 2, 3, 4].map((n) => ({ q: `${t.home.faq.questionWord} #${n}`, a: answer }));
 
-// Cada categoria: badge (fundo = token de cor), tom do ícone (contraste sobre o badge),
-// glyph e perguntas. `a` é a resposta do acordeão (placeholder).
-const faqs = [
-  {
-    key: 'foundation',
-    title: 'About the Foundation',
-    badge: 'bg-studio',
-    iconTone: 'text-orchid-050',
-    icon: 'home',
-    items: [{ q: 'Question item #1', a: answer }, { q: 'Question item #2', a: answer }, { q: 'Question item #3', a: answer }, { q: 'Question item #4', a: answer }],
-  },
-  {
-    key: 'donations',
-    title: 'Donations and Support',
-    badge: 'bg-punch',
-    iconTone: 'text-orchid-050',
-    icon: 'heart',
-    items: [{ q: 'Question item #1', a: answer }, { q: 'Question item #2', a: answer }, { q: 'Question item #3', a: answer }, { q: 'Question item #4', a: answer }],
-  },
-  {
-    key: 'volunteering',
-    title: 'Volunteering',
-    badge: 'bg-corn',
-    iconTone: 'text-woodsmoke',
-    icon: 'hand',
-    items: [{ q: 'Question item #1', a: answer }, { q: 'Question item #2', a: answer }, { q: 'Question item #3', a: answer }, { q: 'Question item #4', a: answer }],
-  },
-  {
-    key: 'programs',
-    title: 'Programs and Services',
-    badge: 'bg-salem',
-    iconTone: 'text-orchid-050',
-    icon: 'layers',
-    items: [{ q: 'Question item #1', a: answer }, { q: 'Question item #2', a: answer }, { q: 'Question item #3', a: answer }, { q: 'Question item #4', a: answer }],
-  },
-  {
-    key: 'partnerships',
-    title: 'Partnerships and Collaborations',
-    badge: 'bg-buckthorn',
-    iconTone: 'text-woodsmoke',
-    icon: 'users',
-    items: [{ q: 'Question item #1', a: answer }, { q: 'Question item #2', a: answer }, { q: 'Question item #3', a: answer }, { q: 'Question item #4', a: answer }],
-  },
-];
+// Metadados visuais (badge/tom/ícone) não mudam por idioma; título vem do dicionário por `key`.
+const META: Record<string, { badge: string; iconTone: string; icon: string }> = {
+  foundation: { badge: 'bg-studio', iconTone: 'text-orchid-050', icon: 'home' },
+  donations: { badge: 'bg-punch', iconTone: 'text-orchid-050', icon: 'heart' },
+  volunteering: { badge: 'bg-corn', iconTone: 'text-woodsmoke', icon: 'hand' },
+  programs: { badge: 'bg-salem', iconTone: 'text-orchid-050', icon: 'layers' },
+  partnerships: { badge: 'bg-buckthorn', iconTone: 'text-woodsmoke', icon: 'users' },
+};
+
+const faqs = t.home.faq.categories.map(({ key, title }) => ({
+  key,
+  title,
+  ...META[key],
+  items: questionItems,
+}));
 ---
 
 <section data-reveal-section data-faq class="overflow-x-clip border-t border-woodsmoke/10 bg-orchid-025">
@@ -77,7 +56,7 @@ const faqs = [
     <div class="relative aspect-[3/4] overflow-hidden rounded-md border-[1.5px] border-woodsmoke bg-orchid-100 sm:aspect-[4/5] lg:aspect-auto lg:h-full lg:min-h-[32rem]">
       <img
         src="/images/faq/woman.webp"
-        alt="A community member wearing a Fundación Elva Fonseca t-shirt, standing outdoors"
+        alt={t.home.faq.photoAlt}
         width="1066"
         height="1600"
         class="absolute inset-0 size-full object-cover object-[50%_4%]"
@@ -96,10 +75,10 @@ const faqs = [
              sem quebrar em notebooks menores. Mesma justificativa da largura do card do slider;
              ver docs/FLUID_DESIGN_SYSTEM.md. Mobile segue em rem puro e pode quebrar. */}
           <h2 class="font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-ink text-[2rem] sm:text-[2.5rem] lg:whitespace-nowrap lg:[font-size:clamp(2rem,3.4vw,3rem)]">
-            Frequently Asked Questions
+            {t.home.faq.heading}
           </h2>
           <p class="font-sans text-base font-medium leading-[1.4] tracking-[-0.02em] text-ink/80">
-            Find answers to the most common questions about our foundation
+            {t.home.faq.subheading}
           </p>
         </div>
       </div>
@@ -107,7 +86,13 @@ const faqs = [
       <div class="flex flex-col gap-8">
         {/* Bleed à direita: margem negativa = padding horizontal do container, então o slider
            chega à borda do viewport (o peek é cortado na borda, sem gutter — igual ao Figma). */}
-        <div data-overlap-slider-init class="faq-slider -mr-6 sm:-mr-10 lg:-mr-16">
+        <div
+          data-overlap-slider-init
+          data-carousel-label={t.home.faq.carouselLabel}
+          data-category-word={t.home.faq.categoryWord}
+          data-of-word={t.home.faq.ofWord}
+          class="faq-slider -mr-6 sm:-mr-10 lg:-mr-16"
+        >
           <div data-overlap-slider-collection class="faq-slider__viewport">
             <ul data-overlap-slider-list class="faq-slider__track">
               {
@@ -183,7 +168,7 @@ const faqs = [
           <button
             type="button"
             data-overlap-slider-prev
-            aria-label="Previous questions"
+            aria-label={t.home.faq.prevLabel}
             class="grid size-12 place-items-center rounded-sm border-[1.5px] border-woodsmoke bg-orchid-050 text-ink transition-[transform,background-color,opacity] duration-150 ease-out enabled:hover:bg-buckthorn enabled:active:bg-buckthorn active:scale-[0.95] disabled:cursor-not-allowed disabled:opacity-40"
           >
             <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -193,7 +178,7 @@ const faqs = [
           <button
             type="button"
             data-overlap-slider-next
-            aria-label="Next questions"
+            aria-label={t.home.faq.nextLabel}
             class="grid size-12 place-items-center rounded-sm border-[1.5px] border-woodsmoke bg-orchid-050 text-ink transition-[transform,background-color,opacity] duration-150 ease-out enabled:hover:bg-buckthorn enabled:active:bg-buckthorn active:scale-[0.95] disabled:cursor-not-allowed disabled:opacity-40"
           >
             <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -300,9 +285,12 @@ const faqs = [
 
     if (!wrap || !slider || !slides.length) return () => {};
 
+    const categoryWord = init.dataset.categoryWord ?? 'Category';
+    const ofWord = init.dataset.ofWord ?? 'of';
+
     wrap.setAttribute('role', 'region');
     wrap.setAttribute('aria-roledescription', 'carousel');
-    wrap.setAttribute('aria-label', 'Frequently asked questions by category');
+    wrap.setAttribute('aria-label', init.dataset.carouselLabel ?? 'Frequently asked questions by category');
 
     let spacing = 0;
     let offsets: number[] = [];
@@ -321,7 +309,7 @@ const faqs = [
       );
       if (prevBtn) prevBtn.disabled = currentIndex <= 0;
       if (nextBtn) nextBtn.disabled = currentIndex >= slides.length - 1;
-      wrap!.setAttribute('aria-label', `Category ${currentIndex + 1} of ${slides.length}`);
+      wrap!.setAttribute('aria-label', `${categoryWord} ${currentIndex + 1} ${ofWord} ${slides.length}`);
     }
 
     function update() {

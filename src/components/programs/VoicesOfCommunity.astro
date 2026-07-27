@@ -11,39 +11,23 @@
 // já usadas no design, nome/cargo/quote inventados, mesmo espírito Lorem ipsum do restante
 // do site pré-CMS).
 
-// Quotes curtas (~92 chars, iguais) — cabem na altura da foto com type 2.5rem.
-const testimonials = [
-  {
-    name: 'Lillian Fernandez',
-    role: 'Volunteer',
-    quote:
-      '"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt”.',
-    image: '/images/programs/voices-01.webp',
-    imageAlt: 'Lillian smiling outdoors, wearing a Fundación Elva Fonseca t-shirt',
-    imagePosition: 'object-[50%_16%]',
-    thumbPosition: 'object-[50%_8%]',
-  },
-  {
-    name: 'Marcos Herrera',
-    role: 'Program Participant',
-    quote:
-      '"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip, ex ea”.',
-    image: '/images/programs/voices-02.webp',
-    imageAlt: 'Marcos standing outdoors, wearing a Fundación Elva Fonseca t-shirt',
-    imagePosition: 'object-[50%_16%]',
-    thumbPosition: 'object-[50%_22%]',
-  },
-  {
-    name: 'Carla Méndez',
-    role: 'Community Coordinator',
-    quote:
-      '"Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat ut”.',
-    image: '/images/programs/voices-03.webp',
-    imageAlt: 'Carla standing outdoors, wearing a Fundación Elva Fonseca polo shirt',
-    imagePosition: 'object-[50%_16%]',
-    thumbPosition: 'object-[42%_27%]',
-  },
-] as const;
+import { defaultLang, useTranslations, type Lang } from '../../i18n/utils';
+
+interface Props {
+  lang?: Lang;
+}
+const { lang = defaultLang } = Astro.props;
+const t = useTranslations(lang).programs.voices;
+
+// Metadados visuais (foto/posição do crop) não mudam por idioma; nome/cargo/quote vêm do
+// dicionário por posição.
+const META = [
+  { image: '/images/programs/voices-01.webp', imagePosition: 'object-[50%_16%]', thumbPosition: 'object-[50%_8%]' },
+  { image: '/images/programs/voices-02.webp', imagePosition: 'object-[50%_16%]', thumbPosition: 'object-[50%_22%]' },
+  { image: '/images/programs/voices-03.webp', imagePosition: 'object-[50%_16%]', thumbPosition: 'object-[42%_27%]' },
+];
+
+const testimonials = t.testimonials.map((item, i) => ({ ...item, ...META[i] }));
 ---
 
 <section data-reveal-section data-voices class="bg-punch py-16 lg:py-20">
@@ -52,7 +36,7 @@ const testimonials = [
     <div class="flex flex-col gap-6">
       <img src="/images/cta/rose-light.svg" alt="" aria-hidden="true" width="68" height="64" class="w-[4.25rem]" />
       <h2 class="font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-orchid text-[2.75rem] sm:text-6xl lg:text-[6.2rem]">
-        Voices of<br />the community:
+        {t.headingLines[0]}<br />{t.headingLines[1]}
       </h2>
     </div>
 
@@ -62,7 +46,7 @@ const testimonials = [
         {/* Foto (pilha, um ativo por vez) — altura Figma 539 → define o card no desktop */}
         <div data-vc-photo-list class="vc-photo-list relative aspect-[485/539] w-full shrink-0 overflow-hidden rounded-xl lg:h-[33.7rem] lg:w-[30.3rem]">
           {
-            testimonials.map((t, i) => (
+            testimonials.map((item, i) => (
               <div
                 data-vc-photo
                 aria-hidden={i !== 0 ? 'true' : 'false'}
@@ -70,9 +54,9 @@ const testimonials = [
               >
                 <img
                   data-vc-photo-inner
-                  src={t.image}
-                  alt={t.imageAlt}
-                  class:list={['absolute inset-0 size-full object-cover', t.imagePosition]}
+                  src={item.image}
+                  alt={item.imageAlt}
+                  class:list={['absolute inset-0 size-full object-cover', item.imagePosition]}
                   loading={i === 0 ? 'eager' : 'lazy'}
                   decoding="async"
                 />
@@ -84,19 +68,19 @@ const testimonials = [
         {/* Quote + meta: mesma altura da foto no desktop (justify-between, sem gap fixo) */}
         <div data-vc-text-list class="vc-text-list relative flex-1 lg:h-[33.7rem] lg:min-h-0">
           {
-            testimonials.map((t, i) => (
+            testimonials.map((item, i) => (
               <div
                 data-vc-text-item
                 aria-hidden={i !== 0 ? 'true' : 'false'}
                 class:list={['vc-text-item flex h-full min-h-0 flex-col justify-between', i === 0 && 'is-active']}
               >
                 <p data-vc-quote class="font-display leading-[1.05] tracking-[-0.04em] text-ink text-xl sm:text-2xl lg:text-[2.5rem]">
-                  {t.quote}
+                  {item.quote}
                 </p>
                 <p data-vc-meta class="font-sans text-base leading-[1.4] tracking-[-0.02em] text-ink/80">
-                  <span class="font-display font-black">{t.name}</span>
+                  <span class="font-display font-black">{item.name}</span>
                   <br />
-                  {t.role}
+                  {item.role}
                 </p>
               </div>
             ))
@@ -107,24 +91,24 @@ const testimonials = [
       {/* Miniaturas */}
       <div data-vc-thumbs class="flex flex-row gap-6 lg:w-[8.75rem] lg:flex-col" role="tablist" aria-label="Testimonials">
         {
-          testimonials.map((t, i) => (
+          testimonials.map((item, i) => (
             <button
               type="button"
               data-vc-thumb
               data-index={i}
               role="tab"
               aria-selected={i === 0 ? 'true' : 'false'}
-              aria-label={`Show ${t.name}'s testimonial`}
+              aria-label={t.thumbAriaLabel.replace('{name}', item.name)}
               class:list={[
                 'vc-thumb relative size-20 shrink-0 overflow-hidden rounded-[0.625rem] border-[1.5px] border-woodsmoke lg:size-auto lg:flex-1',
                 i === 0 && 'is-active',
               ]}
             >
               <img
-                src={t.image}
+                src={item.image}
                 alt=""
                 aria-hidden="true"
-                class:list={['absolute inset-0 size-full object-cover', t.thumbPosition]}
+                class:list={['absolute inset-0 size-full object-cover', item.thumbPosition]}
                 loading="lazy"
                 decoding="async"
               />

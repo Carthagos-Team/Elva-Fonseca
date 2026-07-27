@@ -4,8 +4,10 @@
 // Colunas 1–2 fixas; coluna CTA via props (defaults = Home).
 
 import MissionBandCard from './MissionBandCard.astro';
+import { defaultLang, type Lang } from '../../i18n/utils';
 
 interface Props {
+  lang?: Lang;
   ctaTitle?: string;
   ctaBody?: string;
   primaryLabel?: string;
@@ -22,23 +24,27 @@ interface Props {
 }
 
 const {
+  lang = defaultLang,
   ctaTitle = 'Be part of the change',
   ctaBody = "Your support keeps Elva's legacy alive, turning compassion into action.",
   primaryLabel = 'Donate now',
-  primaryHref = '/donate',
+  primaryHref,
   secondaryLabel = 'Become a volunteer',
-  secondaryHref = '/volunteer',
+  secondaryHref,
   sectionBg = 'bg-surface',
   bare = false,
 } = Astro.props;
 
+const prefix = lang === defaultLang ? '' : `/${lang}`;
+
 const cardProps = {
+  lang,
   ctaTitle,
   ctaBody,
   primaryLabel,
-  primaryHref,
+  primaryHref: primaryHref ?? `${prefix}/donate`,
   secondaryLabel,
-  secondaryHref,
+  secondaryHref: secondaryHref ?? `${prefix}/volunteer`,
 };
 ---
 

@@ -5,46 +5,19 @@
 // tinta pareada da doc) — sigo o Figma literal; contraste ink-sobre-pastel passa com folga.
 // Fotos reaproveitadas de public/images/stories/ (mesmas 5 já usadas em Stories.astro).
 
+import { defaultLang, useTranslations, type Lang } from '../../i18n/utils';
+
+interface Props {
+  lang?: Lang;
+}
+const { lang = defaultLang } = Astro.props;
+const t = useTranslations(lang);
+
 const btnBase =
   'inline-flex min-h-11 items-center justify-center whitespace-nowrap rounded-md border-[1.5px] border-woodsmoke bg-buckthorn px-6 py-3.5 font-display font-black text-base uppercase tracking-[-0.01em] text-ink transition-[transform,filter] duration-150 ease-out hover:brightness-105 active:scale-[0.97]';
 
-const programs = [
-  {
-    bg: 'bg-cerulean-200',
-    image: '/images/programs/education.webp',
-    imageAlt: 'Children in traditional dress walking in a community parade',
-    title: 'Education',
-    description: 'School support, scholarships, and workshops for a better future.',
-  },
-  {
-    bg: 'bg-malachite-200',
-    image: '/images/programs/health.webp',
-    imageAlt: 'Fruit trees in a community garden',
-    title: 'Health',
-    description: 'Medical campaigns, care, and prevention.',
-  },
-  {
-    bg: 'bg-buckthorn-200',
-    image: '/images/programs/community.webp',
-    imageAlt: 'Community members gathered at an outdoor workshop',
-    title: 'Community Development',
-    description: 'Workshops and training to strengthen our community.',
-  },
-  {
-    bg: 'bg-corn-200',
-    image: '/images/programs/nutrition.webp',
-    imageAlt: 'A prepared meal for a community nutrition program',
-    title: 'Nutrition',
-    description: 'Nutrition programs for children and families.',
-  },
-  {
-    bg: 'bg-studio-200',
-    image: '/images/programs/senior-adults.webp',
-    imageAlt: 'A senior community member at home',
-    title: 'Senior Adults',
-    description: 'Companionship and activities for their well-being.',
-  },
-];
+const programs = t.home.ourPrograms.items;
+const prefix = lang === defaultLang ? '' : `/${lang}`;
 ---
 
 <section data-reveal-section data-our-programs class="border-t border-orchid-200 bg-orchid-100">
@@ -52,12 +25,12 @@ const programs = [
     <div data-programs-heading class="flex flex-col items-center gap-6">
       <img src="/images/cta/rose.svg" alt="" class="h-16 w-auto" aria-hidden="true" />
       <h2 class="font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-ink text-[2.5rem] sm:text-6xl lg:text-[4rem]">
-        Our Programs
+        {t.home.ourPrograms.heading}
       </h2>
-      <a href="/donate" class={`hover-text ${btnBase}`}>
+      <a href={`${prefix}/donate`} class={`hover-text ${btnBase}`}>
         <span class="hover-text__inner">
-          <span class="hover-text__label is--default" data-hover-text-el>Donate now</span>
-          <span aria-hidden="true" class="hover-text__label is--hover" data-hover-text-el>Donate now</span>
+          <span class="hover-text__label is--default" data-hover-text-el>{t.home.ourPrograms.ctaLabel}</span>
+          <span aria-hidden="true" class="hover-text__label is--hover" data-hover-text-el>{t.home.ourPrograms.ctaLabel}</span>
         </span>
       </a>
     </div>
@@ -92,7 +65,7 @@ const programs = [
         <div class="relative flex-1 overflow-hidden rounded-md border-[1.5px] border-woodsmoke">
           <img
             src="/images/programs/explore.webp"
-            alt="A volunteer wearing a Fundación Elva Fonseca t-shirt"
+            alt={t.home.ourPrograms.exploreImageAlt}
             width="1066"
             height="1600"
             class="absolute inset-0 h-full w-full object-cover object-top"
@@ -100,12 +73,12 @@ const programs = [
             decoding="async"
           />
           <a
-            href="/programs"
+            href={`${prefix}/programs`}
             class="hover-text absolute bottom-4 left-4 inline-flex min-h-9 items-center justify-center whitespace-nowrap rounded-md border-[1.5px] border-woodsmoke bg-buckthorn px-4 py-3 font-display font-black text-sm uppercase tracking-[-0.01em] text-ink transition-[transform,filter] duration-150 ease-out hover:brightness-105 active:scale-[0.97]"
           >
             <span class="hover-text__inner">
-              <span class="hover-text__label is--default" data-hover-text-el>Explore our programs</span>
-              <span aria-hidden="true" class="hover-text__label is--hover" data-hover-text-el>Explore our programs</span>
+              <span class="hover-text__label is--default" data-hover-text-el>{t.home.ourPrograms.exploreLabel}</span>
+              <span aria-hidden="true" class="hover-text__label is--hover" data-hover-text-el>{t.home.ourPrograms.exploreLabel}</span>
             </span>
           </a>
         </div>

@@ -3,6 +3,14 @@
 // Fileira de 7 texturas + título + corpo centralizados. Estático; hooks data-reveal p/ Fase 5.
 // Ordem das texturas = mesma do CtaDonate / Figma.
 
+import { defaultLang, useTranslations, type Lang } from '../../i18n/utils';
+
+interface Props {
+  lang?: Lang;
+}
+const { lang = defaultLang } = Astro.props;
+const t = useTranslations(lang).donate.impactIntro;
+
 const row = ['02', '06', '04', '01', '07', '05', '03'] as const;
 ---
 
@@ -33,14 +41,12 @@ const row = ['02', '06', '04', '01', '07', '05', '03'] as const;
       <h2
         class="max-w-full font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-ink text-[2.25rem] sm:text-5xl lg:text-[4rem]"
       >
-        Open hands,
+        {t.headingLines[0]}
         <br />
-        meaningful changes.
+        {t.headingLines[1]}
       </h2>
       <p class="max-w-[34.375rem] font-sans text-base font-normal leading-[1.4] tracking-[-0.02em] text-ink">
-        Every donation is put to work across the causes that matter most to our community: education
-        and scholarships, health campaigns, nutrition support, senior care, and workshops that
-        strengthen the community as a whole. Your generosity becomes someone's opportunity.
+        {t.body}
       </p>
     </div>
   </div>

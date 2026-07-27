@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../global/Hero.astro';
+import ImpactStats from '../home/ImpactStats.astro';
+import OurPrograms from '../home/OurPrograms.astro';
+import Faq from '../home/Faq.astro';
+import Story from '../home/Story.astro';
+import Stories from '../home/Stories.astro';
+import CtaVolunteer from '../global/CtaVolunteer.astro';
+import CtaBand from '../global/CtaBand.astro';
+import CtaDonate from '../global/CtaDonate.astro';
+import { defaultLang, useTranslations, type Lang } from '../../i18n/utils';
+
+interface Props {
+  lang?: Lang;
+}
+const { lang = defaultLang } = Astro.props;
+const t = useTranslations(lang);
+const prefix = lang === defaultLang ? '' : `/${lang}`;
+---
+
+<BaseLayout lang={lang} title={t.home.seo.title} description={t.home.seo.description} headerTheme="light">
+  <Hero
+    titleLines={t.home.hero.titleLines}
+    subcopy={t.home.hero.subcopy}
+    imageAlt={t.home.hero.imageAlt}
+  />
+
+  <ImpactStats lang={lang} />
+  <OurPrograms lang={lang} />
+  <Faq lang={lang} />
+
+  {/* Posição temporária p/ visualização — alinhar nas seções corretas da Home depois (Fase 3) */}
+  <CtaDonate
+    titleLines={t.home.ctaDonate.titleLines}
+    body={t.home.ctaDonate.body}
+    ctaLabel={t.home.ctaDonate.ctaLabel}
+    ctaHref={`${prefix}/donate`}
+  />
+  <Story
+    eyebrow={t.home.story.eyebrow}
+    titleLines={t.home.story.titleLines}
+    body={t.home.story.body}
+    imageAlt={t.home.story.imageAlt}
+    cta={{ label: t.home.story.ctaLabel, href: `${prefix}/about` }}
+  />
+  <Stories lang={lang} />
+  <CtaVolunteer
+    titleLines={t.home.ctaVolunteer.titleLines}
+    subcopy={t.home.ctaVolunteer.subcopy}
+    imageAlt={t.home.ctaVolunteer.imageAlt}
+    primary={{ label: t.home.ctaVolunteer.primaryLabel, href: `${prefix}/donate` }}
+    secondary={{ label: t.home.ctaVolunteer.secondaryLabel, href: `${prefix}/volunteer` }}
+  />
+  <CtaBand
+    titleLines={t.home.ctaBand.titleLines}
+    body={t.home.ctaBand.body}
+    ctaLabel={t.home.ctaBand.ctaLabel}
+    ctaHref={`${prefix}/volunteer#apply`}
+  />
+</BaseLayout>

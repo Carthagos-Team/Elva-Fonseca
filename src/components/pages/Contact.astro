@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContactHero from '../contact/ContactHero.astro';
+import CtaVolunteer from '../global/CtaVolunteer.astro';
+import Faq from '../home/Faq.astro';
+import CtaBand from '../global/CtaBand.astro';
+import { defaultLang, useTranslations, type Lang } from '../../i18n/utils';
+
+interface Props {
+  lang?: Lang;
+}
+const { lang = defaultLang } = Astro.props;
+const t = useTranslations(lang);
+const prefix = lang === defaultLang ? '' : `/${lang}`;
+---
+
+<BaseLayout lang={lang} title={t.contact.seo.title} description={t.contact.seo.description} headerBackground="solid">
+  <ContactHero lang={lang} />
+
+  {/* TODO: confirmar com o Jonathan o link real do Transparency Report (PDF/página) — href="#" é placeholder. */}
+  <CtaVolunteer
+    titleLines={t.contact.ctaVolunteer.titleLines}
+    subcopy={t.contact.ctaVolunteer.subcopy}
+    image="/images/cta/transparency.webp"
+    imageAlt={t.contact.ctaVolunteer.imageAlt}
+    primary={{ label: t.contact.ctaVolunteer.primaryLabel, href: '#' }}
+    secondary={null}
+  />
+
+  <Faq lang={lang} />
+
+  <CtaBand
+    titleLines={t.contact.ctaBand.titleLines}
+    body={t.contact.ctaBand.body}
+    ctaLabel={t.contact.ctaBand.ctaLabel}
+    ctaHref={`${prefix}/volunteer`}
+    secondaryLabel={t.contact.ctaBand.secondaryLabel}
+    secondaryHref={`${prefix}/donate`}
+  />
+</BaseLayout>

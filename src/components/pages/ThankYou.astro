@@ -1,0 +1,33 @@
+---
+// Thank You — Figma 3073:72. Destino do redirect Contact/Volunteer (e futuro Donate).
+// Miolo = CtaBand com receipt + prompt + share; Header/Footer via BaseLayout.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CtaBand from '../global/CtaBand.astro';
+import { defaultLang, useTranslations, type Lang } from '../../i18n/utils';
+
+interface Props {
+  lang?: Lang;
+}
+const { lang = defaultLang } = Astro.props;
+const t = useTranslations(lang);
+const prefix = lang === defaultLang ? '' : `/${lang}`;
+---
+
+<BaseLayout
+  lang={lang}
+  title={t.thankYou.seo.title}
+  description={t.thankYou.seo.description}
+  noindex
+  headerBackground="solid"
+>
+  <CtaBand
+    titleLines={t.thankYou.ctaBand.titleLines}
+    body={t.thankYou.ctaBand.body}
+    receipt={t.thankYou.ctaBand.receipt}
+    prompt={t.thankYou.ctaBand.prompt}
+    ctaLabel={t.thankYou.ctaBand.ctaLabel}
+    ctaHref={`${prefix}/volunteer`}
+    secondaryLabel={t.thankYou.ctaBand.secondaryLabel}
+    secondaryAction="share"
+  />
+</BaseLayout>

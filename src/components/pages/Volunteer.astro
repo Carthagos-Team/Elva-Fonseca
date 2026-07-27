@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../global/Hero.astro';
+import Intro from '../volunteer/Intro.astro';
+import StepTimeline from '../volunteer/StepTimeline.astro';
+import VolunteerForm from '../volunteer/VolunteerForm.astro';
+import { defaultLang, useTranslations, type Lang } from '../../i18n/utils';
+
+interface Props {
+  lang?: Lang;
+}
+const { lang = defaultLang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<BaseLayout lang={lang} title={t.volunteer.seo.title} description={t.volunteer.seo.description} headerTheme="light">
+  <Hero
+    titleLines={t.volunteer.hero.titleLines}
+    subcopy={t.volunteer.hero.subcopy}
+    image="/images/hero/volunteer.webp"
+    imageAlt={t.volunteer.hero.imageAlt}
+  />
+
+  <Intro lang={lang} />
+
+  <StepTimeline lang={lang} />
+
+  <VolunteerForm lang={lang} />
+</BaseLayout>

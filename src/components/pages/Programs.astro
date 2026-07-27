@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../global/Hero.astro';
+import ProgramsSlider from '../programs/ProgramsSlider.astro';
+import VoicesOfCommunity from '../programs/VoicesOfCommunity.astro';
+import WhatIsNext from '../programs/WhatIsNext.astro';
+import CtaBand from '../global/CtaBand.astro';
+import { defaultLang, useTranslations, type Lang } from '../../i18n/utils';
+
+interface Props {
+  lang?: Lang;
+}
+const { lang = defaultLang } = Astro.props;
+const t = useTranslations(lang);
+const prefix = lang === defaultLang ? '' : `/${lang}`;
+---
+
+<BaseLayout lang={lang} title={t.programs.seo.title} description={t.programs.seo.description} headerTheme="light">
+  <Hero
+    titleLines={t.programs.hero.titleLines}
+    subcopy={t.programs.hero.subcopy}
+    image="/images/hero/programs.webp"
+    imageAlt={t.programs.hero.imageAlt}
+  />
+
+  <ProgramsSlider lang={lang} />
+
+  <VoicesOfCommunity lang={lang} />
+
+  <WhatIsNext lang={lang} />
+
+  <CtaBand
+    titleLines={t.programs.ctaBand.titleLines}
+    body={t.programs.ctaBand.body}
+    ctaLabel={t.programs.ctaBand.ctaLabel}
+    ctaHref={`${prefix}/volunteer`}
+    secondaryLabel={t.programs.ctaBand.secondaryLabel}
+    secondaryHref={`${prefix}/contact`}
+  />
+</BaseLayout>

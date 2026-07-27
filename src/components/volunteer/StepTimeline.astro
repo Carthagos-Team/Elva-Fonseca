@@ -8,6 +8,14 @@
 // linha E acende o card seguinte (opacity 0.5→1 + leve y) em sincronia. Conteúdo pré-modelado
 // p/ Sanity (Fase 4); card 3 tem corpo estruturado (intro + 2 sub-blocos "Days X:").
 
+import { defaultLang, useTranslations, type Lang } from '../../i18n/utils';
+
+interface Props {
+  lang?: Lang;
+}
+const { lang = defaultLang } = Astro.props;
+const t = useTranslations(lang).volunteer.steps;
+
 const THEME: Record<string, string> = {
   cerulean: 'bg-cerulean-200',
   malachite: 'bg-malachite-200',
@@ -15,51 +23,15 @@ const THEME: Record<string, string> = {
   studio: 'bg-studio-200',
 };
 
-const steps = [
-  {
-    theme: 'cerulean',
-    title: 'Explore your cause',
-    body: 'From supporting children to serving meals or planting trees, our programs offer many ways to help. Find the one that feels right for you.',
-    image: '/images/volunteer/step-01.webp',
-    imageAlt: 'A boy wading through a river, holding a cup and a bag of collected recyclables',
-    imageSide: 'left' as const,
-  },
-  {
-    theme: 'malachite',
-    title: 'Submit your application',
-    body: 'Fill out the volunteer application form below. Let us know your interests and availability, and once we receive it, a member of our team will reach out to guide you through the next steps.',
-    image: '/images/volunteer/step-02.webp',
-    imagePosition: 'object-[50%_10%]',
-    imageAlt: 'A young girl standing in a doorway',
-    imageSide: 'right' as const,
-  },
-  {
-    theme: 'buckthorn',
-    title: 'Join our training program',
-    intro: 'All new volunteers go through a 5-day training journey:',
-    subSteps: [
-      {
-        label: 'Days 1 & 2:',
-        text: 'Introductory sessions to understand our values, safety protocols, and program goals.',
-      },
-      {
-        label: 'Days 3 to 5:',
-        text: 'Hands-on shadowing and real-life experiences, tailored to the program you’ll join.',
-      },
-    ],
-    image: '/images/volunteer/step-03.webp',
-    imageAlt: 'A group of volunteers seated indoors during a training session',
-    imageSide: 'left' as const,
-  },
-  {
-    theme: 'studio',
-    title: 'Start your journey with us',
-    body: 'After training, you’ll officially become part of our volunteer team — ready to support, grow, and bring positive change to our community.',
-    image: '/images/volunteer/step-04.webp',
-    imageAlt: 'Volunteers and children gathered together outdoors under a tree',
-    imageSide: 'right' as const,
-  },
+// Metadados visuais (tema/imagem/lado) não mudam por idioma; texto vem do dicionário por posição.
+const STEP_META = [
+  { theme: 'cerulean', image: '/images/volunteer/step-01.webp', imagePosition: '', imageSide: 'left' as const },
+  { theme: 'malachite', image: '/images/volunteer/step-02.webp', imagePosition: 'object-[50%_10%]', imageSide: 'right' as const },
+  { theme: 'buckthorn', image: '/images/volunteer/step-03.webp', imagePosition: '', imageSide: 'left' as const },
+  { theme: 'studio', image: '/images/volunteer/step-04.webp', imagePosition: '', imageSide: 'right' as const },
 ];
+
+const steps = t.items.map((item, i) => ({ ...item, ...STEP_META[i] }));
 ---
 
 <section data-reveal-section data-step-timeline class="bg-surface py-16 lg:py-20">
@@ -84,7 +56,7 @@ const steps = [
                   alt={step.imageAlt}
                   class:list={[
                     'absolute inset-0 size-full object-cover',
-                    'imagePosition' in step ? step.imagePosition : 'object-center',
+                    step.imagePosition || 'object-center',
                   ]}
                   loading="lazy"
                   decoding="async"

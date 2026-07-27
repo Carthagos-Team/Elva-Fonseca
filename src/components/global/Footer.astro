@@ -2,21 +2,30 @@
 // Footer — Fase 2. Fiel ao Figma Home (node 3089:2), responsivo desktop/tablet/mobile.
 // Conteúdo hardcoded aqui; Fase 4 troca por siteSettings do Sanity (nav, donateUrl, legal, social).
 
+import { defaultLang, useTranslations, type Lang } from '../../i18n/utils';
+
+interface Props {
+  lang?: Lang;
+}
+const { lang = defaultLang } = Astro.props;
+const t = useTranslations(lang);
+const prefix = lang === defaultLang ? '' : `/${lang}`;
+
 const nav = [
-  { href: '/', label: 'Home' },
-  { href: '/about', label: 'About' },
-  { href: '/programs', label: 'Programs' },
-  { href: '/volunteer', label: 'Volunteer' },
-  { href: '/donate', label: 'Donate' },
-  { href: '/contact', label: 'Contact' },
+  { href: `${prefix}/`, label: t.common.footer.nav.home },
+  { href: `${prefix}/about`, label: t.common.footer.nav.about },
+  { href: `${prefix}/programs`, label: t.common.footer.nav.programs },
+  { href: `${prefix}/volunteer`, label: t.common.footer.nav.volunteer },
+  { href: `${prefix}/donate`, label: t.common.footer.nav.donate },
+  { href: `${prefix}/contact`, label: t.common.footer.nav.contact },
 ];
 
 const legal = [
-  { href: '/privacy', label: 'Privacy Policy' },
-  { href: '/terms', label: 'Terms of Service' },
+  { href: `${prefix}/privacy`, label: t.common.footer.legal.privacy },
+  { href: `${prefix}/terms`, label: t.common.footer.legal.terms },
 ];
 
-const donateUrl = '/donate'; // Fase 4: siteSettings.donateUrl (provedor externo)
+const donateUrl = `${prefix}/donate`; // Fase 4: siteSettings.donateUrl (provedor externo)
 const year = new Date().getFullYear();
 
 const path = Astro.url.pathname;
@@ -75,8 +84,8 @@ const isCurrent = (href: string) =>
         class="hover-text flex min-h-11 w-full items-center justify-center rounded-md bg-orchid px-6 py-3 font-display text-lg uppercase tracking-[-0.02em] text-jacko-bean-950 transition-opacity hover:opacity-90 md:hidden"
       >
         <span class="hover-text__inner">
-          <span class="hover-text__label is--default" data-hover-text-el>Donate</span>
-          <span aria-hidden="true" class="hover-text__label is--hover" data-hover-text-el>Donate</span>
+          <span class="hover-text__label is--default" data-hover-text-el>{t.common.footer.donateLabel}</span>
+          <span aria-hidden="true" class="hover-text__label is--hover" data-hover-text-el>{t.common.footer.donateLabel}</span>
         </span>
       </a>
 
@@ -106,8 +115,8 @@ const isCurrent = (href: string) =>
           class="hover-text inline-flex items-center gap-2 text-[0.9375rem]"
         >
           <span class="hover-text__inner opacity-80">
-            <span class="hover-text__label is--default" data-hover-text-el>designed by</span>
-            <span aria-hidden="true" class="hover-text__label is--hover" data-hover-text-el>designed by</span>
+            <span class="hover-text__label is--default" data-hover-text-el>{t.common.footer.credit}</span>
+            <span aria-hidden="true" class="hover-text__label is--hover" data-hover-text-el>{t.common.footer.credit}</span>
           </span>
           <img src="/images/footer/crt.svg" alt="Carthagos" width="62" height="18" class="h-[1.1em] w-auto" />
         </a>
