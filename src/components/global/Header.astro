@@ -63,17 +63,27 @@ const logo = isLight ? '/images/brand/logo-lockup-light.svg' : '/images/brand/lo
     <nav aria-label="Main" class="hidden md:block">
       <ul class="flex items-center gap-6">
         {
-          nav.map(({ href, label }) => (
-            <li>
-              <a
-                href={href}
-                aria-current={isCurrent(href) ? 'page' : undefined}
-                class="font-display text-base tracking-[-0.02em] transition-opacity hover:opacity-70 aria-[current=page]:opacity-60"
-              >
-                {label}
-              </a>
-            </li>
-          ))
+          nav.map(({ href, label }) => {
+            const current = isCurrent(href);
+            return (
+              <li>
+                <a
+                  href={href}
+                  aria-current={current ? 'page' : undefined}
+                  class="group relative inline-block py-1 font-display text-base tracking-[-0.02em]"
+                >
+                  {label}
+                  <span
+                    aria-hidden="true"
+                    class:list={[
+                      'absolute inset-x-0 -bottom-0.5 h-0.5 origin-left rounded-full bg-corn transition-transform duration-300 ease-out',
+                      current ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100',
+                    ]}
+                  />
+                </a>
+              </li>
+            );
+          })
         }
       </ul>
     </nav>
@@ -97,17 +107,27 @@ const logo = isLight ? '/images/brand/logo-lockup-light.svg' : '/images/brand/lo
         <p class="font-display text-sm uppercase tracking-[0.1em] text-orchid/70">Menu</p>
         <ul class="flex flex-col gap-2">
           {
-            nav.map(({ href, label }) => (
-              <li>
-                <a
-                  href={href}
-                  aria-current={isCurrent(href) ? 'page' : undefined}
-                  class="block whitespace-nowrap font-display text-3xl tracking-[-0.03em] text-orchid transition-opacity hover:opacity-60 aria-[current=page]:opacity-40"
-                >
-                  {label}
-                </a>
-              </li>
-            ))
+            nav.map(({ href, label }) => {
+              const current = isCurrent(href);
+              return (
+                <li>
+                  <a
+                    href={href}
+                    aria-current={current ? 'page' : undefined}
+                    class="group relative inline-block whitespace-nowrap py-1 font-display text-3xl tracking-[-0.03em] text-orchid"
+                  >
+                    {label}
+                    <span
+                      aria-hidden="true"
+                      class:list={[
+                        'absolute inset-x-0 -bottom-0.5 h-1 origin-left rounded-full bg-corn transition-transform duration-300 ease-out',
+                        current ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100',
+                      ]}
+                    />
+                  </a>
+                </li>
+              );
+            })
           }
         </ul>
         <a
