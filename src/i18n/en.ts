@@ -99,7 +99,7 @@ export const en = {
     },
     faq: {
       heading: 'Frequently Asked Questions',
-      subheading: 'Find answers to the most common questions about our foundation',
+      subheading: 'Find answers to the most common questions about our foundation.',
       photoAlt: 'A community member wearing a Fundación Elva Fonseca t-shirt, standing outdoors',
       prevLabel: 'Previous questions',
       nextLabel: 'Next questions',
@@ -183,12 +183,12 @@ export const en = {
         "We lead initiatives focused on health, education, environmental care, women's empowerment, and child development, always with a human-centered approach.",
       ],
       imageAlt: 'A person loading flatbreads into a traditional wood-fired oven',
-      ctaLabel: 'Learn more',
+      ctaLabel: 'Explore initiatives',
     },
     legacyStory: {
       section1Heading: 'A life of quiet strength.',
       section1Body:
-        'Elva faced many challenges throughout her life. With scarce resources, she worked tirelessly, washing clothes for others to help provide for her family. Despite the hardships, she always found a way to share what little she had.',
+        'Elva faced many challenges throughout her life. With scarce resources, she worked tirelessly, washing clothes for others to help provide for her family. Despite the hardships, she always found a way to share what\u00A0little\u00A0she\u00A0had.',
       photo1Alt: 'Two children, an older sibling beside a younger one, in a sepia-toned portrait',
       section2Quote: "“Give what you have, not what's left over.”",
       illustrationAlt: 'Illustrated portrait of Elva Fonseca inside an oval frame, with her signature',
@@ -214,7 +214,7 @@ export const en = {
     },
     ctaDonate: {
       titleLines: ['Our mission'],
-      body: 'With empathy and open hands, we work to ensure that no one is left behind. Our goal is to stand beside those who need it, offering care, resources, and dignity to the most vulnerable members of our community.',
+      body: 'With empathy and open hands, we work to ensure that no one is left behind. Our goal is to stand beside those who need it, offering care, resources, and dignity to the most vulnerable members\u00A0of\u00A0our\u00A0community.',
       ctaLabel: 'Donate now',
     },
     team: {
@@ -278,7 +278,7 @@ export const en = {
           titleLines: ['Education &', 'Technology'],
           imageAlt: 'A bright classroom with wooden desks and chairs',
           cards: [
-            { title: 'Free access to technology and printing', desc: 'Computers and printing services available for schoolwork and essential tasks.', value: '1,045', label: '3,680' },
+            { title: 'Free access to technology and printing', desc: 'Computers and printing services available for schoolwork and essential tasks.', value: '3,680', label: 'Sessions' },
             { title: 'Digital classrooms', desc: 'Modern, inclusive education through digital resources — especially in underserved areas.', value: '2,140', label: 'Students reached' },
             { title: 'Sensory room and play area', desc: 'A specially designed space for children with different abilities to play and grow.', value: '510', label: 'Therapeutic sessions held' },
             { title: 'Education and culture', desc: 'Reading workshops, school supply donations, literacy events, and cultural festivals.', value: '115', label: 'Learning events hosted' },
@@ -463,15 +463,15 @@ export const en = {
       photoAlt: 'A community member the foundation supports',
       firstNameLabel: 'First Name',
       lastNameLabel: 'Last Name',
-      emailLabel: 'Enter your e-mail',
-      interestLabel: 'Interest field',
+      emailLabel: 'E-mail Address',
+      interestLabel: 'Subject',
       selectPlaceholder: 'Select',
-      interests: ['General inquiry', 'Volunteering', 'Donations & support', 'Programs & services', 'Partnerships & collaborations'],
+      interests: ['General inquiry', 'Volunteering', 'Donations & Support', 'Programs & Services', 'Partnerships & Collaborations'],
       sendLabel: 'Send',
     },
     ctaVolunteer: {
       titleLines: ['Transparency that builds trust.'],
-      subcopy: 'Explore detailed results and impact in our Transparency Report—updated regularly for full accountability.',
+      subcopy: 'Explore detailed results and impact in our Transparency Report — updated regularly for full accountability.',
       imageAlt: 'A community member wearing a Fundación Elva Fonseca t-shirt',
       primaryLabel: 'Read',
     },

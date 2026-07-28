@@ -185,12 +185,12 @@ export const es: Dictionary = {
         'Lideramos iniciativas centradas en la salud, la educación, el cuidado ambiental, el empoderamiento de las mujeres y el desarrollo infantil, siempre con un enfoque centrado en las personas.',
       ],
       imageAlt: 'Una persona colocando tortillas en un horno tradicional de leña',
-      ctaLabel: 'Conoce más',
+      ctaLabel: 'Explorar iniciativas',
     },
     legacyStory: {
       section1Heading: 'Una vida de fortaleza silenciosa.',
       section1Body:
-        'Elva enfrentó muchos desafíos a lo largo de su vida. Con recursos escasos, trabajó incansablemente lavando ropa para otros para ayudar a mantener a su familia. A pesar de las dificultades, siempre encontró la manera de compartir lo poco que tenía.',
+        'Elva enfrentó muchos desafíos a lo largo de su vida. Con recursos escasos, trabajó incansablemente lavando ropa para otros para ayudar a mantener a su familia. A pesar de las dificultades, siempre encontró la manera de compartir lo\u00A0poco\u00A0que\u00A0tenía.',
       photo1Alt: 'Dos niños, un hermano mayor junto a uno más pequeño, en un retrato en sepia',
       section2Quote: '«Da lo que tienes, no lo que te sobra.»',
       illustrationAlt: 'Retrato ilustrado de Elva Fonseca dentro de un marco ovalado, con su firma',
@@ -216,7 +216,7 @@ export const es: Dictionary = {
     },
     ctaDonate: {
       titleLines: ['Nuestra misión'],
-      body: 'Con empatía y manos abiertas, trabajamos para que nadie se quede atrás. Nuestro objetivo es estar al lado de quienes lo necesitan, ofreciendo cuidado, recursos y dignidad a los miembros más vulnerables de nuestra comunidad.',
+      body: 'Con empatía y manos abiertas, trabajamos para que nadie se quede atrás. Nuestro objetivo es estar al lado de quienes lo necesitan, ofreciendo cuidado, recursos y dignidad a los miembros más vulnerables de\u00A0nuestra\u00A0comunidad.',
       ctaLabel: 'Donar ahora',
     },
     team: {
@@ -280,7 +280,7 @@ export const es: Dictionary = {
           titleLines: ['Educación y', 'Tecnología'],
           imageAlt: 'Un aula luminosa con escritorios y sillas de madera',
           cards: [
-            { title: 'Acceso gratuito a tecnología e impresión', desc: 'Computadoras y servicios de impresión disponibles para tareas escolares y trámites esenciales.', value: '1,045', label: '3,680' },
+            { title: 'Acceso gratuito a tecnología e impresión', desc: 'Computadoras y servicios de impresión disponibles para tareas escolares y trámites esenciales.', value: '3,680', label: 'Sesiones' },
             { title: 'Aulas digitales', desc: 'Educación moderna e inclusiva a través de recursos digitales, especialmente en zonas desatendidas.', value: '2,140', label: 'Estudiantes alcanzados' },
             { title: 'Sala sensorial y área de juegos', desc: 'Un espacio especialmente diseñado para que niños con diferentes capacidades jueguen y crezcan.', value: '510', label: 'Sesiones terapéuticas realizadas' },
             { title: 'Educación y cultura', desc: 'Talleres de lectura, donación de útiles escolares, eventos de alfabetización y festivales culturales.', value: '115', label: 'Eventos educativos realizados' },
@@ -465,8 +465,8 @@ export const es: Dictionary = {
       photoAlt: 'Un miembro de la comunidad apoyado por la fundación',
       firstNameLabel: 'Nombre',
       lastNameLabel: 'Apellido',
-      emailLabel: 'Ingresa tu correo electrónico',
-      interestLabel: 'Campo de interés',
+      emailLabel: 'Correo electrónico',
+      interestLabel: 'Asunto',
       selectPlaceholder: 'Selecciona',
       interests: ['Consulta general', 'Voluntariado', 'Donaciones y apoyo', 'Programas y servicios', 'Alianzas y colaboraciones'],
       sendLabel: 'Enviar',

@@ -22,7 +22,7 @@ const prefix = lang === defaultLang ? '' : `/${lang}`;
     subcopy={t.about.hero.subcopy}
     image="/images/hero/about.webp"
     imageAlt={t.about.hero.imageAlt}
-    cta={{ label: t.about.hero.ctaLabel, href: '#story' }}
+    cta={{ label: t.about.hero.ctaLabel, href: `${prefix}/programs` }}
   />
 
   <LegacyStory lang={lang} />
