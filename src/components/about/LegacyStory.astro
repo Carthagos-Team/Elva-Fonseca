@@ -21,8 +21,9 @@
 // inteiro) — reveal pontual (tempo fixo, `top 75%`, mesma convenção do resto do arquivo/
 // WhatIsNext.astro) + drift em parallax (`scrub` numérico, `ease:'power2.inOut'` como transfer
 // function scroll-linear -> percepção não-linear; `'none'` fica reservado pro connector-fill do
-// StepTimeline, que é progress-fill literal, caso diferente). Mobile: só reveal em stagger.
-// Reduced motion: estado final direto. Ver src/lib/gsap.ts.
+// StepTimeline, que é progress-fill literal, caso diferente). Mobile: só reveal em stagger;
+// coords mx/my/mw + selo/z-index só abaixo de sm — desktop (x/y/w) intacto. Reduced motion:
+// estado final direto. Ver src/lib/gsap.ts.
 
 import { defaultLang, useTranslations, type Lang } from '../../i18n/utils';
 
@@ -32,13 +33,44 @@ interface Props {
 const { lang = defaultLang } = Astro.props;
 const t = useTranslations(lang).about.legacyStory;
 
+// x/y/w = desktop (Figma / scope 2+3+4). mx/my/mw = mobile only — laterais das fotos, fora do texto.
 const badges = [
-  { src: '/images/about/legacy/badge-red-rosette.svg', x: 4, y: 6, w: 12, side: 'left' as const, section: 0 as const },
-  { src: '/images/about/legacy/badge-blue-flower.svg', x: 84, y: 14, w: 13, side: 'right' as const, section: 0 as const },
-  { src: '/images/about/legacy/badge-orange-medallion.svg', x: 6, y: 46, w: 12, side: 'left' as const, section: 1 as const },
-  { src: '/images/about/legacy/badge-yellow-gear.svg', x: 86, y: 58, w: 9, side: 'right' as const, section: 1 as const },
-  { src: '/images/about/legacy/badge-red-rosette.svg', x: 3, y: 82, w: 9, side: 'left' as const, section: 2 as const },
-  { src: '/images/about/legacy/badge-blue-flower.svg', x: 85, y: 88, w: 11, side: 'right' as const, section: 2 as const },
+  {
+    src: '/images/about/legacy/badge-red-rosette.svg',
+    x: 4, y: 6, w: 12,
+    mx: 0, my: 10, mw: 16,
+    side: 'left' as const, section: 0 as const,
+  },
+  {
+    src: '/images/about/legacy/badge-blue-flower.svg',
+    x: 84, y: 14, w: 13,
+    mx: 82, my: 6, mw: 17,
+    side: 'right' as const, section: 0 as const,
+  },
+  {
+    src: '/images/about/legacy/badge-orange-medallion.svg',
+    x: 6, y: 46, w: 12,
+    mx: 0, my: 40, mw: 16,
+    side: 'left' as const, section: 1 as const,
+  },
+  {
+    src: '/images/about/legacy/badge-yellow-gear.svg',
+    x: 86, y: 58, w: 9,
+    mx: 82, my: 37, mw: 15,
+    side: 'right' as const, section: 1 as const,
+  },
+  {
+    src: '/images/about/legacy/badge-red-rosette.svg',
+    x: 3, y: 82, w: 9,
+    mx: 0, my: 72, mw: 15,
+    side: 'left' as const, section: 2 as const,
+  },
+  {
+    src: '/images/about/legacy/badge-blue-flower.svg',
+    x: 85, y: 88, w: 11,
+    mx: 82, my: 70, mw: 16,
+    side: 'right' as const, section: 2 as const,
+  },
 ] as const;
 ---
 
@@ -93,7 +125,12 @@ const badges = [
 </section>
 
 <div data-legacy-flowers-scope class="relative">
-  <div data-legacy-flowers class="pointer-events-none absolute inset-0 z-10 overflow-clip" aria-hidden="true">
+  {/* sm+: z-10 e x/y/w originais. Mobile: mx/my/mw (laterais das fotos). */}
+  <div
+    data-legacy-flowers
+    class="pointer-events-none absolute inset-0 z-10 overflow-clip"
+    aria-hidden="true"
+  >
     {
       badges.map((b) => (
         <img
@@ -101,8 +138,8 @@ const badges = [
           alt=""
           loading="lazy"
           decoding="async"
-          class="legacy-flower absolute"
-          style={`left:${b.x}%;top:${b.y}%;width:${b.w}%`}
+          class="legacy-flower absolute left-[var(--mx)] top-[var(--my)] w-[var(--mw)] sm:left-[var(--x)] sm:top-[var(--y)] sm:w-[var(--w)]"
+          style={`--x:${b.x}%;--y:${b.y}%;--w:${b.w}%;--mx:${b.mx}%;--my:${b.my}%;--mw:${b.mw}%`}
           data-legacy-flower
           data-legacy-flower-section={b.section}
           data-side={b.side}
@@ -161,7 +198,7 @@ const badges = [
         <img
           src="/images/about/legacy/seal.svg"
           alt={t.sealAlt}
-          class="absolute -left-[22%] top-[77%] w-[44%]"
+          class="pointer-events-none absolute -left-[6%] top-[78%] w-[38%] sm:-left-[22%] sm:top-[77%] sm:w-[44%]"
           loading="lazy"
           decoding="async"
         />
@@ -195,7 +232,7 @@ const badges = [
         <img
           src="/images/about/legacy/seal.svg"
           alt={t.sealAlt}
-          class="absolute -left-[22%] top-[77%] w-[44%]"
+          class="pointer-events-none absolute -left-[6%] top-[78%] w-[38%] sm:-left-[22%] sm:top-[77%] sm:w-[44%]"
           loading="lazy"
           decoding="async"
         />

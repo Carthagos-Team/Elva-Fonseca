@@ -120,7 +120,7 @@ export const es: Dictionary = {
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis laoreet in odio vel sollicitudin. Nam aliquet augue dolor, quis varius ligula aliquet nec.',
     },
     ctaDonate: {
-      titleLines: ['Dona o patrocina y', 'mantén viva la misión.'],
+      titleLines: ['Dona o patrocina\u00A0y', 'mantén viva\u00A0la\u00A0misión.'],
       body: 'Ya sea que hagas una donación personal o apoyes como patrocinador, no solo estás ofreciendo recursos. Te unes a una historia construida con cuidado, valentía y transformación. Cada contribución, grande o pequeña, ayuda a que esta misión crezca y llegue a más vidas, un acto generoso a la vez.',
       ctaLabel: 'Donar ahora',
     },
