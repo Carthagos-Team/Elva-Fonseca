@@ -167,7 +167,7 @@ export const es: Dictionary = {
       titleLines: ['Como voluntario,', 'puedes hacer la diferencia.'],
       body: [
         'Hay sabiduría en cada mano y fuerza en cada gesto. Al ofrecer tu tiempo y elegir cuidar, te vuelves parte de algo más grande.',
-        'Compartir lo que la vida te ha enseñado a través de la acción, la presencia y la generosidad significa unirte a un movimiento que construye, sana y eleva comunidades.',
+        'Compartir lo que la vida te ha enseñado a través de la acción, la presencia y la generosidad significa unirte a un movimiento que construye, sana y\u00A0eleva\u00A0comunidades.',
       ],
       ctaLabel: 'Aplica para ser voluntario',
     },
@@ -190,22 +190,22 @@ export const es: Dictionary = {
     legacyStory: {
       section1Heading: 'Una vida de fortaleza silenciosa.',
       section1Body:
-        'Elva enfrentó muchos desafíos a lo largo de su vida. Con recursos escasos, trabajó incansablemente lavando ropa para otros para ayudar a mantener a su familia. A pesar de las dificultades, siempre encontró la manera de compartir lo\u00A0poco\u00A0que\u00A0tenía.',
+        'Elva enfrentó muchos desafíos a lo largo de su vida. Con recursos escasos, trabajó incansablemente lavando ropa para otros para ayudar a mantener a su familia. A pesar de las dificultades, siempre encontró la manera de compartir\u00A0lo\u00A0poco\u00A0que\u00A0tenía.',
       photo1Alt: 'Dos niños, un hermano mayor junto a uno más pequeño, en un retrato en sepia',
       section2Quote: '«Da lo que tienes, no lo que te sobra.»',
       illustrationAlt: 'Retrato ilustrado de Elva Fonseca dentro de un marco ovalado, con su firma',
       section2Label: 'El corazón de una familia.',
       section2Body:
-        'Este es uno de sus dichos más memorables. A través de su generosidad, nos enseñó el verdadero significado de la compasión y el servicio, dando siempre desinteresadamente a quienes lo necesitaban, incluso cuando ella misma tenía muy poco.',
+        'Este es uno de sus dichos más memorables. A través de su generosidad, nos enseñó el verdadero significado de la compasión y el servicio, dando siempre desinteresadamente a quienes lo necesitaban, incluso cuando ella misma tenía\u00A0muy\u00A0poco.',
       section3Heading: 'De sus manos, un legado.',
       photo3Alt: 'Una niña con un vestido floral, posando para un retrato',
       sealAlt: 'Sello: Del Sur de México',
       section3Body:
-        'Mientras sus hijos —Rosa, Antonio, Juan, Leydi y Adilene— crecían, Elva siguió siendo el pilar de nuestra familia. Cuidó a sus nietos y bisnietos con el mismo amor incondicional y dedicación que definieron toda su vida.',
+        'Mientras sus hijos —Rosa, Antonio, Juan, Leydi y Adilene— crecían, Elva siguió siendo el pilar de nuestra familia. Cuidó a sus nietos y bisnietos con el mismo amor incondicional y dedicación que definieron toda\u00A0su\u00A0vida.',
       section4Heading: 'Un futuro forjado por su ejemplo.',
       photo4Alt: 'Una mujer mayor con lentes y una playera de la Fundación Elva Fonseca, al aire libre',
       section4Body:
-        'La Fundación Elva Fonseca fue creada para honrar su vida, sus valores y el amor que dio con tanta libertad. Nuestra misión es continuar su legado sirviendo a quienes lo necesitan en nuestra comunidad, tal como ella lo hizo, con corazones y manos abiertas. Su ejemplo vive en todo lo que hacemos.',
+        'La Fundación Elva Fonseca fue creada para honrar su vida, sus valores y el amor que dio con tanta libertad. Nuestra misión es continuar su legado sirviendo a quienes lo necesitan en nuestra comunidad, tal como ella lo hizo, con corazones y manos abiertas. Su ejemplo vive en todo\u00A0lo\u00A0que\u00A0hacemos.',
     },
     story: {
       paragraphs: [
@@ -388,7 +388,7 @@ export const es: Dictionary = {
     ctaBand: {
       titleLines: ['Como voluntario,', 'puedes hacer la diferencia.'],
       body: [
-        'Compartir lo que la vida te ha enseñado a través de la acción, la presencia y la generosidad significa unirte a un movimiento que construye, sana y eleva comunidades.',
+        'Compartir lo que la vida te ha enseñado a través de la acción, la presencia y la generosidad significa unirte a un movimiento que construye, sana y\u00A0eleva\u00A0comunidades.',
       ],
       ctaLabel: 'Aplica para ser voluntario',
     },

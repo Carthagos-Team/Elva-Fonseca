@@ -165,7 +165,7 @@ export const en = {
       titleLines: ['As a volunteer,', 'you can make a difference.'],
       body: [
         'There is wisdom in every hand and strength in every gesture. By offering your time and choosing to care, you become part of something greater.',
-        'Sharing what life has taught you through action, presence, and generosity means joining a movement that builds, heals, and uplifts communities.',
+        'Sharing what life has taught you through action, presence, and generosity means joining a movement that builds, heals, and\u00A0uplifts\u00A0communities.',
       ],
       ctaLabel: 'Apply for Volunteering',
     },
@@ -188,22 +188,22 @@ export const en = {
     legacyStory: {
       section1Heading: 'A life of quiet strength.',
       section1Body:
-        'Elva faced many challenges throughout her life. With scarce resources, she worked tirelessly, washing clothes for others to help provide for her family. Despite the hardships, she always found a way to share what\u00A0little\u00A0she\u00A0had.',
+        'Elva faced many challenges throughout her life. With scarce resources, she worked tirelessly, washing clothes for others to help provide for her family. Despite the hardships, she always found a way to share\u00A0what\u00A0little\u00A0she\u00A0had.',
       photo1Alt: 'Two children, an older sibling beside a younger one, in a sepia-toned portrait',
       section2Quote: "“Give what you have, not what's left over.”",
       illustrationAlt: 'Illustrated portrait of Elva Fonseca inside an oval frame, with her signature',
       section2Label: 'The heart of a family.',
       section2Body:
-        'This is one of her most memorable sayings. Through her generosity, she taught us the true meaning of compassion and service, always giving selflessly to those in need, even when she herself had very little.',
+        'This is one of her most memorable sayings. Through her generosity, she taught us the true meaning of compassion and service, always giving selflessly to those in need, even when she herself had\u00A0very\u00A0little.',
       section3Heading: 'From her hands, a legacy.',
       photo3Alt: 'A girl in a floral dress, standing for a portrait',
       sealAlt: 'Seal: Del Sur de México',
       section3Body:
-        'As her children — Rosa, Antonio, Juan, Leydi, and Adilene — grew, Elva remained the foundation of our family. She cared for her grandchildren and great-grandchildren with the same unconditional love and dedication that defined her entire life.',
+        'As her children — Rosa, Antonio, Juan, Leydi, and Adilene — grew, Elva remained the foundation of our family. She cared for her grandchildren and great-grandchildren with the same unconditional love and dedication that defined her\u00A0entire\u00A0life.',
       section4Heading: 'A future shaped by her example.',
       photo4Alt: 'An elderly woman wearing glasses and a Fundación Elva Fonseca t-shirt, outdoors',
       section4Body:
-        "The Elva Fonseca Foundation was created to honor her life, her values, and the love she gave so freely. Our mission is to continue her legacy by serving those in need in our community, just as she did — with open hearts and hands. Her example lives on in everything we do.",
+        'The Elva Fonseca Foundation was created to honor her life, her values, and the love she gave so freely. Our mission is to continue her legacy by serving those in need in our community, just as she did — with open hearts and hands. Her example lives on in everything\u00A0we\u00A0do.',
     },
     story: {
       paragraphs: [
@@ -386,7 +386,7 @@ export const en = {
     ctaBand: {
       titleLines: ['As a volunteer,', 'you can make a difference.'],
       body: [
-        'Sharing what life has taught you through action, presence, and generosity means joining a movement that builds, heals, and uplifts communities.',
+        'Sharing what life has taught you through action, presence, and generosity means joining a movement that builds, heals, and\u00A0uplifts\u00A0communities.',
       ],
       ctaLabel: 'Apply for Volunteering',
     },

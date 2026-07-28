@@ -33,6 +33,21 @@ interface Props {
 const { lang = defaultLang } = Astro.props;
 const t = useTranslations(lang).about.legacyStory;
 
+/** Últimas N palavras com nowrap só < lg — evita órfãs no mobile/tablet; desktop intacto. */
+function noOrphan(text: string, count = 3) {
+  const parts = text.trim().split(/\s+/);
+  if (parts.length <= count) return { head: '', tail: text };
+  return {
+    head: `${parts.slice(0, -count).join(' ')} `,
+    tail: parts.slice(-count).join(' '),
+  };
+}
+
+const body1 = noOrphan(t.section1Body, 4);
+const body2 = noOrphan(t.section2Body);
+const body3 = noOrphan(t.section3Body);
+const body4 = noOrphan(t.section4Body);
+
 // x/y/w = desktop (Figma / scope 2+3+4). mx/my/mw = mobile only — laterais das fotos, fora do texto.
 const badges = [
   {
@@ -117,7 +132,7 @@ const badges = [
           {t.section1Heading}
         </h2>
         <p class="max-w-[34rem] text-pretty font-sans text-base font-medium leading-relaxed tracking-[-0.02em] text-ink/80" data-legacy-fade>
-          {t.section1Body}
+          {body1.head}<span class="max-lg:whitespace-nowrap">{body1.tail}</span>
         </p>
       </div>
     </div>
@@ -170,7 +185,7 @@ const badges = [
       <div class="flex flex-col items-center gap-4" data-legacy-fade>
         <p class="font-sans text-base font-semibold leading-[1.4] tracking-[-0.02em] text-ink">{t.section2Label}</p>
         <p class="max-w-[34rem] text-pretty font-sans text-base font-medium leading-relaxed tracking-[-0.02em] text-ink/80">
-          {t.section2Body}
+          {body2.head}<span class="max-lg:whitespace-nowrap">{body2.tail}</span>
         </p>
       </div>
     </div>
@@ -205,7 +220,7 @@ const badges = [
       </div>
 
       <p class="max-w-[34rem] text-pretty font-sans text-base font-semibold leading-[1.4] tracking-[-0.02em] text-ink/80" data-legacy-fade>
-        {t.section3Body}
+        {body3.head}<span class="max-lg:whitespace-nowrap">{body3.tail}</span>
       </p>
     </div>
   </section>
@@ -239,7 +254,7 @@ const badges = [
       </div>
 
       <p class="max-w-[34rem] text-pretty font-sans text-base font-medium leading-relaxed tracking-[-0.02em] text-ink/80" data-legacy-fade>
-        {t.section4Body}
+        {body4.head}<span class="max-lg:whitespace-nowrap">{body4.tail}</span>
       </p>
     </div>
   </section>
