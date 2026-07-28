@@ -157,7 +157,7 @@ export const en = {
       titleLines: ['There are many ways', 'to make a difference.'],
       subcopy:
         "Whether donating, volunteering, or sharing our message, you are part of something greater. Help us continue Elva's legacy of compassion and service.",
-      imageAlt: 'A community member the foundation supports',
+      imageAlt: 'A young girl standing in a doorway, holding a doll',
       primaryLabel: 'Donate now',
       secondaryLabel: 'Become a volunteer',
     },

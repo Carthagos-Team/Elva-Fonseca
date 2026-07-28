@@ -15,7 +15,7 @@ const {
   titleLines = ['There are many ways', 'to make a difference.'],
   subcopy = "Whether donating, volunteering, or sharing our message, you are part of something greater. Help us continue Elva's legacy of compassion and service.",
   image = '/images/cta/volunteer.webp',
-  imageAlt = 'A community member the foundation supports',
+  imageAlt = 'A young girl standing in a doorway, holding a doll',
   primary = { label: 'Donate now', href: '/donate' },
   secondary = { label: 'Become a volunteer', href: '/volunteer' },
 } = Astro.props;
@@ -63,13 +63,15 @@ const btnBase =
         </div>
       </div>
 
-      {/* Foto — position:absolute p/ não influenciar o auto-sizing da linha do grid
-          (a proporção retrato da foto senão vence o cálculo e estica o card). */}
-      <div data-cta-volunteer-photo class="relative h-56 w-full overflow-hidden sm:h-72 lg:h-auto">
+      {/* Foto — absolute em lg p/ não esticar o grid; aspect só abaixo de lg.
+          Object-position: 28% mobile/tablet (crop aprovado); 20% desktop (inalterado). */}
+      <div data-cta-volunteer-photo class="relative aspect-[4/5] w-full overflow-hidden sm:aspect-[5/6] lg:aspect-auto lg:h-auto">
         <img
           src={image}
           alt={imageAlt}
-          class="absolute inset-0 h-full w-full object-cover object-[50%_20%]"
+          width="1312"
+          height="1040"
+          class="absolute inset-0 h-full w-full object-cover object-[50%_28%] lg:object-[50%_20%]"
           loading="lazy"
           decoding="async"
         />

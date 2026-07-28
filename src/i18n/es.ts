@@ -159,7 +159,7 @@ export const es: Dictionary = {
       titleLines: ['Hay muchas formas', 'de hacer la diferencia.'],
       subcopy:
         'Ya sea donando, siendo voluntario o compartiendo nuestro mensaje, formas parte de algo más grande. Ayúdanos a continuar el legado de compasión y servicio de Elva.',
-      imageAlt: 'Un miembro de la comunidad apoyado por la fundación',
+      imageAlt: 'Una niña de pie en un umbral, sosteniendo una muñeca',
       primaryLabel: 'Donar ahora',
       secondaryLabel: 'Sé voluntario',
     },
