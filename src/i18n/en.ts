@@ -118,7 +118,7 @@ export const en = {
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis laoreet in odio vel sollicitudin. Nam aliquet augue dolor, quis varius ligula aliquet nec.',
     },
     ctaDonate: {
-      titleLines: ['Donate or sponsor\u00A0and', 'keep the mission\u00A0alive.'],
+      titleLines: ['Donate or sponsor and', 'keep the mission alive.'],
       body: "Whether you're making a personal donation or supporting as a sponsor, you're not just offering resources. You're joining a story built on care, courage, and transformation. Every contribution, big or small, helps this mission grow and reach more lives, one generous act at a time.",
       ctaLabel: 'Donate now',
     },

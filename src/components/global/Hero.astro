@@ -5,7 +5,7 @@
 // (global) flutua sobreposto no topo — por isso o conteúdo é bottom-aligned.
 // CTA opcional (About): buckthorn + borda woodsmoke; subcopy aceita string ou string[].
 
-import { noOrphan } from '../../lib/typography';
+import { protectCopy } from '../../lib/typography';
 
 interface Props {
   titleLines: readonly string[];
@@ -26,7 +26,7 @@ const {
 } = Astro.props;
 
 const paragraphs = (subcopy == null ? [] : Array.isArray(subcopy) ? subcopy : [subcopy]).map((p) =>
-  noOrphan(p, 2),
+  protectCopy(p, 2),
 );
 ---
 
@@ -54,11 +54,16 @@ const paragraphs = (subcopy == null ? [] : Array.isArray(subcopy) ? subcopy : [s
       ]}
     >
       <div class="flex flex-col items-center gap-4">
-        <h1 data-hero-headline class="font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-[2.75rem] sm:text-6xl lg:text-[6.2rem]">
+        {/* Overflow-safe: sem nowrap no título; clamp mobile; br só sm+ (fluxo natural no mobile). */}
+        <h1
+          data-hero-headline
+          class="max-w-full text-pretty break-normal font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-[clamp(2rem,8vw,2.75rem)] sm:text-6xl lg:text-[6.2rem]"
+        >
           {titleLines.map((line, i) => (
             <>
-              <span class:list={[line.length <= 18 && 'whitespace-nowrap']}>{line}</span>
-              {i < titleLines.length - 1 && <br />}
+              {i > 0 && <br class="hidden sm:block" />}
+              {i > 0 && ' '}
+              {line}
             </>
           ))}
         </h1>
@@ -66,9 +71,9 @@ const paragraphs = (subcopy == null ? [] : Array.isArray(subcopy) ? subcopy : [s
         {
           paragraphs.length > 0 && (
             <div data-hero-body class="flex max-w-[49rem] flex-col gap-4 text-base font-medium leading-relaxed tracking-[-0.02em] text-orchid/95 sm:text-lg">
-              {paragraphs.map(({ head, tail }) => (
+              {paragraphs.map((p) => (
                 <p class="text-pretty">
-                  {head}<span class="whitespace-nowrap">{tail}</span>
+                  {p}
                 </p>
               ))}
             </div>

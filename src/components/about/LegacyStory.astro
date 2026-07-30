@@ -26,7 +26,7 @@
 // estado final direto. Ver src/lib/gsap.ts.
 
 import { defaultLang, useTranslations, type Lang } from '../../i18n/utils';
-import { noOrphan } from '../../lib/typography';
+import { splitNoOrphan, protectCopy } from '../../lib/typography';
 
 interface Props {
   lang?: Lang;
@@ -34,22 +34,19 @@ interface Props {
 const { lang = defaultLang } = Astro.props;
 const t = useTranslations(lang).about.legacyStory;
 
-const body1 = noOrphan(t.section1Body, 4);
-const body2 = noOrphan(t.section2Body);
-const body3 = noOrphan(t.section3Body);
-const body4 = noOrphan(t.section4Body);
+const body1 = protectCopy(t.section1Body, 4);
+const body2 = protectCopy(t.section2Body, 3);
+const body3 = protectCopy(t.section3Body, 3);
+const body4 = protectCopy(t.section4Body, 3);
 
 const headingClass =
-  'font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-ink text-[2.5rem] sm:text-6xl lg:text-[4rem]';
+  'max-w-full text-pretty break-normal font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-ink text-[2.25rem] sm:text-6xl lg:text-[4rem]';
 
-function headingLines(lines: readonly string[]) {
-  const single = lines.length === 1;
-  return { lines, single };
-}
-
-const h1 = headingLines(t.section1HeadingLines);
-const h3 = headingLines(t.section3HeadingLines);
-const h4 = headingLines(t.section4HeadingLines);
+// titleLines + <br> sem nowrap (overflow-safe). Quote usa splitNoOrphan.
+const h1 = t.section1HeadingLines;
+const h3 = t.section3HeadingLines;
+const h4 = t.section4HeadingLines;
+const quote2 = splitNoOrphan(t.section2Quote, 2);
 
 // x/y/w = desktop (Figma / scope 2+3+4). mx/my/mw = mobile only — laterais das fotos, fora do texto.
 const badges = [
@@ -129,18 +126,18 @@ const badges = [
 
       <div class="flex flex-col items-center gap-6">
         <h2
-          class:list={[headingClass, h1.single && 'lg:whitespace-nowrap']}
+          class={headingClass}
           data-legacy-split
         >
-          {h1.lines.map((line, i) => (
+          {h1.map((line, i) => (
             <>
-              <span class:list={[line.length <= 22 && 'whitespace-nowrap']}>{line}</span>
-              {i < h1.lines.length - 1 && <br />}
+              {i > 0 && <br />}
+              {line}
             </>
           ))}
         </h2>
         <p class="max-w-[34rem] text-pretty font-sans text-base font-medium leading-relaxed tracking-[-0.02em] text-ink/80" data-legacy-fade>
-          {body1.head}<span class="max-lg:whitespace-nowrap">{body1.tail}</span>
+          {body1}
         </p>
       </div>
     </div>
@@ -174,10 +171,11 @@ const badges = [
   <section data-reveal-section data-legacy-section class="relative bg-surface px-6 py-16 sm:px-10 lg:px-16 lg:py-20">
     <div class="mx-auto flex max-w-[46rem] flex-col items-center gap-12 text-center">
       <h2
-        class="font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-ink text-[2.5rem] sm:text-6xl lg:text-[4rem]"
+        class="max-w-full text-pretty break-normal font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-ink text-[2.25rem] sm:text-6xl lg:text-[4rem]"
         data-legacy-split
       >
-        {t.section2Quote}
+        {quote2.head}
+        {quote2.nowrap ? <span class="whitespace-nowrap">{quote2.tail}</span> : quote2.tail}
       </h2>
 
       <div class="relative mx-auto aspect-[810/696] w-full max-w-[26rem] sm:max-w-[30rem]" data-legacy-wipe>
@@ -193,7 +191,7 @@ const badges = [
       <div class="flex flex-col items-center gap-4" data-legacy-fade>
         <p class="font-sans text-base font-semibold leading-[1.4] tracking-[-0.02em] text-ink">{t.section2Label}</p>
         <p class="max-w-[34rem] text-pretty font-sans text-base font-medium leading-relaxed tracking-[-0.02em] text-ink/80">
-          {body2.head}<span class="max-lg:whitespace-nowrap">{body2.tail}</span>
+          {body2}
         </p>
       </div>
     </div>
@@ -202,13 +200,13 @@ const badges = [
   <section data-reveal-section data-legacy-section class="relative bg-surface px-6 py-16 sm:px-10 lg:px-16 lg:py-20">
     <div class="mx-auto flex max-w-328 flex-col items-center gap-10 text-center">
       <h2
-        class:list={[headingClass, h3.single && 'lg:whitespace-nowrap']}
+        class={headingClass}
         data-legacy-split
       >
-        {h3.lines.map((line, i) => (
+        {h3.map((line, i) => (
           <>
-            <span class:list={[line.length <= 22 && 'whitespace-nowrap']}>{line}</span>
-            {i < h3.lines.length - 1 && <br />}
+            {i > 0 && <br />}
+            {line}
           </>
         ))}
       </h2>
@@ -233,7 +231,7 @@ const badges = [
       </div>
 
       <p class="max-w-[34rem] text-pretty font-sans text-base font-semibold leading-[1.4] tracking-[-0.02em] text-ink/80" data-legacy-fade>
-        {body3.head}<span class="max-lg:whitespace-nowrap">{body3.tail}</span>
+        {body3}
       </p>
     </div>
   </section>
@@ -241,13 +239,13 @@ const badges = [
   <section data-reveal-section data-legacy-section class="relative bg-surface px-6 py-16 sm:px-10 lg:px-16 lg:py-20">
     <div class="mx-auto flex max-w-328 flex-col items-center gap-10 text-center">
       <h2
-        class:list={[headingClass, h4.single && 'lg:whitespace-nowrap']}
+        class={headingClass}
         data-legacy-split
       >
-        {h4.lines.map((line, i) => (
+        {h4.map((line, i) => (
           <>
-            <span class:list={[line.length <= 22 && 'whitespace-nowrap']}>{line}</span>
-            {i < h4.lines.length - 1 && <br />}
+            {i > 0 && <br />}
+            {line}
           </>
         ))}
       </h2>
@@ -272,7 +270,7 @@ const badges = [
       </div>
 
       <p class="max-w-[34rem] text-pretty font-sans text-base font-medium leading-relaxed tracking-[-0.02em] text-ink/80" data-legacy-fade>
-        {body4.head}<span class="max-lg:whitespace-nowrap">{body4.tail}</span>
+        {body4}
       </p>
     </div>
   </section>

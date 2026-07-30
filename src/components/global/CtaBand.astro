@@ -104,8 +104,7 @@ const flowers = [
       <h2 class="text-balance font-display font-black text-[2.5rem] uppercase leading-none tracking-[-0.04em] text-ink sm:text-6xl lg:text-[4.5rem]">
         {titleLines.map((line, i) => (
           <>
-            {/* nowrap só em linhas curtas (ex.: "la diferencia.") — linhas longas do EN podem quebrar naturalmente */}
-            <span class:list={[line.length <= 18 && 'whitespace-nowrap']}>{line}</span>
+            {line}
             {i < titleLines.length - 1 && <br />}
           </>
         ))}

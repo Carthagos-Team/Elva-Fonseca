@@ -5,6 +5,8 @@
 // Fileira de flores = elementos DOM individuais (classe .cta-petal), prontas para o
 // reveal em stagger com GSAP ScrollTrigger na FASE 5 (ver src/lib/gsap.ts / createMotion).
 
+import { splitNoOrphan, protectCopy } from '../../lib/typography';
+
 interface Props {
   titleLines?: readonly string[];
   body?: string;
@@ -13,11 +15,16 @@ interface Props {
 }
 
 const {
-  titleLines = ['Donate or sponsor\u00A0and', 'keep the mission\u00A0alive.'],
+  titleLines = ['Donate or sponsor and', 'keep the mission alive.'],
   body = "Whether you're making a personal donation or supporting as a sponsor, you're not just offering resources. You're joining a story built on care, courage, and transformation. Every contribution, big or small, helps this mission grow and reach more lives, one generous act at a time.",
   ctaLabel = 'Donate now',
   ctaHref = '/donate',
 } = Astro.props;
+
+const titleParts = titleLines.map((line, i) =>
+  i === titleLines.length - 1 ? splitNoOrphan(line, 2) : { head: '', tail: line, nowrap: false },
+);
+const bodyText = protectCopy(body, 3);
 
 // Ordem exata do Figma para a fileira de flores.
 const row = ['02', '06', '04', '01', '07', '05', '03'];
@@ -48,18 +55,17 @@ const row = ['02', '06', '04', '01', '07', '05', '03'];
     {/* Texto + botão */}
     <div data-cta-donate-content class="flex flex-col items-center gap-9 px-4">
       <div class="flex flex-col items-center gap-6">
-        <h2 class="text-balance font-display font-black text-[2.25rem] uppercase leading-[1.05] tracking-[-0.04em] sm:text-5xl lg:text-[4rem]">
-          {
-            titleLines.map((line, i) => (
-              <>
-                {i > 0 && ' '}
-                {line}
-                {i < titleLines.length - 1 && <br class="hidden sm:block" />}
-              </>
-            ))
-          }
+        <h2 class="max-w-full text-pretty break-normal font-display font-black text-[2.25rem] uppercase leading-[1.05] tracking-[-0.04em] sm:text-5xl lg:text-[4rem]">
+          {titleParts.map((part, i) => (
+            <>
+              {i > 0 && <br class="hidden sm:block" />}
+              {i > 0 && ' '}
+              {part.head}
+              {part.nowrap ? <span class="whitespace-nowrap">{part.tail}</span> : part.tail}
+            </>
+          ))}
         </h2>
-        <p class="max-w-[34.375rem] text-pretty text-base font-medium leading-relaxed tracking-[-0.01em] text-orchid/90">{body}</p>
+        <p class="max-w-[34.375rem] text-pretty text-base font-medium leading-relaxed tracking-[-0.01em] text-orchid/90">{bodyText}</p>
       </div>
 
       <a
