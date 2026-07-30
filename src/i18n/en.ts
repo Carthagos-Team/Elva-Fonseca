@@ -45,7 +45,7 @@ export const en = {
     },
     impactStats: {
       eyebrow: 'Our Social Impact',
-      heading: 'Transforming lives, step by step',
+      headingLines: ['Transforming lives,', 'step\u00A0by\u00A0step'],
       items: [
         { icon: 'users-round', value: '5500+', label: 'Children Benefited', bg: 'bg-studio', text: 'text-orchid' },
         { icon: 'graduation-cap', value: '200+', label: 'Youth Supported', bg: 'bg-brand', text: 'text-orchid' },
@@ -186,7 +186,7 @@ export const en = {
       ctaLabel: 'Explore initiatives',
     },
     legacyStory: {
-      section1Heading: 'A life of quiet strength.',
+      section1HeadingLines: ['A life of quiet strength.'],
       section1Body:
         'Elva faced many challenges throughout her life. With scarce resources, she worked tirelessly, washing clothes for others to help provide for her family. Despite the hardships, she always found a way to share\u00A0what\u00A0little\u00A0she\u00A0had.',
       photo1Alt: 'Two children, an older sibling beside a younger one, in a sepia-toned portrait',
@@ -195,12 +195,12 @@ export const en = {
       section2Label: 'The heart of a family.',
       section2Body:
         'This is one of her most memorable sayings. Through her generosity, she taught us the true meaning of compassion and service, always giving selflessly to those in need, even when she herself had\u00A0very\u00A0little.',
-      section3Heading: 'From her hands, a legacy.',
+      section3HeadingLines: ['From her hands, a legacy.'],
       photo3Alt: 'A girl in a floral dress, standing for a portrait',
       sealAlt: 'Seal: Del Sur de México',
       section3Body:
         'As her children — Rosa, Antonio, Juan, Leydi, and Adilene — grew, Elva remained the foundation of our family. She cared for her grandchildren and great-grandchildren with the same unconditional love and dedication that defined her\u00A0entire\u00A0life.',
-      section4Heading: 'A future shaped by her example.',
+      section4HeadingLines: ['A future shaped by her example.'],
       photo4Alt: 'An elderly woman wearing glasses and a Fundación Elva Fonseca t-shirt, outdoors',
       section4Body:
         'The Elva Fonseca Foundation was created to honor her life, her values, and the love she gave so freely. Our mission is to continue her legacy by serving those in need in our community, just as she did — with open hearts and hands. Her example lives on in everything\u00A0we\u00A0do.',

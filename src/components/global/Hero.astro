@@ -5,6 +5,8 @@
 // (global) flutua sobreposto no topo — por isso o conteúdo é bottom-aligned.
 // CTA opcional (About): buckthorn + borda woodsmoke; subcopy aceita string ou string[].
 
+import { noOrphan } from '../../lib/typography';
+
 interface Props {
   titleLines: readonly string[];
   subcopy?: string | readonly string[];
@@ -23,7 +25,9 @@ const {
   cta,
 } = Astro.props;
 
-const paragraphs = subcopy == null ? [] : Array.isArray(subcopy) ? subcopy : [subcopy];
+const paragraphs = (subcopy == null ? [] : Array.isArray(subcopy) ? subcopy : [subcopy]).map((p) =>
+  noOrphan(p, 2),
+);
 ---
 
 <section data-hero class="bg-surface px-4 py-6 sm:px-5">
@@ -53,7 +57,7 @@ const paragraphs = subcopy == null ? [] : Array.isArray(subcopy) ? subcopy : [su
         <h1 data-hero-headline class="font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-[2.75rem] sm:text-6xl lg:text-[6.2rem]">
           {titleLines.map((line, i) => (
             <>
-              {line}
+              <span class:list={[line.length <= 18 && 'whitespace-nowrap']}>{line}</span>
               {i < titleLines.length - 1 && <br />}
             </>
           ))}
@@ -62,8 +66,10 @@ const paragraphs = subcopy == null ? [] : Array.isArray(subcopy) ? subcopy : [su
         {
           paragraphs.length > 0 && (
             <div data-hero-body class="flex max-w-[49rem] flex-col gap-4 text-base font-medium leading-relaxed tracking-[-0.02em] text-orchid/95 sm:text-lg">
-              {paragraphs.map((p) => (
-                <p>{p}</p>
+              {paragraphs.map(({ head, tail }) => (
+                <p class="text-pretty">
+                  {head}<span class="whitespace-nowrap">{tail}</span>
+                </p>
               ))}
             </div>
           )

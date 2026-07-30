@@ -26,6 +26,7 @@
 // estado final direto. Ver src/lib/gsap.ts.
 
 import { defaultLang, useTranslations, type Lang } from '../../i18n/utils';
+import { noOrphan } from '../../lib/typography';
 
 interface Props {
   lang?: Lang;
@@ -33,20 +34,22 @@ interface Props {
 const { lang = defaultLang } = Astro.props;
 const t = useTranslations(lang).about.legacyStory;
 
-/** Últimas N palavras com nowrap só < lg — evita órfãs no mobile/tablet; desktop intacto. */
-function noOrphan(text: string, count = 3) {
-  const parts = text.trim().split(/\s+/);
-  if (parts.length <= count) return { head: '', tail: text };
-  return {
-    head: `${parts.slice(0, -count).join(' ')} `,
-    tail: parts.slice(-count).join(' '),
-  };
-}
-
 const body1 = noOrphan(t.section1Body, 4);
 const body2 = noOrphan(t.section2Body);
 const body3 = noOrphan(t.section3Body);
 const body4 = noOrphan(t.section4Body);
+
+const headingClass =
+  'font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-ink text-[2.5rem] sm:text-6xl lg:text-[4rem]';
+
+function headingLines(lines: readonly string[]) {
+  const single = lines.length === 1;
+  return { lines, single };
+}
+
+const h1 = headingLines(t.section1HeadingLines);
+const h3 = headingLines(t.section3HeadingLines);
+const h4 = headingLines(t.section4HeadingLines);
 
 // x/y/w = desktop (Figma / scope 2+3+4). mx/my/mw = mobile only — laterais das fotos, fora do texto.
 const badges = [
@@ -126,10 +129,15 @@ const badges = [
 
       <div class="flex flex-col items-center gap-6">
         <h2
-          class="font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-ink text-[2.5rem] sm:text-6xl lg:whitespace-nowrap lg:text-[4rem]"
+          class:list={[headingClass, h1.single && 'lg:whitespace-nowrap']}
           data-legacy-split
         >
-          {t.section1Heading}
+          {h1.lines.map((line, i) => (
+            <>
+              <span class:list={[line.length <= 22 && 'whitespace-nowrap']}>{line}</span>
+              {i < h1.lines.length - 1 && <br />}
+            </>
+          ))}
         </h2>
         <p class="max-w-[34rem] text-pretty font-sans text-base font-medium leading-relaxed tracking-[-0.02em] text-ink/80" data-legacy-fade>
           {body1.head}<span class="max-lg:whitespace-nowrap">{body1.tail}</span>
@@ -194,10 +202,15 @@ const badges = [
   <section data-reveal-section data-legacy-section class="relative bg-surface px-6 py-16 sm:px-10 lg:px-16 lg:py-20">
     <div class="mx-auto flex max-w-328 flex-col items-center gap-10 text-center">
       <h2
-        class="font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-ink text-[2.5rem] sm:text-6xl lg:whitespace-nowrap lg:text-[4rem]"
+        class:list={[headingClass, h3.single && 'lg:whitespace-nowrap']}
         data-legacy-split
       >
-        {t.section3Heading}
+        {h3.lines.map((line, i) => (
+          <>
+            <span class:list={[line.length <= 22 && 'whitespace-nowrap']}>{line}</span>
+            {i < h3.lines.length - 1 && <br />}
+          </>
+        ))}
       </h2>
 
       <div class="relative aspect-[382/534] w-full max-w-[23.9rem] overflow-visible rounded-xl border-[1.5px] border-woodsmoke" data-legacy-fade>
@@ -228,10 +241,15 @@ const badges = [
   <section data-reveal-section data-legacy-section class="relative bg-surface px-6 py-16 sm:px-10 lg:px-16 lg:py-20">
     <div class="mx-auto flex max-w-328 flex-col items-center gap-10 text-center">
       <h2
-        class="font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-ink text-[2.5rem] sm:text-6xl lg:whitespace-nowrap lg:text-[4rem]"
+        class:list={[headingClass, h4.single && 'lg:whitespace-nowrap']}
         data-legacy-split
       >
-        {t.section4Heading}
+        {h4.lines.map((line, i) => (
+          <>
+            <span class:list={[line.length <= 22 && 'whitespace-nowrap']}>{line}</span>
+            {i < h4.lines.length - 1 && <br />}
+          </>
+        ))}
       </h2>
 
       <div class="relative aspect-[382/534] w-full max-w-[23.9rem] overflow-visible rounded-xl border-[1.5px] border-woodsmoke" data-legacy-fade>

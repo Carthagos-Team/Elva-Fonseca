@@ -89,12 +89,19 @@ const slides = t.slides.map((slide, i) => {
                 />
               </span>
 
-              {/* Título — uma linha (Figma / pedido de review); SplitText revela a linha única. */}
+              {/* Título — desktop 1 linha (Figma); abaixo de lg, wrap entre titleLines (spans nowrap). SplitText revela por linha. */}
               <h2
                 data-ps-title
-                class="font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-ink whitespace-nowrap text-[2.5rem] sm:text-5xl lg:text-[4rem]"
+                class="font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-ink lg:whitespace-nowrap text-[2.5rem] sm:text-5xl lg:text-[4rem]"
               >
-                {s.titleLines.join(' ')}
+                {
+                  s.titleLines.map((line, i) => (
+                    <>
+                      {i > 0 && ' '}
+                      <span class="whitespace-nowrap">{line}</span>
+                    </>
+                  ))
+                }
               </h2>
 
               {/* Main: imagem + grid de cards */}

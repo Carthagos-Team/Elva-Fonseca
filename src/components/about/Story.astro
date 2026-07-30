@@ -4,6 +4,7 @@
 // id="story" ancora legada; CTA do Hero agora aponta para /programs. Estático (sem motion) neste passo.
 
 import { defaultLang, useTranslations, type Lang } from '../../i18n/utils';
+import { noOrphan } from '../../lib/typography';
 
 interface Props {
   lang?: Lang;
@@ -11,7 +12,7 @@ interface Props {
 const { lang = defaultLang } = Astro.props;
 const t = useTranslations(lang).about.story;
 
-const paragraphs = t.paragraphs;
+const paragraphs = t.paragraphs.map((p) => noOrphan(p, 3));
 
 const motifs = [
   { src: '/images/about/motifs/01.svg', w: 37, h: 36 },
@@ -41,8 +42,10 @@ const motifs = [
     class="mx-auto flex max-w-[120rem] flex-col gap-10 px-6 pb-12 pt-10 sm:px-10 lg:flex-row lg:items-start lg:justify-between lg:gap-16 lg:px-16 lg:pt-10"
   >
     <div data-story-heading class="flex max-w-[40rem] flex-col gap-4 font-sans text-base font-medium leading-[1.4] tracking-[-0.02em] text-ink">
-      {paragraphs.map((p) => (
-        <p>{p}</p>
+      {paragraphs.map(({ head, tail }) => (
+        <p class="text-pretty">
+          {head}<span class="whitespace-nowrap">{tail}</span>
+        </p>
       ))}
     </div>
 

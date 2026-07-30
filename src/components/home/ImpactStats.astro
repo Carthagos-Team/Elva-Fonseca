@@ -33,8 +33,15 @@ const impact = t.home.impactStats.items;
       <p class="font-sans text-sm font-semibold uppercase tracking-[0.08em] text-buckthorn">
         {t.home.impactStats.eyebrow}
       </p>
-      <h2 class="font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-ink text-[2rem] sm:text-5xl lg:text-[4rem]">
-        {t.home.impactStats.heading}
+      <h2 class="text-balance font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-ink text-[2rem] sm:text-5xl lg:text-[4rem]">
+        {
+          t.home.impactStats.headingLines.map((line, i) => (
+            <>
+              {line}
+              {i < t.home.impactStats.headingLines.length - 1 && <br />}
+            </>
+          ))
+        }
       </h2>
     </div>
 

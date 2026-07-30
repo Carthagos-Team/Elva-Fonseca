@@ -47,7 +47,7 @@ export const es: Dictionary = {
     },
     impactStats: {
       eyebrow: 'Nuestro Impacto Social',
-      heading: 'Transformando vidas, paso a paso',
+      headingLines: ['Transformando vidas,', 'paso\u00A0a\u00A0paso'],
       items: [
         { icon: 'users-round', value: '5500+', label: 'Niños beneficiados', bg: 'bg-studio', text: 'text-orchid' },
         { icon: 'graduation-cap', value: '200+', label: 'Jóvenes apoyados', bg: 'bg-brand', text: 'text-orchid' },
@@ -164,7 +164,7 @@ export const es: Dictionary = {
       secondaryLabel: 'Sé voluntario',
     },
     ctaBand: {
-      titleLines: ['Como voluntario,', 'puedes hacer la diferencia.'],
+      titleLines: ['Como voluntario,', 'puedes hacer', 'la diferencia.'],
       body: [
         'Hay sabiduría en cada mano y fuerza en cada gesto. Al ofrecer tu tiempo y elegir cuidar, te vuelves parte de algo más grande.',
         'Compartir lo que la vida te ha enseñado a través de la acción, la presencia y la generosidad significa unirte a un movimiento que construye, sana y\u00A0eleva\u00A0comunidades.',
@@ -179,7 +179,7 @@ export const es: Dictionary = {
         'Descubre la historia de Elva Fonseca y cómo su legado de compasión dio forma a una fundación dedicada a servir a comunidades en todo Veracruz, México.',
     },
     hero: {
-      titleLines: ['Una historia de cuidado'],
+      titleLines: ['Una historia', 'de cuidado'],
       subcopy: [
         'La Fundación Elva Fonseca es una organización sin fines de lucro que trabaja para apoyar a comunidades vulnerables, especialmente en áreas rurales de Veracruz, México.',
         'Lideramos iniciativas centradas en la salud, la educación, el cuidado ambiental, el empoderamiento de las mujeres y el desarrollo infantil, siempre con un enfoque centrado en las personas.',
@@ -188,7 +188,7 @@ export const es: Dictionary = {
       ctaLabel: 'Explorar iniciativas',
     },
     legacyStory: {
-      section1Heading: 'Una vida de fortaleza silenciosa.',
+      section1HeadingLines: ['Una vida de', 'fortaleza silenciosa.'],
       section1Body:
         'Elva enfrentó muchos desafíos a lo largo de su vida. Con recursos escasos, trabajó incansablemente lavando ropa para otros para ayudar a mantener a su familia. A pesar de las dificultades, siempre encontró la manera de compartir\u00A0lo\u00A0poco\u00A0que\u00A0tenía.',
       photo1Alt: 'Dos niños, un hermano mayor junto a uno más pequeño, en un retrato en sepia',
@@ -197,12 +197,12 @@ export const es: Dictionary = {
       section2Label: 'El corazón de una familia.',
       section2Body:
         'Este es uno de sus dichos más memorables. A través de su generosidad, nos enseñó el verdadero significado de la compasión y el servicio, dando siempre desinteresadamente a quienes lo necesitaban, incluso cuando ella misma tenía\u00A0muy\u00A0poco.',
-      section3Heading: 'De sus manos, un legado.',
+      section3HeadingLines: ['De sus manos,', 'un legado.'],
       photo3Alt: 'Una niña con un vestido floral, posando para un retrato',
       sealAlt: 'Sello: Del Sur de México',
       section3Body:
         'Mientras sus hijos —Rosa, Antonio, Juan, Leydi y Adilene— crecían, Elva siguió siendo el pilar de nuestra familia. Cuidó a sus nietos y bisnietos con el mismo amor incondicional y dedicación que definieron toda\u00A0su\u00A0vida.',
-      section4Heading: 'Un futuro forjado por su ejemplo.',
+      section4HeadingLines: ['Un futuro forjado', 'por su ejemplo.'],
       photo4Alt: 'Una mujer mayor con lentes y una playera de la Fundación Elva Fonseca, al aire libre',
       section4Body:
         'La Fundación Elva Fonseca fue creada para honrar su vida, sus valores y el amor que dio con tanta libertad. Nuestra misión es continuar su legado sirviendo a quienes lo necesitan en nuestra comunidad, tal como ella lo hizo, con corazones y manos abiertas. Su ejemplo vive en todo\u00A0lo\u00A0que\u00A0hacemos.',
@@ -386,7 +386,7 @@ export const es: Dictionary = {
       secondaryLabel: 'Sé voluntario',
     },
     ctaBand: {
-      titleLines: ['Como voluntario,', 'puedes hacer la diferencia.'],
+      titleLines: ['Como voluntario,', 'puedes hacer', 'la diferencia.'],
       body: [
         'Compartir lo que la vida te ha enseñado a través de la acción, la presencia y la generosidad significa unirte a un movimiento que construye, sana y\u00A0eleva\u00A0comunidades.',
       ],
@@ -394,7 +394,7 @@ export const es: Dictionary = {
     },
     sponsorship: {
       eyebrow: 'Patrocinio',
-      titleLines: ['Cada patrocinador es', 'una semilla de cambio.'],
+      titleLines: ['Cada patrocinador', 'es\u00A0una semilla', 'de\u00A0cambio.'],
       body: 'Construyamos algo significativo juntos. Ponte en contacto para explorar oportunidades de colaboración, ya sea co-creando un programa o apoyando una iniciativa existente.',
       imageAlt: 'Un patrocinador comunitario usando una gorra roja al aire libre',
       ctaLabel: 'Enviar un mensaje',
