@@ -23,11 +23,11 @@ const esHref = getRouteFromUrl(Astro.url, 'es');
     aria-label={t.common.languageSwitcher.labelEn}
     aria-current={lang === 'en' ? 'true' : undefined}
     class:list={[
-      'rounded-sm border border-woodsmoke/20 p-1 transition-opacity',
+      'inline-flex h-6 w-9 shrink-0 overflow-hidden rounded-sm border border-woodsmoke/20 p-0 transition-opacity',
       lang === 'en' ? 'opacity-100' : 'opacity-50 hover:opacity-100',
     ]}
   >
-    <img src="/icons/flag-en.svg" width="20" height="14" alt="" class="h-3.5 w-5 rounded-[2px]" />
+    <img src="/icons/flag-en.png" width="36" height="24" alt="" decoding="async" class="size-full object-cover" />
   </a>
   <a
     href={esHref}
@@ -37,11 +37,11 @@ const esHref = getRouteFromUrl(Astro.url, 'es');
     aria-label={t.common.languageSwitcher.labelEs}
     aria-current={lang === 'es' ? 'true' : undefined}
     class:list={[
-      'rounded-sm border border-woodsmoke/20 p-1 transition-opacity',
+      'inline-flex h-6 w-9 shrink-0 overflow-hidden rounded-sm border border-woodsmoke/20 p-0 transition-opacity',
       lang === 'es' ? 'opacity-100' : 'opacity-50 hover:opacity-100',
     ]}
   >
-    <img src="/icons/flag-es.svg" width="20" height="14" alt="" class="h-3.5 w-5 rounded-[2px]" />
+    <img src="/icons/flag-es.png" width="36" height="24" alt="" decoding="async" class="size-full object-cover" />
   </a>
 </div>
 
