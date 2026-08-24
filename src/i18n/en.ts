@@ -371,6 +371,7 @@ export const en = {
       subcopy: 'Every contribution counts. Support our mission and make lasting impact today.',
       imageAlt: 'Volunteers in a circle joining hands together outdoors',
       givebutterAriaLabel: 'Givebutter donation form — coming soon',
+      givebutterLiveAriaLabel: 'Donation form',
       givebutterText: 'Donation form (Givebutter) — coming soon',
     },
     impactIntro: {

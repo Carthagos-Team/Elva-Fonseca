@@ -373,6 +373,7 @@ export const es: Dictionary = {
       subcopy: 'Cada contribución cuenta. Apoya nuestra misión y genera un impacto duradero hoy.',
       imageAlt: 'Voluntarios formando un círculo, tomados de las manos al aire libre',
       givebutterAriaLabel: 'Formulario de donación Givebutter — próximamente',
+      givebutterLiveAriaLabel: 'Formulario de donación',
       givebutterText: 'Formulario de donación (Givebutter) — próximamente',
     },
     impactIntro: {

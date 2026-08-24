@@ -1,7 +1,8 @@
 ---
 // Donate / Hero — Fase 3. Fiel ao Figma (node 3306:2, base 1440).
 // Card de imagem + copy centrado na metade superior + slot Givebutter sobreposto
-// à borda inferior. Embed real do widget fica para fase seguinte.
+// à borda inferior. Ativação do widget real: preencher PUBLIC_GIVEBUTTER_ACCOUNT_ID
+// e PUBLIC_GIVEBUTTER_WIDGET_ID no .env — sem isso, mantém o placeholder abaixo.
 import { defaultLang, useTranslations, type Lang } from '../../i18n/utils';
 
 interface Props {
@@ -9,6 +10,22 @@ interface Props {
 }
 const { lang = defaultLang } = Astro.props;
 const t = useTranslations(lang).donate.hero;
+
+const givebutterAccountId = import.meta.env.PUBLIC_GIVEBUTTER_ACCOUNT_ID;
+const givebutterWidgetId = import.meta.env.PUBLIC_GIVEBUTTER_WIDGET_ID;
+const hasGivebutter = Boolean(givebutterAccountId && givebutterWidgetId);
+
+// Com o widget real, o slot é só posicionamento: o embed do Givebutter já traz o
+// card completo (fundo branco, borda, cantos, rodapé), então qualquer moldura nossa
+// vira uma segunda borda competindo com a dele.
+// O `440px` é exceção deliberada à regra de unidades (CLAUDE.md #2): não é medida de
+// design nossa, e sim o teto que o iframe do Givebutter trava em px (`max-width:440px`
+// + `mr-auto`). Como a raiz do projeto é fluida, um valor em `rem` aqui infla com a
+// viewport (28rem = 448px em 1440, mas 597px em 1920) enquanto o embed continua em
+// 440px alinhado à esquerda — a sobra vira faixa de fundo à direita.
+const givebutterSlotClass = hasGivebutter
+  ? 'w-full max-w-[440px]'
+  : 'flex min-h-[28rem] w-full max-w-[28rem] flex-col items-center justify-center overflow-hidden rounded-2xl border-[1.5px] border-woodsmoke bg-orchid px-6 py-10 text-center sm:min-h-[30rem] lg:min-h-[32rem]';
 ---
 
 <section data-hero class="bg-surface px-4 pb-16 pt-6 sm:px-5 sm:pb-20">
@@ -61,16 +78,28 @@ const t = useTranslations(lang).donate.hero;
         id="givebutter"
         data-givebutter-slot
         role="region"
-        aria-label={t.givebutterAriaLabel}
-        class="flex min-h-[28rem] w-full max-w-[28rem] flex-col items-center justify-center rounded-2xl border-[1.5px] border-woodsmoke bg-orchid px-6 py-10 text-center sm:min-h-[30rem] lg:min-h-[32rem]"
+        aria-label={hasGivebutter ? t.givebutterLiveAriaLabel : t.givebutterAriaLabel}
+        class={givebutterSlotClass}
       >
-        <p class="font-sans text-base font-medium leading-relaxed tracking-[-0.02em] text-ink/50">
-          {t.givebutterText}
-        </p>
+        {
+          hasGivebutter ? (
+            <givebutter-widget id={givebutterWidgetId} class="block w-full" />
+          ) : (
+            <p class="font-sans text-base font-medium leading-relaxed tracking-[-0.02em] text-ink/50">
+              {t.givebutterText}
+            </p>
+          )
+        }
       </div>
     </div>
   </div>
 </section>
+
+{
+  hasGivebutter && (
+    <script is:inline async src={`https://widgets.givebutter.com/latest.umd.cjs?acct=${givebutterAccountId}&p=other`} />
+  )
+}
 
 <script>
   import { createMotion, gsap, SplitText } from '../../lib/gsap';
