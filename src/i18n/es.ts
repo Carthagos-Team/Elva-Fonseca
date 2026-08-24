@@ -229,12 +229,42 @@ export const es: Dictionary = {
     team: {
       heading: 'nuestro equipo',
       members: [
-        { name: 'Manuel Toto', role: 'Presidente' },
-        { name: 'Alexia Díaz', role: 'Directora' },
-        { name: 'Deidamia Reyes', role: 'Secretaria' },
-        { name: 'Yasmín López', role: 'Tesorera' },
-        { name: 'Isabel Ruíz', role: 'Voluntaria' },
-        { name: 'Carlos Toto', role: 'Voluntario' },
+        {
+          name: 'Manuel Toto',
+          role: 'Presidente',
+          image: '/images/about/team/manuel-toto.webp',
+          imageAlt: 'Retrato de Manuel Toto',
+        },
+        {
+          name: 'Jocelyn Diaz',
+          role: 'Directora de Programas',
+          image: '/images/about/team/jocelyn-diaz.webp',
+          imageAlt: 'Retrato de Jocelyn Diaz',
+        },
+        {
+          name: 'Leydi Toto',
+          role: 'Tesorera',
+          image: '/images/about/team/leydi-toto.webp',
+          imageAlt: 'Retrato de Leydi Toto',
+        },
+        {
+          name: 'Norma Lopez',
+          role: 'Secretaria',
+          image: '/images/about/team/norma-lopez.webp',
+          imageAlt: 'Retrato de Norma Lopez',
+        },
+        {
+          name: 'Isabel Ruíz',
+          role: 'Voluntaria',
+          image: '/images/about/team/isabel-ruiz.webp',
+          imageAlt: 'Retrato de Isabel Ruíz',
+        },
+        {
+          name: 'Carlos Toto',
+          role: 'Voluntario',
+          image: '/images/about/team/carlos-toto.webp',
+          imageAlt: 'Retrato de Carlos Toto',
+        },
       ],
     },
     ctaBand: {

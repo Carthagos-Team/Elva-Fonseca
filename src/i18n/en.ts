@@ -227,12 +227,42 @@ export const en = {
     team: {
       heading: 'our team',
       members: [
-        { name: 'Manuel Toto', role: 'President' },
-        { name: 'Alexia Díaz', role: 'Director' },
-        { name: 'Deidamia Reyes', role: 'Secretary' },
-        { name: 'Yasmín López', role: 'Treasurer' },
-        { name: 'Isabel Ruíz', role: 'Volunteer' },
-        { name: 'Carlos Toto', role: 'Volunteer' },
+        {
+          name: 'Manuel Toto',
+          role: 'President',
+          image: '/images/about/team/manuel-toto.webp',
+          imageAlt: 'Portrait of Manuel Toto',
+        },
+        {
+          name: 'Jocelyn Diaz',
+          role: 'Programs Director',
+          image: '/images/about/team/jocelyn-diaz.webp',
+          imageAlt: 'Portrait of Jocelyn Diaz',
+        },
+        {
+          name: 'Leydi Toto',
+          role: 'Treasurer',
+          image: '/images/about/team/leydi-toto.webp',
+          imageAlt: 'Portrait of Leydi Toto',
+        },
+        {
+          name: 'Norma Lopez',
+          role: 'Secretary',
+          image: '/images/about/team/norma-lopez.webp',
+          imageAlt: 'Portrait of Norma Lopez',
+        },
+        {
+          name: 'Isabel Ruíz',
+          role: 'Volunteer',
+          image: '/images/about/team/isabel-ruiz.webp',
+          imageAlt: 'Portrait of Isabel Ruíz',
+        },
+        {
+          name: 'Carlos Toto',
+          role: 'Volunteer',
+          image: '/images/about/team/carlos-toto.webp',
+          imageAlt: 'Portrait of Carlos Toto',
+        },
       ],
     },
     ctaBand: {
