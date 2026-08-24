@@ -16,6 +16,13 @@ export const en = {
       credit: 'designed by',
     },
     languageSwitcher: { labelEn: 'English', labelEs: 'Español' },
+    donateModal: {
+      ariaLabel: 'Donate',
+      heading: 'Scan to donate',
+      body: 'Scan the QR code with your phone to donate directly through Givebutter, or share the campaign with friends and family.',
+      qrAlt: 'QR code linking to the Givebutter donation page for Fundación Elva Fonseca',
+      shareButtonLabel: 'Share on WhatsApp',
+    },
     missionBandCard: {
       ourMission: {
         title: 'Our mission',

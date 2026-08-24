@@ -1,0 +1,188 @@
+---
+// DonateModal — global, renderizado uma vez em BaseLayout. Gatilho é a aba
+// `.donate-tab` do Footer.astro (`data-donate-modal-toggle`).
+// Lógica adaptada do recurso "WhatsApp Modal" da Osmo Supply: mesmo padrão de
+// toggle via atributo + ESC, sem a geração dinâmica de QR via kjua (aqui o QR
+// já vem pronto como asset estático) e sem o bypass em touch (decisão do
+// cliente: sempre abre o modal, em qualquer dispositivo).
+import { defaultLang, useTranslations, type Lang } from '../../i18n/utils';
+
+interface Props {
+  lang?: Lang;
+}
+const { lang = defaultLang } = Astro.props;
+const t = useTranslations(lang).common.donateModal;
+
+const whatsappShareUrl =
+  'https://api.whatsapp.com/send?text=Join%20me%20in%20raising%20money%20for%20Fundacion%20Elva%20Fonseca%20USA%20Inc%21%20https%3A%2F%2Fgivebutter.com%2Felva_fonseca';
+---
+
+<div data-donate-modal-status="not-active" data-donate-modal class="donate-modal">
+  <div data-donate-modal-toggle class="donate-modal__dark"></div>
+  <div class="donate-modal__card" role="dialog" aria-modal="true" aria-labelledby="donate-modal-heading">
+    <img
+      src="/images/donate/givebutter-qr.svg"
+      alt={t.qrAlt}
+      width="300"
+      height="300"
+      class="donate-modal__qr"
+    />
+    <div class="donate-modal__text">
+      <h2 id="donate-modal-heading" class="font-display text-3xl uppercase tracking-[-0.02em] text-ink">
+        {t.heading}
+      </h2>
+      <p class="font-sans text-base leading-relaxed text-ink/60">
+        {t.body}
+      </p>
+    </div>
+    <a href={whatsappShareUrl} target="_blank" rel="noopener noreferrer" class="donate-modal__btn">
+      <span class="donate-modal__btn-span">{t.shareButtonLabel}</span>
+    </a>
+    <button type="button" data-donate-modal-toggle aria-label="Close" class="donate-modal__close">
+      <span class="donate-modal__close-bar"></span>
+      <span class="donate-modal__close-bar is--duplicate"></span>
+    </button>
+  </div>
+</div>
+
+<style>
+  .donate-modal {
+    z-index: 100;
+    pointer-events: none;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    inset: 0;
+  }
+
+  .donate-modal__dark {
+    transition: all 0.6s cubic-bezier(0.625, 0.05, 0, 1);
+    pointer-events: auto;
+    background-color: color-mix(in srgb, var(--color-woodsmoke) 35%, transparent);
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  [data-donate-modal-status='active'] .donate-modal__dark {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .donate-modal__card {
+    transition: all 0.6s cubic-bezier(0.625, 0.05, 0, 1);
+    pointer-events: auto;
+    background-color: var(--color-orchid-100);
+    border-radius: var(--radius-2xl);
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    gap: 1.25em;
+    width: 20em;
+    padding: 2.5em 2em;
+    position: relative;
+    transform: translateY(25%);
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  [data-donate-modal-status='active'] .donate-modal__card {
+    transform: translateY(0%);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .donate-modal__qr {
+    width: 8.75em;
+    height: 8.75em;
+    border-radius: var(--radius-md);
+  }
+
+  .donate-modal__text {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    gap: 0.5em;
+    text-align: center;
+  }
+
+  .donate-modal__btn {
+    display: flex;
+    position: relative;
+    color: var(--color-orchid);
+    background-color: var(--color-buckthorn);
+    border-radius: 30em;
+    padding: 1em 1.5em;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+  }
+  .donate-modal__btn:hover {
+    opacity: 0.9;
+  }
+  .donate-modal__btn-span {
+    color: var(--color-orchid);
+    font-family: var(--font-display);
+    font-size: 1em;
+    font-weight: 400;
+    line-height: 1;
+  }
+
+  .donate-modal__close {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 2em;
+    height: 2em;
+    position: absolute;
+    top: 1.25em;
+    right: 1.25em;
+    background: none;
+    border: none;
+    padding: 0;
+  }
+  .donate-modal__close-bar {
+    background-color: var(--color-woodsmoke);
+    width: 1.5em;
+    height: 0.09375em;
+    position: absolute;
+    transform: rotate(-45deg);
+  }
+  .donate-modal__close-bar.is--duplicate {
+    transform: rotate(45deg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .donate-modal__dark,
+    .donate-modal__card,
+    .donate-modal__btn {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  function initDonateModal() {
+    const modal = document.querySelector<HTMLElement>('[data-donate-modal]');
+    if (!modal) return;
+
+    document.querySelectorAll<HTMLElement>('[data-donate-modal-toggle]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const isActive = modal.getAttribute('data-donate-modal-status') === 'active';
+        modal.setAttribute('data-donate-modal-status', isActive ? 'not-active' : 'active');
+      });
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        modal.setAttribute('data-donate-modal-status', 'not-active');
+      }
+    });
+  }
+
+  if (document.readyState !== 'loading') initDonateModal();
+  else document.addEventListener('DOMContentLoaded', initDonateModal);
+</script>

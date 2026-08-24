@@ -3,6 +3,7 @@ import '../styles/global.css';
 import SEO from '../components/global/SEO.astro';
 import Header from '../components/global/Header.astro';
 import Footer from '../components/global/Footer.astro';
+import DonateModal from '../components/global/DonateModal.astro';
 import { defaultLang, type Lang } from '../i18n/utils';
 
 interface Props {
@@ -43,6 +44,7 @@ const {
       <slot />
     </main>
     <Footer lang={lang} />
+    <DonateModal lang={lang} />
     <script>
       import { initSmoothScroll } from '../lib/scroll';
       import { initHoverText } from '../lib/hover-text';

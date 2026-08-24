@@ -127,14 +127,21 @@ const isCurrent = (href: string) =>
   {/* Papel picado — faixa decorativa base */}
   <div class="papel papel--bottom" aria-hidden="true"></div>
 
-  {/* Aba vertical Donate — desktop/tablet (md+); no mobile vira o botão acima */}
-  <a
-    href={donateUrl}
+  {/* Aba vertical Donate — desktop/tablet (md+); no mobile vira o botão acima.
+      Gatilho do modal (QR Givebutter + compartilhar no WhatsApp), não navega mais
+      direto pra /donate. Também é o elemento flutuante global — ver <script> abaixo:
+      some dentro da hero e, ao passar dela, fica position:fixed permanentemente
+      pelo resto do scroll da página (nunca volta a ser um elemento parado aqui
+      dentro do footer). */}
+  <button
+    type="button"
+    data-donate-modal-toggle
+    aria-haspopup="dialog"
+    aria-label={t.common.footer.donateLabel}
     class="donate-tab hidden md:flex"
-    aria-label="Donate"
   >
-    <span class="donate-tab__text">Donate</span>
-  </a>
+    <span class="donate-tab__text">{t.common.footer.donateLabel}</span>
+  </button>
 
   <p class="sr-only">© {year} Elva Fonseca Foundation</p>
 </footer>
@@ -178,14 +185,14 @@ const isCurrent = (href: string) =>
     padding: 1.25rem 0.625rem;
     border-top-left-radius: var(--radius-md);
     border-bottom-left-radius: var(--radius-md);
-    background: var(--color-orchid);
+    background: var(--color-buckthorn);
     color: var(--color-jacko-bean-950);
     font-family: var(--font-display);
     font-weight: 400;
     font-size: 1rem;
     letter-spacing: -0.04em;
     text-transform: uppercase;
-    transition: padding-right 0.2s ease;
+    transition: padding-right 0.2s ease, opacity 0.25s ease;
   }
   .donate-tab:hover {
     padding-right: 0.875rem;
@@ -194,8 +201,79 @@ const isCurrent = (href: string) =>
     writing-mode: vertical-rl;
     transform: rotate(180deg);
   }
+  /* .donate-tab é um <button> agora — zera reset de UA (borda, cursor, font herdada). */
+  .donate-tab {
+    border: none;
+    cursor: pointer;
+  }
+
+  /* Estado flutuante global — ver <script> abaixo. Uma vez que a página passa da
+     hero, a aba fica permanentemente position:fixed (nunca "pousa" de volta no
+     footer) — só alterna is-visible ao entrar/sair da hero. A regra .donate-tab
+     acima (position:absolute) só é relevante no instante antes do script rodar. */
+  .donate-tab.is-floating {
+    position: fixed;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%) translateX(6em);
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      padding-right 0.2s ease,
+      opacity 0.25s ease,
+      transform 0.6s cubic-bezier(0.625, 0.05, 0, 1);
+  }
+  .donate-tab.is-floating.is-visible {
+    transform: translateY(-50%) translateX(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
 
   @media (prefers-reduced-motion: reduce) {
-    .donate-tab { transition: none; }
+    .donate-tab,
+    .donate-tab.is-floating {
+      transition: none;
+    }
   }
 </style>
+
+<script>
+  // Aba Donate flutuante global — a MESMA aba do footer alterna entre "flutuando"
+  // (position:fixed). Uma vez que passa da hero, fica flutuando permanentemente
+  // até o fim da página — nunca "pousa" de volta no footer.
+  import { createMotion, ScrollTrigger } from '../../lib/gsap';
+
+  function initDonateTabFloat() {
+    const tab = document.querySelector<HTMLElement>('[data-donate-modal-toggle].donate-tab');
+    if (!tab) return;
+
+    const heroEl = document.querySelector<HTMLElement>('[data-hero], [data-contact-hero]');
+
+    // Página sem hero (ex.: Stories, ainda placeholder) — aba já nasce flutuando.
+    if (!heroEl) {
+      tab.classList.add('is-floating', 'is-visible');
+      return;
+    }
+
+    createMotion(undefined, () => {
+      // A diferença de reduced-motion já é resolvida via CSS (transition: none);
+      // a lógica de mostrar/esconder é idêntica nos dois casos.
+      const heroTrigger = ScrollTrigger.create({
+        trigger: heroEl,
+        start: 'bottom top',
+        onEnter: () => tab.classList.add('is-floating', 'is-visible'),
+        onLeaveBack: () => tab.classList.remove('is-visible'),
+      });
+
+      // createMotion reavalia este callback quando um breakpoint (isDesktop/
+      // isMobile/reducedMotion) muda — sem matar o trigger antigo aqui, um
+      // resize cruzando 1024px duplicaria o ScrollTrigger.
+      return () => {
+        heroTrigger.kill();
+      };
+    });
+  }
+
+  if (document.readyState !== 'loading') initDonateTabFloat();
+  else document.addEventListener('DOMContentLoaded', initDonateTabFloat);
+</script>

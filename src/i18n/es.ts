@@ -18,6 +18,13 @@ export const es: Dictionary = {
       credit: 'diseñado por',
     },
     languageSwitcher: { labelEn: 'English', labelEs: 'Español' },
+    donateModal: {
+      ariaLabel: 'Donar',
+      heading: 'Escanea para donar',
+      body: 'Escanea el código QR con tu teléfono para donar directamente a través de Givebutter, o comparte la campaña con amigos y familiares.',
+      qrAlt: 'Código QR que enlaza a la página de donación de Givebutter para Fundación Elva Fonseca',
+      shareButtonLabel: 'Compartir en WhatsApp',
+    },
     missionBandCard: {
       ourMission: {
         title: 'Nuestra misión',
