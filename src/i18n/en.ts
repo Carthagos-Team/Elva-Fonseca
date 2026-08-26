@@ -113,16 +113,78 @@ export const en = {
       carouselLabel: 'Frequently asked questions by category',
       categoryWord: 'Category',
       ofWord: 'of',
-      questionWord: 'Question item',
       categories: [
-        { key: 'foundation', title: 'About the Foundation' },
-        { key: 'donations', title: 'Donations and Support' },
-        { key: 'volunteering', title: 'Volunteering' },
-        { key: 'programs', title: 'Programs and Services' },
-        { key: 'partnerships', title: 'Partnerships and Collaborations' },
+        {
+          key: 'foundation',
+          title: 'About the Foundation',
+          items: [
+            {
+              q: 'What does Fundación Elva Fonseca do?',
+              a: 'We support individuals and families through community programs focused on food assistance, mobility and health, community development, education and technology, and art, culture and the environment.',
+            },
+            {
+              q: 'How can I contact Fundación Elva Fonseca?',
+              a: 'You can contact us directly through our website contact form or social media channels to learn more about programs, volunteering, donations, or partnerships.',
+            },
+          ],
+        },
+        {
+          key: 'donations',
+          title: 'Donations and Support',
+          items: [
+            {
+              q: 'How can I donate?',
+              a: 'You can support Fundación Elva Fonseca through monetary donations, supplies, mobility equipment, food, educational materials, or other needed resources.',
+            },
+            {
+              q: 'How are donations used?',
+              a: 'Donations help us provide programs, resources, equipment, meals, educational opportunities, and direct community support to those who need it most.',
+            },
+          ],
+        },
+        {
+          key: 'volunteering',
+          title: 'Volunteering',
+          items: [
+            {
+              q: 'How can I become a volunteer?',
+              a: 'We welcome volunteers who want to contribute their time, knowledge, professional skills, or talents. Opportunities may include helping with events, community meals, educational activities, art classes, and programs supporting children and individuals with special needs.',
+            },
+            {
+              q: 'Can I volunteer by teaching a class or workshop?',
+              a: 'Yes. We welcome professionals and community members interested in sharing their knowledge through classes, workshops, arts, technology, health education, or other valuable skills.',
+            },
+          ],
+        },
+        {
+          key: 'programs',
+          title: 'Programs and Services',
+          items: [
+            {
+              q: 'Who can participate in your programs?',
+              a: 'Our programs serve children, families, older adults, individuals with special needs, and people experiencing financial hardship or extreme need. Eligibility may vary depending on the program.',
+            },
+            {
+              q: 'Are your programs free?',
+              a: 'Many of our programs and community activities are provided at no cost, thanks to the support of volunteers, donors, and community partners.',
+            },
+            {
+              q: 'How can I receive assistance?',
+              a: 'Contact our team to learn about available programs, upcoming events, and current resources. Availability may vary depending on the program and resources available.',
+            },
+          ],
+        },
+        {
+          key: 'partnerships',
+          title: 'Partnerships and Collaborations',
+          items: [
+            {
+              q: 'Can my business or organization partner with the Foundation?',
+              a: 'Absolutely. We welcome partnerships, sponsorships, and collaborations with businesses, professionals, nonprofits, schools, and community organizations that share our commitment to serving the community.',
+            },
+          ],
+        },
       ],
-      answer:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis laoreet in odio vel sollicitudin. Nam aliquet augue dolor, quis varius ligula aliquet nec.',
     },
     ctaDonate: {
       titleLines: ['Donate or sponsor and', 'keep the mission alive.'],

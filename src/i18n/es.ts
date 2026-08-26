@@ -115,16 +115,78 @@ export const es: Dictionary = {
       carouselLabel: 'Preguntas frecuentes por categoría',
       categoryWord: 'Categoría',
       ofWord: 'de',
-      questionWord: 'Pregunta',
       categories: [
-        { key: 'foundation', title: 'Sobre la Fundación' },
-        { key: 'donations', title: 'Donaciones y Apoyo' },
-        { key: 'volunteering', title: 'Voluntariado' },
-        { key: 'programs', title: 'Programas y Servicios' },
-        { key: 'partnerships', title: 'Alianzas y Colaboraciones' },
+        {
+          key: 'foundation',
+          title: 'Sobre la Fundación',
+          items: [
+            {
+              q: '¿Qué hace la Fundación Elva Fonseca?',
+              a: 'Apoyamos a individuos y familias a través de programas comunitarios enfocados en asistencia alimentaria, movilidad y salud, desarrollo comunitario, educación y tecnología, y arte, cultura y medio ambiente.',
+            },
+            {
+              q: '¿Cómo puedo contactar a la Fundación Elva Fonseca?',
+              a: 'Puedes contactarnos directamente a través del formulario de contacto en nuestro sitio web o en nuestras redes sociales para conocer más sobre programas, voluntariado, donaciones o alianzas.',
+            },
+          ],
+        },
+        {
+          key: 'donations',
+          title: 'Donaciones y Apoyo',
+          items: [
+            {
+              q: '¿Cómo puedo donar?',
+              a: 'Puedes apoyar a la Fundación Elva Fonseca mediante donaciones monetarias, suministros, equipos de movilidad, alimentos, materiales educativos u otros recursos necesarios.',
+            },
+            {
+              q: '¿Cómo se utilizan las donaciones?',
+              a: 'Las donaciones nos ayudan a brindar programas, recursos, equipos, comidas, oportunidades educativas y apoyo directo a la comunidad para quienes más lo necesitan.',
+            },
+          ],
+        },
+        {
+          key: 'volunteering',
+          title: 'Voluntariado',
+          items: [
+            {
+              q: '¿Cómo puedo ser voluntario?',
+              a: 'Damos la bienvenida a voluntarios que deseen contribuir con su tiempo, conocimiento, habilidades profesionales o talentos. Las oportunidades pueden incluir apoyo en eventos, comidas comunitarias, actividades educativas, clases de arte y programas para niños e individuos con necesidades especiales.',
+            },
+            {
+              q: '¿Puedo ser voluntario enseñando una clase o taller?',
+              a: 'Sí. Damos la bienvenida a profesionales y miembros de la comunidad interesados en compartir su conocimiento a través de clases, talleres, artes, tecnología, educación en salud u otras habilidades valiosas.',
+            },
+          ],
+        },
+        {
+          key: 'programs',
+          title: 'Programas y Servicios',
+          items: [
+            {
+              q: '¿Quién puede participar en sus programas?',
+              a: 'Nuestros programas atienden a niños, familias, adultos mayores, individuos con necesidades especiales y personas que enfrentan dificultades financieras o necesidades extremas. La elegibilidad puede variar según el programa.',
+            },
+            {
+              q: '¿Sus programas son gratuitos?',
+              a: 'Muchos de nuestros programas y actividades comunitarias se ofrecen sin costo, gracias al apoyo de voluntarios, donantes y aliados comunitarios.',
+            },
+            {
+              q: '¿Cómo puedo recibir asistencia?',
+              a: 'Contacta a nuestro equipo para conocer los programas disponibles, próximos eventos y recursos actuales. La disponibilidad puede variar según el programa y los recursos disponibles.',
+            },
+          ],
+        },
+        {
+          key: 'partnerships',
+          title: 'Alianzas y Colaboraciones',
+          items: [
+            {
+              q: '¿Puede mi empresa u organización asociarse con la Fundación?',
+              a: 'Por supuesto. Damos la bienvenida a alianzas, patrocinios y colaboraciones con empresas, profesionales, organizaciones sin fines de lucro, escuelas y organizaciones comunitarias que compartan nuestro compromiso de servir a la comunidad.',
+            },
+          ],
+        },
       ],
-      answer:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis laoreet in odio vel sollicitudin. Nam aliquet augue dolor, quis varius ligula aliquet nec.',
     },
     ctaDonate: {
       titleLines: ['Dona o patrocina y', 'mantén viva la misión.'],
