@@ -1,0 +1,331 @@
+---
+// Home / ProgramModalGroup — lógica do modal básico Osmo Supply, com o visual dos
+// nodes Figma 3426:218, 3426:230, 3426:243, 3426:255 e 3426:267.
+
+interface ModalSegment {
+  readonly text: string;
+  readonly strong: boolean;
+}
+
+interface Program {
+  readonly key: string;
+  readonly bg: string;
+  readonly image: string;
+  readonly modalImage: string;
+  readonly imageAlt: string;
+  readonly titleLines: readonly string[];
+  readonly modalBody: readonly ModalSegment[];
+}
+
+interface Props {
+  programs: readonly Program[];
+  closeLabel: string;
+}
+
+const { programs, closeLabel } = Astro.props;
+---
+
+<div data-modal-group-status="not-active" class="program-modal" aria-hidden="true">
+  <button
+    type="button"
+    data-modal-close
+    class="program-modal__dark"
+    aria-label={closeLabel}
+    tabindex="-1"
+  ></button>
+
+  {
+    programs.map((program) => {
+      const titleId = `program-modal-title-${program.key}`;
+
+      return (
+        <article
+          data-modal-name={program.key}
+          data-modal-status="not-active"
+          class:list={['program-modal__card', program.bg]}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby={titleId}
+          aria-hidden="true"
+          tabindex="-1"
+        >
+          <div class="program-modal__image">
+            <img
+              src={program.modalImage}
+              alt={program.imageAlt}
+              width="951"
+              height="931"
+              class="size-full object-cover"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+
+          <div class="program-modal__content">
+            <h2
+              id={titleId}
+              class="text-balance font-display font-black uppercase leading-[1.05] tracking-[-0.04em] text-ink text-[2rem]"
+            >
+              {program.titleLines.join(' ')}
+            </h2>
+            <p class="max-w-116 text-pretty font-sans text-base font-medium leading-[1.4] tracking-[-0.02em] text-ink/80">
+              {
+                program.modalBody.map((segment) =>
+                  segment.strong ? <strong class="font-extrabold">{segment.text}</strong> : segment.text,
+                )
+              }
+            </p>
+          </div>
+
+          <button type="button" data-modal-close class="program-modal__close" aria-label={closeLabel}>
+            <img
+              src="/icons/modal-close.svg"
+              alt=""
+              width="20"
+              height="20"
+              class="size-5"
+              aria-hidden="true"
+            />
+            <span>{closeLabel}</span>
+          </button>
+        </article>
+      );
+    })
+  }
+</div>
+
+<style>
+  .program-modal {
+    position: fixed;
+    z-index: 100;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    overflow: hidden;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      opacity 0.2s linear,
+      visibility 0s linear 0.2s;
+  }
+
+  .program-modal[data-modal-group-status='active'] {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+    transition-delay: 0s;
+  }
+
+  .program-modal__dark {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background-color: color-mix(in srgb, var(--color-woodsmoke) 50%, transparent);
+    cursor: pointer;
+  }
+
+  .program-modal__card {
+    position: relative;
+    display: none;
+    width: min(100%, 60.375rem);
+    max-height: calc(100dvh - 2rem);
+    min-height: min(30.25rem, calc(100dvh - 2rem));
+    padding: 0.5rem;
+    overflow: hidden;
+    border: var(--hairline) solid var(--color-woodsmoke);
+    border-radius: var(--radius-lg);
+    overscroll-behavior: contain;
+  }
+
+  .program-modal__card[data-modal-status='active'] {
+    display: flex;
+  }
+
+  .program-modal__image {
+    position: relative;
+    flex: 1 1 0;
+    min-width: 0;
+    overflow: hidden;
+    border: var(--hairline) solid var(--color-woodsmoke);
+    border-radius: var(--radius-md);
+    background-color: var(--color-orchid-100);
+  }
+
+  .program-modal__content {
+    display: flex;
+    flex: 1 1 0;
+    min-width: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    padding: 4.5rem 1rem 2.25rem;
+    text-align: center;
+  }
+
+  .program-modal__close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    display: inline-flex;
+    min-height: 3rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    padding: 0.875rem 1.5rem 0.875rem 1.25rem;
+    border: var(--hairline) solid var(--color-woodsmoke);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-orchid);
+    color: var(--color-ink);
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 900;
+    line-height: 1;
+    text-transform: uppercase;
+    cursor: pointer;
+    touch-action: manipulation;
+    transition:
+      transform 0.15s ease-out,
+      filter 0.15s ease-out;
+  }
+
+  .program-modal__close:hover {
+    filter: brightness(0.97);
+  }
+
+  .program-modal__close:active {
+    transform: scale(0.97);
+  }
+
+  @media (width < 64rem) {
+    .program-modal__card {
+      flex-direction: column;
+      min-height: 0;
+      overflow-y: auto;
+    }
+
+    .program-modal__image {
+      aspect-ratio: 4 / 3;
+      flex: none;
+      width: 100%;
+    }
+
+    .program-modal__content {
+      flex: none;
+      padding: 4rem 1rem 2rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .program-modal,
+    .program-modal__close {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  function initModalBasic() {
+    const foundModalGroup = document.querySelector<HTMLElement>('[data-modal-group-status]');
+    if (!foundModalGroup) return;
+    const modalGroup = foundModalGroup;
+
+    const modals = Array.from(modalGroup.querySelectorAll<HTMLElement>('[data-modal-name]'));
+    const modalTargets = Array.from(document.querySelectorAll<HTMLElement>('[data-modal-target]'));
+    let activeTrigger: HTMLElement | null = null;
+    let previousBodyOverflow = '';
+
+    function getActiveModal() {
+      return modalGroup.querySelector<HTMLElement>('[data-modal-name][data-modal-status="active"]');
+    }
+
+    function closeAllModals() {
+      const wasActive = modalGroup.getAttribute('data-modal-group-status') === 'active';
+
+      modalTargets.forEach((target) => target.setAttribute('data-modal-status', 'not-active'));
+      modalGroup.setAttribute('data-modal-group-status', 'not-active');
+      modalGroup.setAttribute('aria-hidden', 'true');
+      modals.forEach((modal) => modal.setAttribute('aria-hidden', 'true'));
+      document.body.style.overflow = previousBodyOverflow;
+
+      if (wasActive) activeTrigger?.focus();
+      activeTrigger = null;
+    }
+
+    modalTargets.forEach((modalTarget) => {
+      modalTarget.addEventListener('click', function () {
+        const modalTargetName = this.getAttribute('data-modal-target');
+        if (!modalTargetName) return;
+
+        modalTargets.forEach((target) => target.setAttribute('data-modal-status', 'not-active'));
+        modals.forEach((modal) => {
+          modal.setAttribute('data-modal-status', 'not-active');
+          modal.setAttribute('aria-hidden', 'true');
+        });
+
+        const activeModal = modalGroup.querySelector<HTMLElement>(`[data-modal-name="${modalTargetName}"]`);
+        if (!activeModal) return;
+
+        this.setAttribute('data-modal-status', 'active');
+        activeModal.setAttribute('data-modal-status', 'active');
+        activeModal.setAttribute('aria-hidden', 'false');
+        modalGroup.setAttribute('data-modal-group-status', 'active');
+        modalGroup.setAttribute('aria-hidden', 'false');
+
+        activeTrigger = this;
+        previousBodyOverflow = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+
+        requestAnimationFrame(() => {
+          activeModal.querySelector<HTMLButtonElement>('[data-modal-close]')?.focus();
+        });
+      });
+    });
+
+    modalGroup.querySelectorAll<HTMLElement>('[data-modal-close]').forEach((closeBtn) => {
+      closeBtn.addEventListener('click', closeAllModals);
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (modalGroup.getAttribute('data-modal-group-status') !== 'active') return;
+
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        closeAllModals();
+        return;
+      }
+
+      if (event.key !== 'Tab') return;
+
+      const activeModal = getActiveModal();
+      if (!activeModal) return;
+
+      const focusable = Array.from(
+        activeModal.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        ),
+      );
+      if (!focusable.length) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
+  }
+
+  if (document.readyState !== 'loading') initModalBasic();
+  else document.addEventListener('DOMContentLoaded', initModalBasic);
+</script>

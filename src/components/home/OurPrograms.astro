@@ -1,11 +1,12 @@
 ---
-// Home / OurPrograms — Fase 3, seção a seção. Fiel ao Figma (node 3153:336).
+// Home / OurPrograms — Fase 3, seção a seção. Fiel ao Figma (node 3426:149).
 // Paleta de categoria confirmada aqui (docs/DESIGN_TOKENS.md previa a tabela pastel↔tinta, o
 // mapeamento categoria↔cor ficava em aberto). Figma usa text-ink uniforme nos 5 cards (não a
 // tinta pareada da doc) — sigo o Figma literal; contraste ink-sobre-pastel passa com folga.
-// Fotos reaproveitadas de public/images/stories/ (mesmas 5 já usadas em Stories.astro).
+// Fotos próprias de cada categoria exportadas do Figma e otimizadas em WebP.
 
 import { defaultLang, useTranslations, type Lang } from '../../i18n/utils';
+import ProgramModalGroup from './ProgramModalGroup.astro';
 
 interface Props {
   lang?: Lang;
@@ -37,31 +38,45 @@ const prefix = lang === defaultLang ? '' : `/${lang}`;
 
     <ul class="grid w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {
-        programs.map(({ bg, image, imageAlt, title, description }) => (
-          <li class={`flex h-[22rem] flex-col rounded-lg border-[1.5px] border-woodsmoke p-2 sm:h-[26rem] lg:h-[30rem] ${bg}`}>
-            <div class="relative min-h-0 flex-1 overflow-hidden rounded-md border-[1.5px] border-woodsmoke bg-orchid-100">
-              <img
-                src={image}
-                alt={imageAlt}
-                class="absolute inset-0 h-full w-full object-cover"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-            <div class="flex shrink-0 flex-col gap-6 px-4 py-9 text-center">
-              <p class="font-display font-black leading-[1.05] tracking-[-0.04em] text-ink text-[2rem]">
-                {title}
-              </p>
-              <p class="min-h-[2.75rem] font-sans text-base font-medium leading-[1.4] tracking-[-0.02em] text-ink/80">
-                {description}
-              </p>
-            </div>
+        programs.map(({ key, bg, image, imageAlt, titleLines, description }) => (
+          <li class={`rounded-lg border-[1.5px] border-woodsmoke sm:h-104 lg:h-120 ${bg}`}>
+            <button
+              type="button"
+              data-modal-target={key}
+              data-modal-status="not-active"
+              class="program-card__button group flex w-full cursor-pointer flex-col bg-transparent p-2 text-inherit transition-transform duration-150 ease-out active:scale-[0.99] sm:size-full"
+            >
+              <div class="relative aspect-video w-full flex-none overflow-hidden rounded-md border-[1.5px] border-woodsmoke bg-orchid-100 sm:aspect-auto sm:min-h-0 sm:flex-1">
+                <img
+                  src={image}
+                  alt={imageAlt}
+                  class="program-card__image absolute inset-0 h-full w-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+              <div class="flex shrink-0 flex-col gap-6 px-4 py-9 text-center">
+                <span class="font-display font-black leading-[1.05] tracking-[-0.04em] text-ink text-[2rem]">
+                  {
+                    titleLines.map((line, i) => (
+                      <>
+                        {i > 0 && <br />}
+                        {line}
+                      </>
+                    ))
+                  }
+                </span>
+                <span class="min-h-11 font-sans text-base font-medium leading-[1.4] tracking-[-0.02em] text-ink/80">
+                  {description}
+                </span>
+              </div>
+            </button>
           </li>
         ))
       }
 
       {/* 6º card — foto full-bleed + CTA sobreposto */}
-      <li class="flex h-[22rem] flex-col rounded-lg border-[1.5px] border-woodsmoke bg-orchid-050 p-2 sm:h-[26rem] lg:h-[30rem]">
+      <li class="flex h-88 flex-col rounded-lg border-[1.5px] border-woodsmoke bg-orchid-050 p-2 sm:h-104 lg:h-120">
         <div class="relative flex-1 overflow-hidden rounded-md border-[1.5px] border-woodsmoke">
           <img
             src="/images/programs/explore.webp"
@@ -84,8 +99,46 @@ const prefix = lang === defaultLang ? '' : `/${lang}`;
         </div>
       </li>
     </ul>
+
+    <ProgramModalGroup programs={programs} closeLabel={t.home.ourPrograms.closeLabel} />
   </div>
 </section>
+
+<style>
+  .program-card__image {
+    transition:
+      transform 0.25s ease-out,
+      filter 0.25s ease-out;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .program-card__button:hover {
+      filter: brightness(1.02);
+    }
+
+    .program-card__button:hover .program-card__image {
+      filter: brightness(1.03) saturate(1.04);
+      transform: scale(1.025);
+    }
+  }
+
+  .program-card__button:focus-visible .program-card__image {
+    filter: brightness(1.03) saturate(1.04);
+    transform: scale(1.025);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .program-card__button,
+    .program-card__image {
+      transition: none;
+    }
+
+    .program-card__button:hover .program-card__image,
+    .program-card__button:focus-visible .program-card__image {
+      transform: none;
+    }
+  }
+</style>
 
 <script>
   import { createMotion, gsap } from '../../lib/gsap';

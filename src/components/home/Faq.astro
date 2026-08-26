@@ -15,6 +15,7 @@ interface Props {
 }
 const { lang = defaultLang } = Astro.props;
 const t = useTranslations(lang);
+const prefix = lang === defaultLang ? '' : `/${lang}`;
 
 // Ícones de categoria (Lucide-style, viewBox 24). set:html dentro de um <svg> compartilhado.
 const ICONS: Record<string, string> = {
@@ -145,7 +146,20 @@ const faqs = t.home.faq.categories.map(({ key, title, items }) => ({
                             <div class="faq-acc-panel">
                               <div class="min-h-0 overflow-hidden">
                                 <p class="pt-4 font-sans text-base font-medium leading-[1.4] tracking-[-0.02em] text-ink/80">
-                                  {item.a}
+                                  {typeof item.a === 'string' ? (
+                                    item.a
+                                  ) : (
+                                    <>
+                                      {item.a.before}
+                                      <a
+                                        href={`${prefix}/contact`}
+                                        class="font-semibold text-ink underline decoration-woodsmoke/40 underline-offset-2 transition-colors hover:decoration-ink"
+                                      >
+                                        {item.a.linkLabel}
+                                      </a>
+                                      {item.a.after}
+                                    </>
+                                  )}
                                 </p>
                               </div>
                             </div>
