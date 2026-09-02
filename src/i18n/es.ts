@@ -459,22 +459,25 @@ export const es: Dictionary = {
       thumbAriaLabel: 'Mostrar el testimonio de {name}',
       testimonials: [
         {
-          name: 'Lillian Fernandez',
+          name: 'Jesus Hernandez',
+          role: 'Voluntario',
+          quote:
+            '"Nunca imaginé que ser voluntario en la Fundación Elva Fonseca cambiaría mi vida de la manera en que lo ha hecho."',
+          imageAlt: 'Jesus Hernandez de pie al aire libre, usando una playera de la Fundación Elva Fonseca',
+        },
+        {
+          name: 'Carlos Toto',
+          role: 'Voluntario',
+          quote:
+            '"Hoy puedo decir que ser voluntario no es algo que hago. Es algo que se ha convertido en parte de quien soy."',
+          imageAlt: 'Carlos Toto de pie al aire libre, usando una playera de la Fundación Elva Fonseca',
+        },
+        {
+          name: 'Isabel Ruíz',
           role: 'Voluntaria',
-          quote: '"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt".',
-          imageAlt: 'Lillian sonriendo al aire libre, usando una playera de la Fundación Elva Fonseca',
-        },
-        {
-          name: 'Marcos Herrera',
-          role: 'Participante del Programa',
-          quote: '"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip, ex ea".',
-          imageAlt: 'Marcos de pie al aire libre, usando una playera de la Fundación Elva Fonseca',
-        },
-        {
-          name: 'Carla Méndez',
-          role: 'Coordinadora Comunitaria',
-          quote: '"Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat ut".',
-          imageAlt: 'Carla de pie al aire libre, usando una playera tipo polo de la Fundación Elva Fonseca',
+          quote:
+            '"A través de la Fundación, he tenido la oportunidad de conocer a niños, familias y personas de mi comunidad que me han recordado lo importantes que son realmente la amabilidad, la compasión y la solidaridad."',
+          imageAlt: 'Isabel Ruíz de pie al aire libre, usando una playera tipo polo de la Fundación Elva Fonseca',
         },
       ],
     },

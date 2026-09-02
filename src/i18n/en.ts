@@ -457,22 +457,25 @@ export const en = {
       thumbAriaLabel: "Show {name}'s testimonial",
       testimonials: [
         {
-          name: 'Lillian Fernandez',
+          name: 'Jesus Hernandez',
           role: 'Volunteer',
-          quote: '"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt".',
-          imageAlt: 'Lillian smiling outdoors, wearing a Fundación Elva Fonseca t-shirt',
+          quote:
+            '"I never imagined that volunteering with the Elva Fonseca Foundation would change my life the way it has."',
+          imageAlt: 'Jesus Hernandez standing outdoors, wearing a Fundación Elva Fonseca t-shirt',
         },
         {
-          name: 'Marcos Herrera',
-          role: 'Program Participant',
-          quote: '"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip, ex ea".',
-          imageAlt: 'Marcos standing outdoors, wearing a Fundación Elva Fonseca t-shirt',
+          name: 'Carlos Toto',
+          role: 'Volunteer',
+          quote:
+            '"Today, I can say that being a volunteer is not something I do. It is something that has become part of who I am."',
+          imageAlt: 'Carlos Toto standing outdoors, wearing a Fundación Elva Fonseca t-shirt',
         },
         {
-          name: 'Carla Méndez',
-          role: 'Community Coordinator',
-          quote: '"Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat ut".',
-          imageAlt: 'Carla standing outdoors, wearing a Fundación Elva Fonseca polo shirt',
+          name: 'Isabel Ruíz',
+          role: 'Volunteer',
+          quote:
+            '"Through the Foundation, I have had the opportunity to meet children, families, and people in my community who have reminded me how important kindness, compassion, and solidarity truly are."',
+          imageAlt: 'Isabel Ruíz standing outdoors, wearing a Fundación Elva Fonseca polo shirt',
         },
       ],
     },
