@@ -9,16 +9,16 @@
 
 import { defaultLang, useTranslations, type Lang } from '../../i18n/utils';
 import { splitNoOrphan, protectCopy } from '../../lib/typography';
+import { getWeb3FormsThankYouUrl } from '../../lib/web3forms';
 
 interface Props {
   lang?: Lang;
 }
 const { lang = defaultLang } = Astro.props;
 const t = useTranslations(lang).volunteer.form;
-const prefix = lang === defaultLang ? '' : `/${lang}`;
 
 const accessKey = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '';
-const thankYouUrl = new URL(`${prefix}/thank-you`, Astro.site).toString();
+const thankYouUrl = getWeb3FormsThankYouUrl(lang, Astro.url);
 const heading = splitNoOrphan(t.heading, 2);
 
 const fieldWrap = 'flex flex-col gap-2';
@@ -57,7 +57,13 @@ const control =
         </div>
       </div>
 
-      <form action="https://api.web3forms.com/submit" method="POST" class="flex flex-col gap-9">
+      <form
+        action="https://api.web3forms.com/submit"
+        method="POST"
+        class="flex flex-col gap-9"
+        data-web3form
+        data-redirect={thankYouUrl}
+      >
         {/* Web3Forms — campos de controle */}
         <input type="hidden" name="access_key" value={accessKey} />
         <input type="hidden" name="subject" value="New volunteer application — Elva Fonseca Foundation" />
@@ -99,6 +105,7 @@ const control =
 
 <script>
   import { createMotion, gsap } from '../../lib/gsap';
+  import { initWeb3FormsSubmit } from '../../lib/web3forms-submit';
 
   function initVolunteerForm() {
     const section = document.querySelector<HTMLElement>('[data-volunteer-form]');
@@ -132,6 +139,11 @@ const control =
     });
   }
 
-  if (document.readyState !== 'loading') initVolunteerForm();
-  else document.addEventListener('DOMContentLoaded', initVolunteerForm);
+  function bootVolunteerForm() {
+    initVolunteerForm();
+    initWeb3FormsSubmit();
+  }
+
+  if (document.readyState !== 'loading') bootVolunteerForm();
+  else document.addEventListener('DOMContentLoaded', bootVolunteerForm);
 </script>
