@@ -647,20 +647,38 @@ export const es: Dictionary = {
     },
   },
   thankYou: {
-    seo: {
-      title: 'Gracias',
-      description:
-        'Gracias por apoyar a la Fundación Elva Fonseca. Tu generosidad nos ayuda a seguir sirviendo a comunidades en todo Veracruz, México.',
+    contact: {
+      seo: {
+        title: 'Gracias',
+        description:
+          'Gracias por contactar a la Fundación Elva Fonseca. Recibimos tu mensaje y te responderemos pronto.',
+      },
+      ctaBand: {
+        titleLines: ['Gracias por', 'escribirnos.'],
+        body: [
+          'Recibimos tu mensaje y nuestro equipo lo revisará pronto. Tu voz nos ayuda a construir comunidades más fuertes y futuros más brillantes en Veracruz, México.',
+        ],
+        receipt: 'Recibimos tu envío.',
+        prompt: '¿Quieres hacer aún más?',
+        ctaLabel: 'Sé voluntario',
+        secondaryLabel: 'Comparte nuestra causa',
+      },
     },
-    ctaBand: {
-      titleLines: ['Gracias por', 'apoyar nuestra misión.'],
-      body: [
-        'Tu donación está en camino de convertirse en una comida, una ayuda de movilidad, un útil escolar, un momento de cuidado — exactamente donde más se necesita. El legado de Elva Fonseca vive gracias a personas como tú.',
-      ],
-      receipt: 'Se ha enviado un recibo a tu correo electrónico.',
-      prompt: '¿Quieres hacer aún más?',
-      ctaLabel: 'Sé voluntario',
-      secondaryLabel: 'Comparte nuestra causa',
+    volunteer: {
+      seo: {
+        title: 'Gracias',
+        description:
+          'Gracias por postularte como voluntario en la Fundación Elva Fonseca. Recibimos tu solicitud y nos pondremos en contacto pronto.',
+      },
+      ctaBand: {
+        titleLines: ['Gracias por', 'tu solicitud.'],
+        body: [
+          'Recibimos tu solicitud de voluntariado y agradecemos tu disposición para servir. Nuestro equipo revisará tu mensaje y se comunicará contigo con los próximos pasos.',
+        ],
+        receipt: 'Recibimos tu envío.',
+        ctaLabel: 'Volver al inicio',
+        secondaryLabel: 'Comparte nuestra causa',
+      },
     },
   },
 };

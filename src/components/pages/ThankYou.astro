@@ -5,29 +5,35 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import CtaBand from '../global/CtaBand.astro';
 import { defaultLang, useTranslations, type Lang } from '../../i18n/utils';
 
+export type ThankYouVariant = 'contact' | 'volunteer';
+
 interface Props {
   lang?: Lang;
+  variant?: ThankYouVariant;
 }
-const { lang = defaultLang } = Astro.props;
-const t = useTranslations(lang);
+const { lang = defaultLang, variant = 'contact' } = Astro.props;
+const t = useTranslations(lang).thankYou[variant];
 const prefix = lang === defaultLang ? '' : `/${lang}`;
+
+const homeHref = prefix ? `${prefix}/` : '/';
+const ctaHref = variant === 'volunteer' ? homeHref : `${prefix}/volunteer`;
 ---
 
 <BaseLayout
   lang={lang}
-  title={t.thankYou.seo.title}
-  description={t.thankYou.seo.description}
+  title={t.seo.title}
+  description={t.seo.description}
   noindex
   headerBackground="solid"
 >
   <CtaBand
-    titleLines={t.thankYou.ctaBand.titleLines}
-    body={t.thankYou.ctaBand.body}
-    receipt={t.thankYou.ctaBand.receipt}
-    prompt={t.thankYou.ctaBand.prompt}
-    ctaLabel={t.thankYou.ctaBand.ctaLabel}
-    ctaHref={`${prefix}/volunteer`}
-    secondaryLabel={t.thankYou.ctaBand.secondaryLabel}
+    titleLines={t.ctaBand.titleLines}
+    body={t.ctaBand.body}
+    receipt={t.ctaBand.receipt}
+    prompt={'prompt' in t.ctaBand ? t.ctaBand.prompt : undefined}
+    ctaLabel={t.ctaBand.ctaLabel}
+    ctaHref={ctaHref}
+    secondaryLabel={t.ctaBand.secondaryLabel}
     secondaryAction="share"
   />
 </BaseLayout>

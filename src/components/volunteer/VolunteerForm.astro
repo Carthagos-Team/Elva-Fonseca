@@ -18,7 +18,7 @@ const { lang = defaultLang } = Astro.props;
 const t = useTranslations(lang).volunteer.form;
 
 const accessKey = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '';
-const thankYouUrl = getWeb3FormsThankYouUrl(lang, Astro.url);
+const thankYouUrl = getWeb3FormsThankYouUrl(lang, Astro.url, 'volunteer');
 const heading = splitNoOrphan(t.heading, 2);
 
 const fieldWrap = 'flex flex-col gap-2';

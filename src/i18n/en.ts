@@ -645,20 +645,38 @@ export const en = {
     },
   },
   thankYou: {
-    seo: {
-      title: 'Thank You',
-      description:
-        'Thank you for supporting the Elva Fonseca Foundation. Your generosity helps us continue serving communities across Veracruz, Mexico.',
+    contact: {
+      seo: {
+        title: 'Thank You',
+        description:
+          'Thank you for reaching out to the Elva Fonseca Foundation. We received your message and will get back to you soon.',
+      },
+      ctaBand: {
+        titleLines: ['Thank you for', 'reaching out.'],
+        body: [
+          'We received your message and our team will review it shortly. Your voice helps us build stronger communities and brighter futures across Veracruz, Mexico.',
+        ],
+        receipt: 'We received your submission.',
+        prompt: 'Want to do even more?',
+        ctaLabel: 'Become a volunteer',
+        secondaryLabel: 'Share our cause',
+      },
     },
-    ctaBand: {
-      titleLines: ['Thank you for', 'supporting our mission.'],
-      body: [
-        "Your donation is on its way to becoming a meal, a mobility aid, a school supply, a moment of care — exactly where it's needed most. Elva Fonseca's legacy lives on because of people like you.",
-      ],
-      receipt: 'A receipt has been sent to your email.',
-      prompt: 'Want to do even more?',
-      ctaLabel: 'Become a volunteer',
-      secondaryLabel: 'Share our cause',
+    volunteer: {
+      seo: {
+        title: 'Thank You',
+        description:
+          'Thank you for applying to volunteer with the Elva Fonseca Foundation. We received your application and will be in touch soon.',
+      },
+      ctaBand: {
+        titleLines: ['Thank you for', 'your application.'],
+        body: [
+          'We received your volunteer application and appreciate your willingness to serve. Our team will review your message and contact you with next steps.',
+        ],
+        receipt: 'We received your submission.',
+        ctaLabel: 'Back to home',
+        secondaryLabel: 'Share our cause',
+      },
     },
   },
 } as const;
