@@ -11,6 +11,8 @@ interface Props {
   title: string;
   description: string;
   ogImage?: string;
+  /** Preload da foto de hero (LCP) — descobre o download no <head>, antes do body. */
+  lcpImage?: string;
   noindex?: boolean;
   headerTheme?: 'light' | 'dark';
   headerBackground?: 'transparent' | 'solid';
@@ -21,6 +23,7 @@ const {
   title,
   description,
   ogImage,
+  lcpImage,
   noindex,
   headerTheme = 'dark',
   headerBackground = 'transparent',
@@ -36,6 +39,11 @@ const {
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="generator" content={Astro.generator} />
+    {
+      lcpImage && (
+        <link rel="preload" as="image" href={lcpImage} fetchpriority="high" type="image/webp" />
+      )
+    }
     <SEO lang={lang} {title} {description} {ogImage} {noindex} />
   </head>
   <body class="flex min-h-dvh flex-col">

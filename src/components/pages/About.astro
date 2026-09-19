@@ -7,6 +7,7 @@ import CtaDonate from '../global/CtaDonate.astro';
 import Team from '../about/Team.astro';
 import CtaBand from '../global/CtaBand.astro';
 import { defaultLang, useTranslations, type Lang } from '../../i18n/utils';
+import { HERO_IMAGES } from '../../lib/hero-images';
 
 interface Props {
   lang?: Lang;
@@ -16,11 +17,17 @@ const t = useTranslations(lang);
 const prefix = lang === defaultLang ? '' : `/${lang}`;
 ---
 
-<BaseLayout lang={lang} title={t.about.seo.title} description={t.about.seo.description} headerTheme="light">
+<BaseLayout
+  lang={lang}
+  title={t.about.seo.title}
+  description={t.about.seo.description}
+  headerTheme="light"
+  lcpImage={HERO_IMAGES.about.src}
+>
   <Hero
     titleLines={t.about.hero.titleLines}
     subcopy={t.about.hero.subcopy}
-    image="/images/hero/about.webp"
+    image={HERO_IMAGES.about.src}
     imageAlt={t.about.hero.imageAlt}
     cta={{ label: t.about.hero.ctaLabel, href: `${prefix}/programs` }}
   />

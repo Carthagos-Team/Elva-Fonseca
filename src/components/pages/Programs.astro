@@ -6,6 +6,7 @@ import VoicesOfCommunity from '../programs/VoicesOfCommunity.astro';
 import WhatIsNext from '../programs/WhatIsNext.astro';
 import CtaBand from '../global/CtaBand.astro';
 import { defaultLang, useTranslations, type Lang } from '../../i18n/utils';
+import { HERO_IMAGES } from '../../lib/hero-images';
 
 interface Props {
   lang?: Lang;
@@ -15,11 +16,17 @@ const t = useTranslations(lang);
 const prefix = lang === defaultLang ? '' : `/${lang}`;
 ---
 
-<BaseLayout lang={lang} title={t.programs.seo.title} description={t.programs.seo.description} headerTheme="light">
+<BaseLayout
+  lang={lang}
+  title={t.programs.seo.title}
+  description={t.programs.seo.description}
+  headerTheme="light"
+  lcpImage={HERO_IMAGES.programs.src}
+>
   <Hero
     titleLines={t.programs.hero.titleLines}
     subcopy={t.programs.hero.subcopy}
-    image="/images/hero/programs.webp"
+    image={HERO_IMAGES.programs.src}
     imageAlt={t.programs.hero.imageAlt}
   />
 

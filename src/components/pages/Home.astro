@@ -10,6 +10,7 @@ import CtaVolunteer from '../global/CtaVolunteer.astro';
 import CtaBand from '../global/CtaBand.astro';
 import CtaDonate from '../global/CtaDonate.astro';
 import { defaultLang, useTranslations, type Lang } from '../../i18n/utils';
+import { HERO_IMAGES } from '../../lib/hero-images';
 
 interface Props {
   lang?: Lang;
@@ -19,7 +20,13 @@ const t = useTranslations(lang);
 const prefix = lang === defaultLang ? '' : `/${lang}`;
 ---
 
-<BaseLayout lang={lang} title={t.home.seo.title} description={t.home.seo.description} headerTheme="light">
+<BaseLayout
+  lang={lang}
+  title={t.home.seo.title}
+  description={t.home.seo.description}
+  headerTheme="light"
+  lcpImage={HERO_IMAGES.home.src}
+>
   <Hero
     titleLines={t.home.hero.titleLines}
     subcopy={t.home.hero.subcopy}

@@ -6,6 +6,7 @@ import MissionBand from '../global/MissionBand.astro';
 import CtaBand from '../global/CtaBand.astro';
 import Story from '../home/Story.astro';
 import { defaultLang, useTranslations, type Lang } from '../../i18n/utils';
+import { HERO_IMAGES } from '../../lib/hero-images';
 
 interface Props {
   lang?: Lang;
@@ -15,7 +16,13 @@ const t = useTranslations(lang);
 const prefix = lang === defaultLang ? '' : `/${lang}`;
 ---
 
-<BaseLayout lang={lang} title={t.donate.seo.title} description={t.donate.seo.description} headerTheme="light">
+<BaseLayout
+  lang={lang}
+  title={t.donate.seo.title}
+  description={t.donate.seo.description}
+  headerTheme="light"
+  lcpImage={HERO_IMAGES.donate.src}
+>
   <DonateHero lang={lang} />
   <DonateImpactIntro lang={lang} />
   <MissionBand

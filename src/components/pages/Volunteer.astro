@@ -5,6 +5,7 @@ import Intro from '../volunteer/Intro.astro';
 import StepTimeline from '../volunteer/StepTimeline.astro';
 import VolunteerForm from '../volunteer/VolunteerForm.astro';
 import { defaultLang, useTranslations, type Lang } from '../../i18n/utils';
+import { HERO_IMAGES } from '../../lib/hero-images';
 
 interface Props {
   lang?: Lang;
@@ -13,11 +14,17 @@ const { lang = defaultLang } = Astro.props;
 const t = useTranslations(lang);
 ---
 
-<BaseLayout lang={lang} title={t.volunteer.seo.title} description={t.volunteer.seo.description} headerTheme="light">
+<BaseLayout
+  lang={lang}
+  title={t.volunteer.seo.title}
+  description={t.volunteer.seo.description}
+  headerTheme="light"
+  lcpImage={HERO_IMAGES.volunteer.src}
+>
   <Hero
     titleLines={t.volunteer.hero.titleLines}
     subcopy={t.volunteer.hero.subcopy}
-    image="/images/hero/volunteer.webp"
+    image={HERO_IMAGES.volunteer.src}
     imageAlt={t.volunteer.hero.imageAlt}
   />
 

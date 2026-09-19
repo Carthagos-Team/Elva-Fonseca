@@ -8,6 +8,7 @@
 import { defaultLang, useTranslations, type Lang } from '../../i18n/utils';
 import { splitNoOrphan, protectCopy } from '../../lib/typography';
 import { getWeb3FormsThankYouUrl } from '../../lib/web3forms';
+import { HERO_IMAGES } from '../../lib/hero-images';
 
 interface Props {
   lang?: Lang;
@@ -32,13 +33,14 @@ const control =
     {/* Coluna esquerda — foto */}
     <div data-contact-hero-photo class="relative aspect-[4/5] overflow-hidden rounded-md border-[1.5px] border-woodsmoke bg-orchid-050 lg:aspect-auto lg:h-full lg:min-h-[32rem]">
       <img
-        src="/images/contact/hero.webp"
+        src={HERO_IMAGES.contact.src}
         alt={t.photoAlt}
-        width="1267"
-        height="1335"
+        width={HERO_IMAGES.contact.width}
+        height={HERO_IMAGES.contact.height}
         class="absolute inset-0 size-full object-cover"
+        fetchpriority="high"
         loading="eager"
-        decoding="async"
+        decoding="sync"
       />
     </div>
 
