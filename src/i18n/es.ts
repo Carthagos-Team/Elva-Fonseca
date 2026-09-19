@@ -13,7 +13,6 @@ export const es: Dictionary = {
         donate: 'Donar',
         contact: 'Contacto',
       },
-      legal: { privacy: 'Política de Privacidad', terms: 'Términos de Servicio' },
       donateLabel: 'Donar',
       credit: 'diseñado por',
     },

@@ -20,11 +20,6 @@ const nav = [
   { href: `${prefix}/contact`, label: t.common.footer.nav.contact },
 ];
 
-const legal = [
-  { href: `${prefix}/privacy`, label: t.common.footer.legal.privacy },
-  { href: `${prefix}/terms`, label: t.common.footer.legal.terms },
-];
-
 const donateUrl = `${prefix}/donate`; // Fase 4: siteSettings.donateUrl (provedor externo)
 const year = new Date().getFullYear();
 
@@ -51,7 +46,7 @@ const isCurrent = (href: string) =>
       />
     </div>
 
-    {/* Bloco direito: nav → título → (botão donate mobile) → legal */}
+    {/* Bloco direito: nav → título → (botão donate mobile) → crédito */}
     <div class="flex flex-col items-start gap-8">
       <nav aria-label="Footer">
         <ul class="grid grid-flow-col grid-rows-3 gap-x-8 gap-y-1.5 sm:gap-x-12 lg:gap-x-16">
@@ -89,38 +84,18 @@ const isCurrent = (href: string) =>
         </span>
       </a>
 
-      {/* Linha legal + crédito */}
-      <div class="flex flex-col items-start gap-y-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-6">
-        <ul class="flex flex-wrap items-center gap-x-6 gap-y-2">
-          {
-            legal.map(({ href, label }) => (
-              <li>
-                <a
-                  href={href}
-                  class="footer-legal hover-text text-[0.9375rem] font-semibold"
-                >
-                  <span class="hover-text__inner">
-                    <span class="hover-text__label is--default" data-hover-text-el>{label}</span>
-                    <span aria-hidden="true" class="hover-text__label is--hover" data-hover-text-el>{label}</span>
-                  </span>
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-        <a
-          href="https://carthagos.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="hover-text inline-flex items-center gap-2 text-[0.9375rem]"
-        >
-          <span class="hover-text__inner opacity-80">
-            <span class="hover-text__label is--default" data-hover-text-el>{t.common.footer.credit}</span>
-            <span aria-hidden="true" class="hover-text__label is--hover" data-hover-text-el>{t.common.footer.credit}</span>
-          </span>
-          <img src="/images/footer/crt.svg" alt="Carthagos" width="62" height="18" class="h-[1.1em] w-auto" />
-        </a>
-      </div>
+      <a
+        href="https://carthagos.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="hover-text inline-flex items-center gap-2 text-[0.9375rem]"
+      >
+        <span class="hover-text__inner opacity-80">
+          <span class="hover-text__label is--default" data-hover-text-el>{t.common.footer.credit}</span>
+          <span aria-hidden="true" class="hover-text__label is--hover" data-hover-text-el>{t.common.footer.credit}</span>
+        </span>
+        <img src="/images/footer/crt.svg" alt="Carthagos" width="62" height="18" class="h-[1.1em] w-auto" />
+      </a>
     </div>
   </div>
 

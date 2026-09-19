@@ -11,7 +11,6 @@ export const en = {
         donate: 'Donate',
         contact: 'Contact',
       },
-      legal: { privacy: 'Privacy Policy', terms: 'Terms of Service' },
       donateLabel: 'Donate',
       credit: 'designed by',
     },
