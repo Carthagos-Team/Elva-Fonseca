@@ -45,15 +45,6 @@ const {
       )
     }
     <SEO lang={lang} {title} {description} {ogImage} {noindex} />
-    {/* OpenAnalytics (instância Carthagos). A chave é pública, só escreve; os eventos só
-        contam em domínios liberados em Settings → Domains (elvafonseca.org). */}
-    <script
-      is:inline
-      async
-      src="https://c.analytics.carthagos.com/oa.js"
-      data-key="oa_pk_ulmy1HRZ-7LqOfZfZXr78DA9dKKKsB_l"
-      data-collector="https://c.analytics.carthagos.com"
-      data-respect-gpc></script>
   </head>
   <body class="flex min-h-dvh flex-col">
     <Header lang={lang} theme={headerTheme} background={headerBackground} />
@@ -65,11 +56,9 @@ const {
     <script>
       import { initSmoothScroll } from '../lib/scroll';
       import { initHoverText } from '../lib/hover-text';
-      import { initCtaTracking } from '../lib/analytics';
 
       initSmoothScroll();
       initHoverText();
-      initCtaTracking();
     </script>
   </body>
 </html>
