@@ -12,7 +12,8 @@
 | Navegação | **MPA puro** (sem `<ClientRouter />`) | Zero cleanup de ScrollTrigger entre rotas; View Transitions só se virarem requisito |
 | CMS | Sanity embutido (`@sanity/astro`, studio em `/admin`) | Sem monorepo para projeto deste porte |
 | Donate/Contact | Provedores estáticos (Stripe Payment Link / Web3Forms etc.) | Mantém build 100% estático; adapter só se surgir rota server real |
-| Deploy | A definir (Vercel provável) | Estático → qualquer host serve |
+| Deploy | Vercel, produção em `https://elvafonseca.org/` | Estático → qualquer host serve |
+| Analytics | OpenAnalytics (instância Carthagos, site `elva-fonseca`): `<script is:inline>` no `BaseLayout`; eventos `donate_click`/`volunteer_click` via `src/lib/analytics.ts`, `form_submit`/`form_error` em `web3forms-submit.ts`, `donate_modal_open`/`whatsapp_share`/`program_open` via `data-oa-event` | Sem cookies de terceiros nem banner; eventos só contam de `elvafonseca.org` (Settings → Domains) |
 
 ## Rotas
 

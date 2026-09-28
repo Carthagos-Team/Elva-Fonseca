@@ -1,8 +1,11 @@
+import { track } from './analytics';
+
 /** Intercept Web3Forms HTML POST → fetch + redirect (reliable on localhost/preview). */
 export function initWeb3FormsSubmit(root: ParentNode = document) {
   root.querySelectorAll<HTMLFormElement>('form[data-web3form]').forEach((form) => {
     const redirect = form.dataset.redirect;
     if (!redirect) return;
+    const props = { form: form.dataset.form ?? 'unknown', lang: document.documentElement.lang };
 
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
@@ -19,13 +22,17 @@ export function initWeb3FormsSubmit(root: ParentNode = document) {
         const data = (await response.json()) as { success?: boolean; message?: string };
 
         if (response.ok && data.success) {
+          // O tracker envia a fila por sendBeacon no pagehide do redirect.
+          track('form_submit', props);
           window.location.assign(redirect);
           return;
         }
 
+        track('form_error', props);
         if (submit) submit.disabled = false;
         window.alert(data.message ?? 'Something went wrong. Please try again.');
       } catch {
+        track('form_error', props);
         if (submit) submit.disabled = false;
         window.alert('Something went wrong. Please try again.');
       }
